@@ -27,4 +27,21 @@
     @apply font-mono antialiased text-black dark:text-gray-600;
     @apply overflow-hidden;
   }
+
+  *:focus {
+    outline-width: 0;
+    border: aqua solid 1px;
+  }
+
+  button {
+    -webkit-app-region: no-drag;
+  }
+}
+
+@layer components {
+  .titlebar {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }

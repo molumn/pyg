@@ -29,13 +29,13 @@ export const applicationHandler = new (class ApplicationHandler {
 const browserWindowOptions: BrowserWindowConstructorOptions = {
   show: false,
   autoHideMenuBar: true,
-  frame: false,
+  frame: process.platform === 'darwin',
   center: true,
   title: 'Plan Your Game',
   vibrancy: 'under-window',
   visualEffectState: 'active',
   titleBarStyle: 'hidden',
-  trafficLightPosition: { x: 15, y: 10 },
+  // trafficLightPosition: { x: 15, y: 10 },
   ...(process.platform === 'linux' ? { icon } : {}),
   webPreferences: {
     preload: join(__dirname, '../preload/index.js'),
@@ -52,7 +52,9 @@ export function getWindowTypeAndBrowserWindowOptions(): [
   return [
     'login',
     {
-      width: 970,
+      minWidth: 800,
+      minHeight: 600,
+      width: 800,
       height: 600,
       ...browserWindowOptions
     }
