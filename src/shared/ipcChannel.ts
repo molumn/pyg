@@ -7,6 +7,11 @@ export type IpcResponse<ParamPair extends [unknown[], unknown] = [[], void]> = (
 
 export type IpcRequestChannel =
   | 'request-window-type'
+  | 'request-window-is-maximized'
+  | 'request-close-window'
+  | 'request-minimize-window'
+  | 'request-maximize-window'
+  | 'request-restore-window'
 
 export type IpcChannel =
   | 'set-window-type'
@@ -17,6 +22,12 @@ export const responseChannel = (to: IpcRequestChannel): string => to.replace('re
 
 export interface IpcParameter {
   'request-window-type': IpcCallbackReturn<WindowType>
+  'request-window-is-maximized': IpcCallbackReturn<boolean>
+  'request-close-window': IpcCallbackParameters
+  'request-minimize-window': IpcCallbackParameters
+  'request-maximize-window': IpcCallbackParameters
+  'request-restore-window': IpcCallbackParameters
+
   'set-window-type': IpcCallbackParameters<[WindowType]>
 }
 

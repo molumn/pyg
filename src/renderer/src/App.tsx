@@ -7,11 +7,22 @@ import { StartPage } from './StartPage'
 import { WorkspacePage } from './WorkspacePage'
 import { ErrorPage } from './ErrorPage'
 
+import { TitleBarSection } from './components/TitleBar'
+import { WindowControlButtons } from './components/button/WindowControlButtons'
+
 export default function App(): ReactNode {
   const windowType = useAppSelector(selectWindowType)
 
   return (
     <>
+      <TitleBarSection>
+        <div className={'w-[135px]'}>left</div>
+        <div className={'grow'} />
+        <div className={'justify-self-center self-center'}>center</div>
+        <div className={'grow'} />
+        <div className={'justify-self-center self-center'}>right</div>
+        <WindowControlButtons />
+      </TitleBarSection>
       {
         windowType === 'login' ? (
           <LoginPage />
