@@ -1,12 +1,12 @@
-import { ipcMain } from "electron";
-import { IpcAPI } from "../../shared/ipcChannel";
-import { applicationHandler } from "../properties";
+import { ipcMain } from 'electron'
+import { IpcAPI } from '../../shared/ipcChannel'
+import { applicationHandler } from '../properties'
 
 const ipcCallbacks: IpcAPI = {
-  "request-window-type": () => {
+  'request-window-type': () => {
     return applicationHandler.mainWindowType
   },
-  "set-window-type": (_, type) => {
+  'set-window-type': (_, type) => {
     applicationHandler.applyWindowType(type)
     console.log(applicationHandler.mainWindowType)
   }

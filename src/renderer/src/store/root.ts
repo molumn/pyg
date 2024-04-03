@@ -1,5 +1,5 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { windowSlice } from "./state/window";
+import { configureStore } from '@reduxjs/toolkit'
+import { windowSlice } from './state/window'
 
 export const store = configureStore({
   reducer: {

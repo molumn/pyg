@@ -3,27 +3,28 @@ import icon from '../../resources/icon.png?asset'
 import { join } from 'path'
 
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
-import { WindowType } from "../shared/types";
+import { WindowType } from '../shared/types'
 
-export const applicationHandler = new class ApplicationHandler {
+export const applicationHandler = new (class ApplicationHandler {
   private static _mainWindow: BrowserWindow
-  public get mainWindow(): BrowserWindow { return ApplicationHandler._mainWindow }
+  public get mainWindow(): BrowserWindow {
+    return ApplicationHandler._mainWindow
+  }
 
   private static _mainWindowType: WindowType
-  public get mainWindowType(): WindowType { return ApplicationHandler._mainWindowType }
+  public get mainWindowType(): WindowType {
+    return ApplicationHandler._mainWindowType
+  }
 
-
-  applyWindow() {
+  applyWindow(): void {
     const typeAndOptions = getWindowTypeAndBrowserWindowOptions()
     ApplicationHandler._mainWindowType = typeAndOptions[0]
     ApplicationHandler._mainWindow = new BrowserWindow(typeAndOptions[1])
   }
-  applyWindowType(type: WindowType) {
+  applyWindowType(type: WindowType): void {
     ApplicationHandler._mainWindowType = type
   }
-}()
-
-
+})()
 
 const browserWindowOptions: BrowserWindowConstructorOptions = {
   show: false,
@@ -43,7 +44,10 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
   }
 }
 
-export function getWindowTypeAndBrowserWindowOptions(): [WindowType, BrowserWindowConstructorOptions] {
+export function getWindowTypeAndBrowserWindowOptions(): [
+  WindowType,
+  BrowserWindowConstructorOptions
+] {
   // todo : load configurations and check appropriate option
   return [
     'login',

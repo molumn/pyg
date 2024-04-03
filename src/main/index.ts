@@ -6,7 +6,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { applicationHandler } from './properties'
 import { registerAllIpcCallbacks } from './ipc'
 
-function loadWindow() {
+function loadWindow(): void {
   applicationHandler.applyWindow()
 
   const window = applicationHandler.mainWindow
@@ -50,5 +50,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-

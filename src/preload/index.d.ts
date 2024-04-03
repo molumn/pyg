@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { IpcRequest } from "../shared/ipcChannel";
+import { IpcRequest } from '../shared/ipcChannel'
 
 declare global {
   interface Window {
