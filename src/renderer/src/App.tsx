@@ -15,14 +15,20 @@ export default function App(): ReactNode {
 
   return (
     <>
-      <TitleBarSection>
-        <div className={'w-[135px]'}>left</div>
-        <div className={'grow'} />
-        <div className={'justify-self-center self-center'}>center</div>
-        <div className={'grow'} />
-        <div className={'justify-self-center self-center'}>right</div>
-        <WindowControlButtons />
-      </TitleBarSection>
+      {windowType !== 'login' ? (
+        <TitleBarSection>
+          <div className={'w-[135px]'}>left</div>
+          <div className={'grow'} />
+          <div className={'justify-self-center self-center'}>center</div>
+          <div className={'grow'} />
+          <div className={'justify-self-center self-center'}>right</div>
+          <WindowControlButtons />
+        </TitleBarSection>
+      ) : (
+        <TitleBarSection className={'flex-row-reverse bg-[#00000000]'}>
+          <WindowControlButtons />
+        </TitleBarSection>
+      )}
       {
         windowType === 'login' ? (
           <LoginPage />

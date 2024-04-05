@@ -3,14 +3,33 @@ import { ComponentProps, ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { fetchWindowIsMaximized, selectWindowIsMaximized, selectWindowType } from '../../store/state/window'
+import {
+  fetchWindowIsMaximized,
+  selectWindowIsMaximized,
+  selectWindowType
+} from '../../store/state/window'
 
-import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc'
+import {
+  VscChromeClose,
+  VscChromeMaximize,
+  VscChromeMinimize,
+  VscChromeRestore
+} from 'react-icons/vsc'
+import { themeClass } from '../../utils'
 
-const WindowControlButton = ({ className, children, ...props }: ComponentProps<'button'>): ReactNode => {
-  return <button className={twMerge('w-[40px] h-[32px] flex items-center justify-center', className)} {...props}>
-    {children}
-  </button>
+const WindowControlButton = ({
+  className,
+  children,
+  ...props
+}: ComponentProps<'button'>): ReactNode => {
+  return (
+    <button
+      className={twMerge('w-[40px] h-[32px] flex items-center justify-center', className)}
+      {...props}
+    >
+      {children}
+    </button>
+  )
 }
 
 export const WindowControlButtons = (): ReactNode => {
@@ -18,16 +37,16 @@ export const WindowControlButtons = (): ReactNode => {
   const maximized = useAppSelector(selectWindowIsMaximized)
   const dispatch = useAppDispatch()
 
-  const onMinimize = async () => {
+  const onMinimize = async (): Promise<void> => {
     window.ipc('request-minimize-window')
   }
-  const onMaximizeOrRestore = async () => {
+  const onMaximizeOrRestore = async (): Promise<void> => {
     if (maximized) await window.ipc('request-restore-window')
     else await window.ipc('request-maximize-window')
 
     dispatch(fetchWindowIsMaximized())
   }
-  const onClose = async () => {
+  const onClose = async (): Promise<void> => {
     if (windowType === 'workspace') {
       // todo : popup
     }
@@ -35,16 +54,27 @@ export const WindowControlButtons = (): ReactNode => {
   }
 
   return window.electron.process.platform !== 'darwin' ? (
-    <div className={'right-0 justify-self-center flex flex-row grow-0 items-center justify-center'} >
-      <WindowControlButton onClick={onMinimize} className={'hover:bg-[#8C8C8CC0]'}>
+    <div className={'right-0 justify-self-center flex flex-row grow-0 items-center justify-center'}>
+      <WindowControlButton
+        onClick={onMinimize}
+        className={themeClass.dust.handling.highlight}
+      >
         <VscChromeMinimize />
       </WindowControlButton>
-      <WindowControlButton onClick={onMaximizeOrRestore} className={'hover:bg-[#8C8C8CC0]'}>
+      <WindowControlButton
+        onClick={onMaximizeOrRestore}
+        className={themeClass.dust.handling.highlight}
+      >
         {maximized ? <VscChromeRestore /> : <VscChromeMaximize />}
       </WindowControlButton>
-      <WindowControlButton onClick={onClose} className={'hover:bg-red-700'}>
+      <WindowControlButton
+        onClick={onClose}
+        className={themeClass.dust.handling.warning}
+      >
         <VscChromeClose />
       </WindowControlButton>
     </div>
-  ) : <></>
+  ) : (
+    <></>
+  )
 }
