@@ -38,7 +38,7 @@ export const WindowControlButtons = (): ReactNode => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    function handleResize() {
+    function handleResize(): void {
       dispatch(fetchWindowIsMaximized())
     }
     window.addEventListener('resize', handleResize)
@@ -62,7 +62,7 @@ export const WindowControlButtons = (): ReactNode => {
   }
 
   return window.electron.process.platform !== 'darwin' ? (
-    <div className={'right-0 justify-self-center flex flex-row grow-0 items-center justify-center'}>
+    <div className={'fixed top-0 right-0 justify-self-center flex flex-row items-center justify-center bg-inherit'}>
       <WindowControlButton onClick={onMinimize} className={themeClass.dust.control.minimize}>
         <VscChromeMinimize />
       </WindowControlButton>

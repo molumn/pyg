@@ -18,7 +18,7 @@ export const TitleBarSection = ({
       )}
       {...props}
     >
-      <Row className={'flex-1 justify-center items-center'}>{children}</Row>
+      <Row className={'mr-[120px] flex-1 justify-center items-center'}>{children}</Row>
       <WindowControlButtons />
     </header>
   )
