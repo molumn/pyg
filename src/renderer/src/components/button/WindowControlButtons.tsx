@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps, ReactNode, useEffect } from 'react'
 
 import { twMerge } from 'tailwind-merge'
 
@@ -37,14 +37,22 @@ export const WindowControlButtons = (): ReactNode => {
   const maximized = useAppSelector(selectWindowIsMaximized)
   const dispatch = useAppDispatch()
 
+  useEffect(() => {
+    function handleResize() {
+      dispatch(fetchWindowIsMaximized())
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
+
   const onMinimize = async (): Promise<void> => {
     window.ipc('request-minimize-window')
   }
   const onMaximizeOrRestore = async (): Promise<void> => {
     if (maximized) await window.ipc('request-restore-window')
     else await window.ipc('request-maximize-window')
-
-    dispatch(fetchWindowIsMaximized())
   }
   const onClose = async (): Promise<void> => {
     if (windowType === 'workspace') {
