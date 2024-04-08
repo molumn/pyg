@@ -12,12 +12,17 @@ export const themeClass: {
       maximize: string
       close: string
     }
-    form: {
-      base: string
-      label: string
-      input: string
-      submit: string
-      media: string
+    login: {
+      form: {
+        base: string
+        label: string
+        input: string
+        submit: string
+        media: string
+      }
+    }
+    start: {
+      sidebar: string
     }
   }
 } = {
@@ -35,12 +40,17 @@ export const themeClass: {
       close:
         'bg-transparent text-dust-text-base hover:bg-dust-handling-warning focus:bg-dust-handling-warning'
     },
-    form: {
-      base: 'bg-dust-light text-dust-text-base',
-      label: 'text-dust-text-base',
-      input: 'ring-dust-utility focus:bg-dust-handling-highlight focus:ring-dust-concentrate',
-      submit: 'bg-dust-primary hover:bg-dust-concentrate',
-      media: 'bg-dust-primary'
+    login: {
+      form: {
+        base: 'bg-dust-light text-dust-text-base',
+        label: 'text-dust-text-base',
+        input: 'ring-dust-utility focus:bg-dust-handling-highlight focus:ring-dust-concentrate',
+        submit: 'bg-dust-primary hover:bg-dust-concentrate',
+        media: 'bg-dust-primary'
+      }
+    },
+    start: {
+      sidebar: 'bg-dust-utility'
     }
   }
 }

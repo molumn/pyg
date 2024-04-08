@@ -9,7 +9,7 @@ export const CentralizedDiv = ({
 }: ComponentProps<'div'>): ReactNode => {
   return (
     <div
-      className={twMerge('flex justify-center items-center bg-transparent', className)}
+      className={twMerge('w-full h-full flex justify-center items-center bg-transparent', className)}
       {...props}
     >
       {children}
@@ -20,7 +20,7 @@ export const CentralizedDiv = ({
 export const Column = ({ className, children, ...props }: ComponentProps<'div'>): ReactNode => {
   return (
     <div
-      className={twMerge('flex flex-col justify-center bg-transparent', className)}
+      className={twMerge('w-full h-full flex flex-col bg-transparent', className)}
       {...props}
     >
       {children}
@@ -31,7 +31,7 @@ export const Column = ({ className, children, ...props }: ComponentProps<'div'>)
 export const Row = ({ className, children, ...props }: ComponentProps<'div'>): ReactNode => {
   return (
     <div
-      className={twMerge('flex flex-row items-center bg-transparent', className)}
+      className={twMerge('w-full h-full flex flex-row bg-transparent', className)}
       {...props}
     >
       {children}

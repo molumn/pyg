@@ -19,9 +19,9 @@ export default function App(): ReactNode {
         <TitleBarSection>
           <div className={'w-[135px]'}>left</div>
           <GrowingDiv />
-          <div className={'justify-self-center self-center'}>center</div>
+          <div>center</div>
           <GrowingDiv />
-          <div className={'justify-self-center self-center'}>right</div>
+          <div>right</div>
         </TitleBarSection>
       ) : (
         <TitleBarSection className={'bg-transparent'} />

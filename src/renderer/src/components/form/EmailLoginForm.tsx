@@ -10,7 +10,7 @@ const EmailInput = (): ReactNode => {
     <div>
       <label
         htmlFor={'email'}
-        className={twMerge('block text-sm font-medium leading-6', themeClass.dust.form.label)}
+        className={twMerge('block text-sm font-medium leading-6', themeClass.dust.login.form.label)}
       >
         Email Address
       </label>
@@ -22,7 +22,7 @@ const EmailInput = (): ReactNode => {
           required={true}
           className={twMerge(
             'w-full block rounded-md py-1.5 shadow-sm ring-1 ring-inset',
-            themeClass.dust.form.input,
+            themeClass.dust.login.form.input,
             'focus:ring-2 focus:ring-inset',
             'sm:text-sm sm-leading-6'
           )}
@@ -38,7 +38,7 @@ const PasswordInput = (): ReactNode => {
       <div className={'flex items-center justify-between'}>
         <label
           htmlFor={'email'}
-          className={twMerge('block text-sm font-medium leading-6', themeClass.dust.form.label)}
+          className={twMerge('block text-sm font-medium leading-6', themeClass.dust.login.form.label)}
         >
           Password
         </label>
@@ -57,7 +57,7 @@ const PasswordInput = (): ReactNode => {
           required={true}
           className={twMerge(
             'w-full block rounded-md py-1.5 shadow-sm ring-1 ring-inset',
-            themeClass.dust.form.input,
+            themeClass.dust.login.form.input,
             'focus:ring-2 focus:ring-inset',
             'sm:text-sm sm-leading-6'
           )}
@@ -74,7 +74,7 @@ const SubmitButton = (): ReactNode => {
         type={'submit'}
         className={twMerge(
           'w-full flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
-          themeClass.dust.form.submit
+          themeClass.dust.login.form.submit
         )}
       >
         Sign in
@@ -86,7 +86,7 @@ const SubmitButton = (): ReactNode => {
 const GoogleLoginButton = (): ReactNode => {
   return (
     <CentralizedDiv
-      className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.form.media)}
+      className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
     >
       <a href={'#'}>
         {/* todo : 3rd party login */}
@@ -99,7 +99,7 @@ const GoogleLoginButton = (): ReactNode => {
 const GithubLoginButton = (): ReactNode => {
   return (
     <CentralizedDiv
-      className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.form.media)}
+      className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
     >
       <a href={'#'}>
         {/* todo : 3rd party login */}

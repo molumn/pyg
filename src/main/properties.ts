@@ -49,15 +49,25 @@ export function getWindowTypeAndBrowserWindowOptions(): [
   BrowserWindowConstructorOptions
 ] {
   // todo : load configurations and check appropriate option
+  // return [
+  //   'login',
+  //   {
+  //     minWidth: 800,
+  //     minHeight: 600,
+  //     width: 800,
+  //     height: 600,
+  //     maximizable: false,
+  //     roundedCorners: false,
+  //     ...browserWindowOptions
+  //   }
+  // ]
   return [
-    'login',
+    'start',
     {
-      minWidth: 800,
-      minHeight: 600,
-      width: 800,
-      height: 600,
-      maximizable: false,
-      roundedCorners: false,
+      minWidth: 1000,
+      minHeight: 750,
+      width: 1000,
+      height: 750,
       ...browserWindowOptions
     }
   ]

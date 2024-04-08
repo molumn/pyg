@@ -6,8 +6,8 @@ export const Frame = ({ className, children, ...props }: ComponentProps<'div'>):
   return (
     <div
       className={twMerge(
-        'w-full h-[calc(100vh-32px)] relative top-[32px]',
-        themeClass.dust.light,
+        'w-full h-[calc(100lvh-32px)] relative top-[32px]',
+        themeClass.dust.sections.body,
         className
       )}
       {...props}
