@@ -61,23 +61,23 @@ export function getWindowTypeAndBrowserWindowOptions(): [
   //     ...browserWindowOptions
   //   }
   // ]
-  return [
-    'start',
-    {
-      minWidth: 1000,
-      minHeight: 750,
-      width: 1000,
-      height: 750,
-      ...browserWindowOptions
-    }
-  ]
   // return [
-  //   'workspace',
+  //   'start',
   //   {
   //     minWidth: 1000,
   //     minHeight: 750,
-  //     fullscreen: true,
+  //     width: 1000,
+  //     height: 750,
   //     ...browserWindowOptions
   //   }
   // ]
+  return [
+    'workspace',
+    {
+      minWidth: 1000,
+      minHeight: 750,
+      fullscreen: true,
+      ...browserWindowOptions
+    }
+  ]
 }
