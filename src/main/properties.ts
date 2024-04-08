@@ -35,7 +35,7 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
   vibrancy: 'under-window',
   visualEffectState: 'active',
   titleBarStyle: 'hidden',
-  // trafficLightPosition: { x: 15, y: 10 },
+  trafficLightPosition: { x: 15, y: 10 },
   ...(process.platform === 'linux' ? { icon } : {}),
   webPreferences: {
     preload: join(__dirname, '../preload/index.js'),
@@ -71,4 +71,13 @@ export function getWindowTypeAndBrowserWindowOptions(): [
       ...browserWindowOptions
     }
   ]
+  // return [
+  //   'workspace',
+  //   {
+  //     minWidth: 1000,
+  //     minHeight: 750,
+  //     fullscreen: true,
+  //     ...browserWindowOptions
+  //   }
+  // ]
 }

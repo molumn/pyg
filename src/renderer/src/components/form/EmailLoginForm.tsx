@@ -16,6 +16,7 @@ const EmailInput = (): ReactNode => {
       </label>
       <div className={'mt-2'}>
         <input
+          id={'email-input'}
           name={'email'}
           type={'email'}
           autoComplete={'email'}
@@ -51,6 +52,7 @@ const PasswordInput = (): ReactNode => {
       </div>
       <div className={'mt-2'}>
         <input
+          id={'password-input'}
           name={'password'}
           type={'password'}
           autoComplete={'current-password'}
@@ -109,7 +111,11 @@ const GithubLoginButton = (): ReactNode => {
   )
 }
 
-export const EmailLoginForm = (): ReactNode => {
+type EmailLoginFormProps = {
+  submit?: (email, password) => Promise<void>,
+}
+
+export const EmailLoginForm = (props: EmailLoginFormProps): ReactNode => {
   return (
     <Column className={'w-[400px] min-h-full px-6 py-12'}>
       <div>
@@ -118,7 +124,16 @@ export const EmailLoginForm = (): ReactNode => {
         </h2>
       </div>
       <div className={'mt-10'}>
-        <form className={'space-y-6'} onSubmit={() => {}}>
+        <form
+          className={'space-y-6'}
+          onSubmit={() => {
+            // @ts-ignore
+            const email = document.getElementById('email-input')?.value
+            // @ts-ignore
+            const password = document.getElementById('password-input')?.value
+            props.submit?.(email, password)
+          }}
+        >
           {/* todo : onSubmit */}
           <EmailInput />
           <PasswordInput />

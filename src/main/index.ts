@@ -40,8 +40,12 @@ app.whenReady().then(() => {
 
   loadWindow()
 
-  app.on('activate', function () {
+  app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) loadWindow()
+  })
+
+  app.on('login', (event, webContents, authenticationResponseDetails, authInfo, callback) => {
+    // todo : social media login
   })
 })
 
