@@ -8,7 +8,7 @@ import { WorkspacePage } from './WorkspacePage'
 import { ErrorPage } from './ErrorPage'
 
 import { TitleBarSection } from './components/TitleBar'
-import { WindowControlButtons } from './components/button/WindowControlButtons'
+import GrowingDiv from './components/base/GrowingDiv'
 
 export default function App(): ReactNode {
   const windowType = useAppSelector(selectWindowType)
@@ -18,16 +18,13 @@ export default function App(): ReactNode {
       {windowType !== 'login' ? (
         <TitleBarSection>
           <div className={'w-[135px]'}>left</div>
-          <div className={'grow'} />
+          <GrowingDiv />
           <div className={'justify-self-center self-center'}>center</div>
-          <div className={'grow'} />
+          <GrowingDiv />
           <div className={'justify-self-center self-center'}>right</div>
-          <WindowControlButtons />
         </TitleBarSection>
       ) : (
-        <TitleBarSection className={'flex-row-reverse bg-[#00000000]'}>
-          <WindowControlButtons />
-        </TitleBarSection>
+        <TitleBarSection className={'bg-transparent'} />
       )}
       {
         windowType === 'login' ? (

@@ -1,6 +1,8 @@
 import { ComponentProps, ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { themeClass } from '../utils'
+import { WindowControlButtons } from './button/WindowControlButtons'
+import { Row } from '../utils/class/Layout'
 
 export const TitleBarSection = ({
   className,
@@ -11,12 +13,13 @@ export const TitleBarSection = ({
     <header
       className={twMerge(
         'fixed h-[32px] w-full titlebar flex flex-row overflow-x-visible',
-        themeClass.dust.primary,
+        themeClass.dust.sections.header,
         className
       )}
       {...props}
     >
-      {children}
+      <Row className={'flex-1'}>{children}</Row>
+      <WindowControlButtons />
     </header>
   )
 }

@@ -1,40 +1,46 @@
-type Theme =
-  | 'dust'
+type Theme = 'dust'
 
 export const themeClass: {
   [theme in Theme]: {
-    primary: string
-    secondary: string
-    concentrate: string
-    utility: string
-    light: string
-    text: {
-      heavy: string
-      base: string
+    sections: {
+      header: string
+      body: string
+      footer: string
     }
-    handling: {
-      highlight: string
-      warning: string
+    control: {
+      minimize: string
+      maximize: string
+      close: string
+    }
+    form: {
+      base: string
+      label: string
+      input: string
+      submit: string
+      media: string
     }
   }
 } = {
   dust: {
-    primary: 'bg-dust-primary text-dust-text-heavy',
-    secondary: 'bg-dust-secondary text-dust-text-heavy',
-    concentrate: 'bg-dust-concentrate text-dust-text-base',
-    utility: 'bg-dust-utility text-dust-text-base',
-    light: 'bg-dust-light text-dust-text-base',
-    text: {
-      heavy: 'text-dust-text-heavy',
-      base: 'text-dust-text-base'
+    sections: {
+      header: 'bg-dust-primary text-dust-text-heavy',
+      body: 'bg-dust-light text-dust-text-base',
+      footer: 'bg-dust-secondary text-dust-text-heavy'
     },
-    handling: {
-      highlight:
-        'hover:bg-dust-handling-highlight group-hover:bg-dust-handling-highlight ' +
-        'focus:bg-dust-handling-highlight group-focus:bg-dust-handling-highlight focus-within:bg-dust-handling-highlight',
-      warning:
-        'hover:bg-dust-handling-warning group-hover:bg-dust-handling-warning ' +
-        'focus:bg-dust-handling-warning group-focus:bg-dust-handling-warning focus-within:bg-dust-handling-warning '
+    control: {
+      minimize:
+        'bg-transparent text-dust-text-base hover:bg-dust-handling-highlight focus:bg-dust-handling-highlight',
+      maximize:
+        'bg-transparent text-dust-text-base hover:bg-dust-handling-highlight focus:bg-dust-handling-highlight',
+      close:
+        'bg-transparent text-dust-text-base hover:bg-dust-handling-warning focus:bg-dust-handling-warning'
+    },
+    form: {
+      base: 'bg-dust-light text-dust-text-base',
+      label: 'text-dust-text-base',
+      input: 'ring-dust-utility focus:bg-dust-handling-highlight focus:ring-dust-concentrate',
+      submit: 'bg-dust-primary hover:bg-dust-concentrate',
+      media: 'bg-dust-primary'
     }
   }
 }

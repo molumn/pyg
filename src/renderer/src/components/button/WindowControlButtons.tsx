@@ -55,22 +55,22 @@ export const WindowControlButtons = (): ReactNode => {
 
   return window.electron.process.platform !== 'darwin' ? (
     <div className={'right-0 justify-self-center flex flex-row grow-0 items-center justify-center'}>
-      <WindowControlButton
-        onClick={onMinimize}
-        className={themeClass.dust.handling.highlight}
-      >
+      <WindowControlButton onClick={onMinimize} className={themeClass.dust.control.minimize}>
         <VscChromeMinimize />
       </WindowControlButton>
-      <WindowControlButton
-        onClick={onMaximizeOrRestore}
-        className={themeClass.dust.handling.highlight}
-      >
-        {maximized ? <VscChromeRestore /> : <VscChromeMaximize />}
-      </WindowControlButton>
-      <WindowControlButton
-        onClick={onClose}
-        className={themeClass.dust.handling.warning}
-      >
+      {
+        windowType !== 'login' ? (
+          <WindowControlButton
+            onClick={onMaximizeOrRestore}
+            className={themeClass.dust.control.maximize}
+          >
+            {maximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+          </WindowControlButton>
+        ) : (
+          <></>
+        )
+      }
+      <WindowControlButton onClick={onClose} className={themeClass.dust.control.close}>
         <VscChromeClose />
       </WindowControlButton>
     </div>

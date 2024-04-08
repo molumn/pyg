@@ -56,6 +56,7 @@ export function getWindowTypeAndBrowserWindowOptions(): [
       minHeight: 600,
       width: 800,
       height: 600,
+      maximizable: false,
       roundedCorners: false,
       ...browserWindowOptions
     }
