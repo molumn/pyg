@@ -12,13 +12,10 @@ export type IpcRequestChannel =
   | 'request-minimize-window'
   | 'request-maximize-window'
   | 'request-restore-window'
+  | 'request-change-window'
 
 export type IpcChannel =
-  | 'set-window-type'
   | IpcRequestChannel
-
-// todo : remove response channel?
-export const responseChannel = (to: IpcRequestChannel): string => to.replace('request-', 'response-')
 
 export interface IpcParameter {
   'request-window-type': IpcCallbackReturn<WindowType>
@@ -27,8 +24,7 @@ export interface IpcParameter {
   'request-minimize-window': IpcCallbackParameters
   'request-maximize-window': IpcCallbackParameters
   'request-restore-window': IpcCallbackParameters
-
-  'set-window-type': IpcCallbackParameters<[WindowType]>
+  'request-change-window': IpcCallbackParameters<[WindowType]>
 }
 
 export type IpcRequest = <Channel extends IpcChannel>(channel: Channel, ...args: IpcParameter[Channel][0]) => Promise<IpcParameter[Channel][1]>

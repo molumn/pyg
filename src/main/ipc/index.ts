@@ -1,16 +1,12 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { IpcAPI } from '../../shared/ipcChannel'
-import { applicationHandler } from '../properties'
-import { onClose, onMaximize, onMinimize, onRestore } from './window-control'
+import { onChangeWindow, onClose, onMaximize, onMinimize, onRestore } from './window-control'
+import { ApplicationHandler } from '../handle/application'
 
 const ipcCallbacks: IpcAPI = {
   'request-window-type': () => {
-    return applicationHandler.mainWindowType
+    return ApplicationHandler.instance.windowType
   },
-  'set-window-type': (_, type) => {
-    applicationHandler.applyWindowType(type)
-  },
-
   'request-window-is-maximized': (event) => {
     const win = BrowserWindow.fromId(event.sender.id)
     return win?.isMaximized() === true
@@ -20,6 +16,8 @@ const ipcCallbacks: IpcAPI = {
   'request-maximize-window': onMaximize,
   'request-restore-window': onRestore,
   'request-close-window': onClose,
+
+  'request-change-window': onChangeWindow,
 }
 
 export function registerAllIpcCallbacks(): void {
