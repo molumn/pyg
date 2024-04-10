@@ -8,9 +8,11 @@ import { EmailLoginForm } from './components/form/EmailLoginForm'
 export const LoginPage = (): ReactNode => {
   return (
     <CentralizedDiv className={twMerge('w-full h-full', themeClass.dust.sections.body)}>
-      <EmailLoginForm submit={async (email, password) => {
-        // todo : ipc request login
-      }} />
+      <EmailLoginForm
+        submit={async () => {
+          // todo : ipc request login
+        }}
+      />
     </CentralizedDiv>
   )
 }

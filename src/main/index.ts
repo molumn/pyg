@@ -44,9 +44,9 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) loadWindow()
   })
 
-  app.on('login', (event, webContents, authenticationResponseDetails, authInfo, callback) => {
-    // todo : social media login
-  })
+  // app.on('login', (event, webContents, authenticationResponseDetails, authInfo, callback) => {
+  //   // todo : social media login
+  // })
 })
 
 app.on('window-all-closed', () => {

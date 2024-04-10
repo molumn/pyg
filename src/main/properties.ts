@@ -76,7 +76,6 @@ export function getWindowTypeAndBrowserWindowOptions(): [
     {
       minWidth: 1000,
       minHeight: 750,
-      fullscreen: true,
       ...browserWindowOptions
     }
   ]
