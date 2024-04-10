@@ -1,9 +1,13 @@
 import { ReactNode } from 'react'
-import { CentralizedDiv, Column, Row } from '../../utils/class/Layout'
-import { twMerge } from 'tailwind-merge'
-import { themeClass } from '../../utils'
+
 import { FcGoogle } from 'react-icons/fc'
 import { IoLogoGithub } from 'react-icons/io'
+
+import { twMerge } from 'tailwind-merge'
+
+import { CentralizedDiv, Column, Row } from '../../utils/class/Layout'
+
+import { themeClass } from '../../utils'
 
 const EmailInput = (): ReactNode => {
   return (
@@ -39,7 +43,10 @@ const PasswordInput = (): ReactNode => {
       <div className={'flex items-center justify-between'}>
         <label
           htmlFor={'email'}
-          className={twMerge('block text-sm font-medium leading-6', themeClass.dust.login.form.label)}
+          className={twMerge(
+            'block text-sm font-medium leading-6',
+            themeClass.dust.login.form.label
+          )}
         >
           Password
         </label>
@@ -112,7 +119,7 @@ const GithubLoginButton = (): ReactNode => {
 }
 
 type EmailLoginFormProps = {
-  submit?: (email, password) => Promise<void>,
+  submit?: (email, password) => Promise<void>
 }
 
 export const EmailLoginForm = (props: EmailLoginFormProps): ReactNode => {
@@ -127,8 +134,10 @@ export const EmailLoginForm = (props: EmailLoginFormProps): ReactNode => {
         <form
           className={'space-y-6'}
           onSubmit={() => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const email = document.getElementById('email-input')?.value
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const password = document.getElementById('password-input')?.value
             props.submit?.(email, password)

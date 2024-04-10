@@ -9,7 +9,10 @@ export const CentralizedDiv = ({
 }: ComponentProps<'div'>): ReactNode => {
   return (
     <div
-      className={twMerge('w-full h-full flex justify-center items-center bg-transparent', className)}
+      className={twMerge(
+        'w-full h-full flex justify-center items-center bg-transparent',
+        className
+      )}
       {...props}
     >
       {children}

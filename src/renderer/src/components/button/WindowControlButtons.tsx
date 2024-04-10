@@ -3,11 +3,7 @@ import { ComponentProps, ReactNode, useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import {
-  fetchWindowIsMaximized,
-  selectWindowIsMaximized,
-  selectWindowType
-} from '../../store/state/window'
+import { fetchWindowIsMaximized, selectWindowIsMaximized } from '../../store/state/window'
 
 import {
   VscChromeClose,
@@ -15,6 +11,8 @@ import {
   VscChromeMinimize,
   VscChromeRestore
 } from 'react-icons/vsc'
+
+import { windowPage } from '../../utils'
 import { themeClass } from '../../utils'
 
 const WindowControlButton = ({
@@ -33,7 +31,6 @@ const WindowControlButton = ({
 }
 
 export const WindowControlButtons = (): ReactNode => {
-  const windowType = useAppSelector(selectWindowType)
   const maximized = useAppSelector(selectWindowIsMaximized)
   const dispatch = useAppDispatch()
 
@@ -55,29 +52,31 @@ export const WindowControlButtons = (): ReactNode => {
     else await window.ipc('request-maximize-window')
   }
   const onClose = async (): Promise<void> => {
-    if (windowType === 'workspace') {
+    if (windowPage.isWorkspacePage) {
       // todo : popup
     }
     window.ipc('request-close-window')
   }
 
   return window.electron.process.platform !== 'darwin' ? (
-    <div className={'fixed top-0 right-0 justify-self-center flex flex-row items-center justify-center bg-inherit'}>
+    <div
+      className={
+        'fixed top-0 right-0 justify-self-center flex flex-row items-center justify-center bg-inherit'
+      }
+    >
       <WindowControlButton onClick={onMinimize} className={themeClass.dust.control.minimize}>
         <VscChromeMinimize />
       </WindowControlButton>
-      {
-        windowType !== 'login' ? (
-          <WindowControlButton
-            onClick={onMaximizeOrRestore}
-            className={themeClass.dust.control.maximize}
-          >
-            {maximized ? <VscChromeRestore /> : <VscChromeMaximize />}
-          </WindowControlButton>
-        ) : (
-          <></>
-        )
-      }
+      {!windowPage.isLoginPage ? (
+        <WindowControlButton
+          onClick={onMaximizeOrRestore}
+          className={themeClass.dust.control.maximize}
+        >
+          {maximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+        </WindowControlButton>
+      ) : (
+        <></>
+      )}
       <WindowControlButton onClick={onClose} className={themeClass.dust.control.close}>
         <VscChromeClose />
       </WindowControlButton>

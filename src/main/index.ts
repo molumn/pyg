@@ -22,9 +22,11 @@ function loadWindow(): void {
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    window.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    window.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/#${applicationHandler.mainWindowType}`)
   } else {
-    window.loadFile(join(__dirname, '../renderer/index.html'))
+    window.loadFile(
+      join(__dirname, `../renderer/index.html/#${applicationHandler.mainWindowType}`)
+    )
   }
 }
 
