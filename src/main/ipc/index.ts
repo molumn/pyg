@@ -2,6 +2,7 @@ import { BrowserWindow, ipcMain } from 'electron'
 import { IpcAPI } from '../../shared/ipcChannel'
 import { onChangeWindow, onClose, onMaximize, onMinimize, onRestore } from './window-control'
 import { ApplicationHandler } from '../handle/application'
+import { onAuth } from './auth'
 
 const ipcCallbacks: IpcAPI = {
   'request-window-type': () => {
@@ -18,6 +19,8 @@ const ipcCallbacks: IpcAPI = {
   'request-close-window': onClose,
 
   'request-change-window': onChangeWindow,
+
+  'request-user-authentication': onAuth
 }
 
 export function registerAllIpcCallbacks(): void {

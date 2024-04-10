@@ -8,6 +8,7 @@ import { twMerge } from 'tailwind-merge'
 import { CentralizedDiv, Column, Row } from '../../utils/class/Layout'
 
 import { themeClass } from '../../utils'
+import { login } from '../../utils/login'
 
 const EmailInput = (): ReactNode => {
   return (
@@ -97,10 +98,21 @@ const GoogleLoginButton = (): ReactNode => {
     <CentralizedDiv
       className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
     >
-      <a href={'#'}>
+      <button onClick={async () => {
+        const res = await login({
+          req: {
+            type: 'SignIn'
+          },
+          type: 'google'
+        })
+        // fixme: tested -> success : await user social login and response of token
+        // if (res.result) {
+        //   window.ipc('request-change-window', 'start')
+        // }
+      }}>
         {/* todo : 3rd party login */}
         <FcGoogle size={20} />
-      </a>
+      </button>
     </CentralizedDiv>
   )
 }
@@ -110,19 +122,26 @@ const GithubLoginButton = (): ReactNode => {
     <CentralizedDiv
       className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
     >
-      <a href={'#'}>
+      <button onClick={() => {
+        const res = await login({
+          req: {
+            type: 'SignIn'
+          },
+          type: 'github'
+        })
+        // fixme: tested -> success : await user social login and response of token
+        // if (res.result) {
+        //   window.ipc('request-change-window', 'start')
+        // }
+      }}>
         {/* todo : 3rd party login */}
         <IoLogoGithub size={25} />
-      </a>
+      </button>
     </CentralizedDiv>
   )
 }
 
-type EmailLoginFormProps = {
-  submit?: (email, password) => Promise<void>
-}
-
-export const EmailLoginForm = (props: EmailLoginFormProps): ReactNode => {
+export const EmailLoginForm = (): ReactNode => {
   return (
     <Column className={'w-[400px] min-h-full px-6 py-12'}>
       <div>
@@ -133,14 +152,26 @@ export const EmailLoginForm = (props: EmailLoginFormProps): ReactNode => {
       <div className={'mt-10'}>
         <form
           className={'space-y-6'}
-          onSubmit={() => {
+          onSubmit={async () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const email = document.getElementById('email-input')?.value
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const password = document.getElementById('password-input')?.value
-            props.submit?.(email, password)
+            const res = await login(
+              {
+                req: {
+                  type: 'SignIn'
+                },
+                email,
+                password
+              }
+            )
+            // fixme: tested -> success : await user social login and response of token
+            // if (res.result) {
+            //   window.ipc('request-change-window', 'start')
+            // }
           }}
         >
           {/* todo : onSubmit */}

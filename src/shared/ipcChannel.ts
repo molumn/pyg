@@ -1,6 +1,7 @@
-import { WindowType } from './types'
+import { AuthenticationRequest, AuthenticationResponse, WindowType } from './types'
 
 export type IpcCallbackParameters<Args extends unknown[] = [], Return = void> = [Args, Return]
+export type IpcAsyncCallbackParameters<Args extends unknown[] = [], Return = void> = [Args, Promise<Return>]
 export type IpcCallbackReturn<Return> = [[], Return]
 
 export type IpcResponse<ParamPair extends [unknown[], unknown] = [[], void]> = (event, ...args: ParamPair[0]) => ParamPair[1]
@@ -15,6 +16,7 @@ export type IpcRequestChannel =
   | 'request-change-window'
 
 export type IpcChannel =
+  | 'request-user-authentication'
   | IpcRequestChannel
 
 export interface IpcParameter {
@@ -25,6 +27,8 @@ export interface IpcParameter {
   'request-maximize-window': IpcCallbackParameters
   'request-restore-window': IpcCallbackParameters
   'request-change-window': IpcCallbackParameters<[WindowType]>
+
+  'request-user-authentication': IpcAsyncCallbackParameters<[AuthenticationRequest], AuthenticationResponse>
 }
 
 export type IpcRequest = <Channel extends IpcChannel>(channel: Channel, ...args: IpcParameter[Channel][0]) => Promise<IpcParameter[Channel][1]>

@@ -11,11 +11,7 @@ export const LoginPage = (): ReactNode => {
     <>
       <TitleBarSection className={'bg-transparent'} />
       <CentralizedDiv className={twMerge('w-full h-full', themeClass.dust.sections.body)}>
-        <EmailLoginForm
-          submit={async () => {
-            // todo : ipc request login
-          }}
-        />
+        <EmailLoginForm />
       </CentralizedDiv>
     </>
   )

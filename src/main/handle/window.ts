@@ -23,7 +23,7 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
   }
 }
 
-export function getBrowserWindowOptions(type: WindowType): BrowserWindowConstructorOptions {
+export function getBrowserWindowOptions(type: WindowType, parent?: BrowserWindow): BrowserWindowConstructorOptions {
   if (type === 'login') return {
     minWidth: 800,
     minHeight: 600,
@@ -45,15 +45,24 @@ export function getBrowserWindowOptions(type: WindowType): BrowserWindowConstruc
     minHeight: 750,
     ...browserWindowOptions
   }
+  else if (type === 'popup') return {
+    width: 400,
+    height: 600,
+    autoHideMenuBar: true,
+    center: true,
+    parent,
+  }
   else return browserWindowOptions
 }
 
 class WindowHandler {
   private instance: BrowserWindow
   readonly type: WindowType
-  constructor(windowType: WindowType) {
+  private readonly url: string | undefined
+  constructor(windowType: WindowType, url?: string, parent?: WindowHandler) {
     this.type = windowType
-    this.instance = new BrowserWindow(getBrowserWindowOptions(windowType))
+    this.instance = new BrowserWindow(getBrowserWindowOptions(windowType, parent?.instance))
+    this.url = url
   }
 
   preload(): void {
@@ -69,7 +78,9 @@ class WindowHandler {
   }
 
   render(): void {
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    if (this.url)
+      this.instance.loadURL(this.url)
+    else if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       this.instance.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/#${this.type}`)
     } else {
       this.instance.loadFile(
@@ -92,6 +103,8 @@ export class WindowManager {
     return this.main?.type ?? 'login'
   }
 
+  private childWindow: WindowHandler | null = null
+
   display(): void {
     if (this.main) this.main.render()
   }
@@ -100,5 +113,12 @@ export class WindowManager {
     if (this.main) this.main.close()
     this.main = new WindowHandler(type)
     this.main.preload()
+  }
+
+  child(url: string): void {
+    if (!this.main) return;
+    this.childWindow = new WindowHandler('popup', url, this.main)
+    this.childWindow.preload()
+    this.childWindow.render()
   }
 }

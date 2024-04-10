@@ -1,3 +1,5 @@
+import 'dotenv/config.js'
+
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 
@@ -22,7 +24,7 @@ app.whenReady().then(() => {
   })
 
   // app.on('login', (event, webContents, authenticationResponseDetails, authInfo, callback) => {
-  //   // todo : social media login
+  //   console.log('login')
   // })
 })
 
