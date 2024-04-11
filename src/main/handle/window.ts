@@ -23,35 +23,42 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
   }
 }
 
-export function getBrowserWindowOptions(type: WindowType, parent?: BrowserWindow): BrowserWindowConstructorOptions {
-  if (type === 'login') return {
-    minWidth: 800,
-    minHeight: 600,
-    width: 800,
-    height: 600,
-    maximizable: false,
-    roundedCorners: false,
-    ...browserWindowOptions
-  }
-  else if (type === 'start') return {
-    minWidth: 1000,
-    minHeight: 750,
-    width: 1000,
-    height: 750,
-    ...browserWindowOptions
-  }
-  else if (type === 'workspace') return {
-    minWidth: 1000,
-    minHeight: 750,
-    ...browserWindowOptions
-  }
-  else if (type === 'popup') return {
-    width: 400,
-    height: 600,
-    autoHideMenuBar: true,
-    center: true,
-    parent,
-  }
+export function getBrowserWindowOptions(
+  type: WindowType,
+  parent?: BrowserWindow
+): BrowserWindowConstructorOptions {
+  if (type === 'login')
+    return {
+      minWidth: 800,
+      minHeight: 600,
+      width: 800,
+      height: 600,
+      maximizable: false,
+      roundedCorners: false,
+      ...browserWindowOptions
+    }
+  else if (type === 'start')
+    return {
+      minWidth: 1000,
+      minHeight: 750,
+      width: 1000,
+      height: 750,
+      ...browserWindowOptions
+    }
+  else if (type === 'workspace')
+    return {
+      minWidth: 1000,
+      minHeight: 750,
+      ...browserWindowOptions
+    }
+  else if (type === 'popup')
+    return {
+      width: 400,
+      height: 600,
+      autoHideMenuBar: true,
+      center: true,
+      parent
+    }
   else return browserWindowOptions
 }
 
@@ -78,14 +85,16 @@ class WindowHandler {
   }
 
   render(): void {
-    if (this.url)
-      this.instance.loadURL(this.url)
-    else if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    if (this.url) {
+      try {
+        this.instance.loadURL(this.url)
+      } catch (err) {
+        this.instance.loadURL('about:blank')
+      }
+    } else if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       this.instance.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/#${this.type}`)
     } else {
-      this.instance.loadFile(
-        join(__dirname, `../renderer/index.html/#${this.type}`)
-      )
+      this.instance.loadFile(join(__dirname, `../renderer/index.html/#${this.type}`))
     }
   }
 
@@ -116,7 +125,7 @@ export class WindowManager {
   }
 
   child(url: string): void {
-    if (!this.main) return;
+    if (!this.main) return
     this.childWindow = new WindowHandler('popup', url, this.main)
     this.childWindow.preload()
     this.childWindow.render()

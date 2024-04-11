@@ -3,6 +3,10 @@ import { loginWithEmail, loginWithGithub, loginWithGoogle } from '../lib/oauth'
 import { IpcAPI } from '../../shared/ipcChannel'
 
 export const onAuth: IpcAPI['request-user-authentication'] = async (_, req: AuthenticationRequest): Promise<AuthenticationResponse> => {
+  const res: AuthenticationResponse = {
+    result: false,
+    type: 'SignIn'
+  }
   if ('type' in req) {
     if (req.type === 'google') {
       await loginWithGoogle()
@@ -13,7 +17,9 @@ export const onAuth: IpcAPI['request-user-authentication'] = async (_, req: Auth
     console.log('email', req.email)
     await loginWithEmail(req.email, req.password)
   }
+
   return {
-    result: true, type: 'SignIn'
+    result: true,
+    type: 'SignIn'
   } // todo : return really auth response
 }

@@ -98,18 +98,20 @@ const GoogleLoginButton = (): ReactNode => {
     <CentralizedDiv
       className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
     >
-      <button onClick={async () => {
-        const res = await login({
-          req: {
-            type: 'SignIn'
-          },
-          type: 'google'
-        })
-        // fixme: tested -> success : await user social login and response of token
-        // if (res.result) {
-        //   window.ipc('request-change-window', 'start')
-        // }
-      }}>
+      <button
+        onClick={async () => {
+          const res = await login({
+            req: {
+              type: 'SignIn'
+            },
+            type: 'google'
+          })
+          // fixme: tested -> success : await user social login and response of token
+          // if (res.result) {
+          //   window.ipc('request-change-window', 'start')
+          // }
+        }}
+      >
         {/* todo : 3rd party login */}
         <FcGoogle size={20} />
       </button>
@@ -122,18 +124,20 @@ const GithubLoginButton = (): ReactNode => {
     <CentralizedDiv
       className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
     >
-      <button onClick={() => {
-        const res = await login({
-          req: {
-            type: 'SignIn'
-          },
-          type: 'github'
-        })
-        // fixme: tested -> success : await user social login and response of token
-        // if (res.result) {
-        //   window.ipc('request-change-window', 'start')
-        // }
-      }}>
+      <button
+        onClick={async () => {
+          const res = await login({
+            req: {
+              type: 'SignIn'
+            },
+            type: 'github'
+          })
+          // fixme: tested -> success : await user social login and response of token
+          // if (res.result) {
+          //   window.ipc('request-change-window', 'start')
+          // }
+        }}
+      >
         {/* todo : 3rd party login */}
         <IoLogoGithub size={25} />
       </button>
@@ -159,15 +163,13 @@ export const EmailLoginForm = (): ReactNode => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const password = document.getElementById('password-input')?.value
-            const res = await login(
-              {
-                req: {
-                  type: 'SignIn'
-                },
-                email,
-                password
-              }
-            )
+            const res = await login({
+              req: {
+                type: 'SignIn'
+              },
+              email,
+              password
+            })
             // fixme: tested -> success : await user social login and response of token
             // if (res.result) {
             //   window.ipc('request-change-window', 'start')
