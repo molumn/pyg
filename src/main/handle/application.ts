@@ -10,7 +10,7 @@ export class ApplicationHandler {
 
   createWindow(): void {
     // todo : decide what type of window will be displayed
-    WindowManager.instance.switch('login')
+    WindowManager.instance.switch('start')
     WindowManager.instance.display()
   }
 

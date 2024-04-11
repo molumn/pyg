@@ -110,6 +110,7 @@ const GoogleLoginButton = (): ReactNode => {
           // if (res.result) {
           //   window.ipc('request-change-window', 'start')
           // }
+          res.result
         }}
       >
         {/* todo : 3rd party login */}
@@ -136,6 +137,7 @@ const GithubLoginButton = (): ReactNode => {
           // if (res.result) {
           //   window.ipc('request-change-window', 'start')
           // }
+          res.result
         }}
       >
         {/* todo : 3rd party login */}
@@ -174,6 +176,7 @@ export const EmailLoginForm = (): ReactNode => {
             // if (res.result) {
             //   window.ipc('request-change-window', 'start')
             // }
+            res.result
           }}
         >
           {/* todo : onSubmit */}
@@ -185,7 +188,7 @@ export const EmailLoginForm = (): ReactNode => {
           Not a member?{' '}
           {/*<a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">*/}
           {/*  /!* todo : Sign up *!/*/}
-          {/*  Start a 14 day free trial*/}
+          {/*  Start a 14day free trial*/}
           {/*</a>*/}
           {/*  /!* todo : Remove free trial label? *!/*/}
         </p>

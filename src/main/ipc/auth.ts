@@ -2,24 +2,25 @@ import { AuthenticationRequest, AuthenticationResponse } from '../../shared/type
 import { loginWithEmail, loginWithGithub, loginWithGoogle } from '../lib/oauth'
 import { IpcAPI } from '../../shared/ipcChannel'
 
-export const onAuth: IpcAPI['request-user-authentication'] = async (_, req: AuthenticationRequest): Promise<AuthenticationResponse> => {
-  const res: AuthenticationResponse = {
-    result: false,
-    type: 'SignIn'
-  }
+export const onAuth: IpcAPI['request-user-authentication'] = async (
+  _,
+  req: AuthenticationRequest
+): Promise<AuthenticationResponse> => {
+  let res: AuthenticationResponse
   if ('type' in req) {
     if (req.type === 'google') {
-      await loginWithGoogle()
+      res = await loginWithGoogle()
     } else if (req.type === 'github') {
-      await loginWithGithub()
+      res = await loginWithGithub()
+    } else {
+      res = {
+        result: false,
+        type: 'SignIn'
+      }
     }
   } else {
     console.log('email', req.email)
-    await loginWithEmail(req.email, req.password)
+    res = await loginWithEmail(req.email, req.password)
   }
-
-  return {
-    result: true,
-    type: 'SignIn'
-  } // todo : return really auth response
+  return res
 }

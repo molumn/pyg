@@ -11,10 +11,6 @@ export const StartPage = (): ReactNode => {
   return (
     <>
       <TitleBarSection>
-        {
-          window.electron.process.platform === 'darwin' ? <div className={'w-[80px]'} /> : <></>
-          // todo : match traffic light width
-        }
         <div className={'w-[135px]'}>left</div>
         <GrowingDiv />
         <div>center</div>
