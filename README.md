@@ -1,34 +1,15 @@
-# pyg
+# Plan Your Game
 
-An Electron application with React and TypeScript
+## Description
 
-## Recommended IDE Setup
+> 2024년도 1학기 WAP 동아리 웹 10팀 프로젝트입니다
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## ROADMAP
 
-## Project Setup
+ - [ ] ~~인앱 로그인 기능~~
+   - [ ] 백엔드를 통한 로그인 기능
+     - [x] OAuth 로그인 요청
+     - [ ] OAuth Response 받기
+ - [ ] 노트 작성 UI
+ - [ ] 플롯 작성 UI
 
-### Install
-
-```bash
-$ npm install
-```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```
