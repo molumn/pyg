@@ -1,28 +1,44 @@
-import { BrowserWindow, IpcMainEvent } from 'electron'
-
-import { IpcAPI } from '../../shared/ipcChannel'
-import { WindowType } from '../../shared/types'
+import { BrowserWindow, IpcMainInvokeEvent } from 'electron'
+import { IpcListenerType } from './index'
 import { ApplicationHandler } from '../handle/application'
 
-export const onMinimize: IpcAPI['request-minimize-window'] = (event: IpcMainEvent) => {
-  const win = BrowserWindow.fromId(event.sender.id)
-  if (win) win.minimize()
+export type WindowControlIpcCallbacks = {
+  onMinimize: () => void
+  onMaximize: () => void
+  onRestore: () => void
+  onClose: () => void
+
+  onChangeToLogin: () => void
+  onChangeToStart: () => void
+  onChangeToWorkspace: (workspaceNickname?: string) => void
 }
 
-export const onMaximize: IpcAPI['request-maximize-window'] = (event: IpcMainEvent) => {
-  const win = BrowserWindow.fromId(event.sender.id)
-  if (win) win.maximize()
-}
-export const onRestore: IpcAPI['request-restore-window'] = (event: IpcMainEvent) => {
-  const win = BrowserWindow.fromId(event.sender.id)
-  if (win) win.restore()
-}
+export const WindowControlIpcListeners: IpcListenerType<WindowControlIpcCallbacks> = {
+  onMinimize: (event: IpcMainInvokeEvent) => {
+    const win = BrowserWindow.fromId(event.sender.id)
+    if (win) win.minimize()
+  },
+  onMaximize: (event: IpcMainInvokeEvent) => {
+    const win = BrowserWindow.fromId(event.sender.id)
+    if (win) win.maximize()
+  },
+  onRestore: (event: IpcMainInvokeEvent) => {
+    const win = BrowserWindow.fromId(event.sender.id)
+    if (win) win.restore()
+  },
+  onClose: (event: IpcMainInvokeEvent) => {
+    const win = BrowserWindow.fromId(event.sender.id)
+    if (win) win.close()
+  },
 
-export const onClose: IpcAPI['request-close-window'] = (event: IpcMainEvent) => {
-  const win = BrowserWindow.fromId(event.sender.id)
-  if (win) win.close()
-}
-
-export const onChangeWindow: IpcAPI['request-change-window'] = (_: IpcMainEvent, type: WindowType) => {
-  ApplicationHandler.instance.changeWindow(type)
+  onChangeToLogin: () => {
+    ApplicationHandler.instance.changeToLoginWindow()
+  },
+  onChangeToStart: () => {
+    ApplicationHandler.instance.changeToStartWindow()
+  },
+  onChangeToWorkspace: () => {
+    // todo : find recent opened workspace or registered workspace
+    ApplicationHandler.instance.changeToWorkspaceWindow()
+  }
 }

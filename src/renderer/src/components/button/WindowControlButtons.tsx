@@ -44,18 +44,18 @@ export const WindowControlButtons = (): ReactNode => {
     }
   })
 
-  const onMinimize = async (): Promise<void> => {
-    window.ipc('request-minimize-window')
+  const onMinimize = (): void => {
+    window.windowControl.onMinimize()
   }
-  const onMaximizeOrRestore = async (): Promise<void> => {
-    if (maximized) await window.ipc('request-restore-window')
-    else await window.ipc('request-maximize-window')
+  const onMaximizeOrRestore = (): void => {
+    if (maximized) window.windowControl.onRestore()
+    else window.windowControl.onMaximize()
   }
-  const onClose = async (): Promise<void> => {
+  const onClose = (): void => {
     if (windowPage.isWorkspacePage) {
       // todo : popup
     }
-    window.ipc('request-close-window')
+    window.windowControl.onClose()
   }
 
   return window.electron.process.platform !== 'darwin' ? (

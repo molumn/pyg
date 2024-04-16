@@ -1,5 +1,6 @@
 import { WindowType } from '../../shared/types'
 import { WindowManager } from './window'
+import { Workspace, WorkspaceKey } from './workspace'
 
 export class ApplicationHandler {
   static readonly instance: ApplicationHandler = new ApplicationHandler()
@@ -14,8 +15,21 @@ export class ApplicationHandler {
     WindowManager.instance.display()
   }
 
-  changeWindow(type: WindowType): void {
-    WindowManager.instance.switch(type)
+  changeToLoginWindow(): void {
+    WindowManager.instance.switch('login')
+    WindowManager.instance.display()
+  }
+
+  changeToStartWindow(): void {
+    WindowManager.instance.switch('start')
+    WindowManager.instance.display()
+  }
+
+  changeToWorkspaceWindow(workspaceKey?: WorkspaceKey): void {
+    if (!workspaceKey) Workspace.createAndApplyDemo('demo')
+    else Workspace.createAndApplyWorkspace(workspaceKey)
+
+    WindowManager.instance.switch('workspace')
     WindowManager.instance.display()
   }
 

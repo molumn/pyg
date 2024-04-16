@@ -1,13 +1,16 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { IpcRequest } from '../shared/ipcChannel'
+import {
+  AuthorizationIpcRequesters,
+  WindowControlIpcRequesters,
+  WindowStatusIpcRequesters
+} from '../main/ipc/requesters'
 
 declare global {
   interface Window {
-    electron: ElectronAPI,
-    ipc: IpcRequest,
-    register: {
-      on: (channel: string, callback: (...args: unknown[]) => void) => void,
-      remove: (channel: string, callback: (...args: unknown[]) => void) => void
-    }
+    electron: ElectronAPI
+
+    windowControl: typeof WindowControlIpcRequesters
+    windowStatus: typeof WindowStatusIpcRequesters
+    authorization: typeof AuthorizationIpcRequesters
   }
 }

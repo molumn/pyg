@@ -125,7 +125,7 @@ export class WindowManager {
   }
 
   child(url: string): void {
-    if (!this.main) return
+    if (!this.main || this.child !== null) return
     this.childWindow = new WindowHandler('popup', url, this.main)
     this.childWindow.preload()
     this.childWindow.render()

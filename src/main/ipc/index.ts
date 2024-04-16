@@ -1,30 +1,30 @@
-import { BrowserWindow, ipcMain } from 'electron'
-import { IpcAPI } from '../../shared/ipcChannel'
-import { onChangeWindow, onClose, onMaximize, onMinimize, onRestore } from './window-control'
-import { ApplicationHandler } from '../handle/application'
-import { onAuth } from './auth'
+import { ipcMain, IpcMainInvokeEvent } from 'electron'
+import { WindowControlIpcListeners } from './window-control'
+import { WindowStatusIpcListeners } from './window-status'
+import { AuthorizationIpcListeners } from './auth'
 
-const ipcCallbacks: IpcAPI = {
-  'request-window-type': () => {
-    return ApplicationHandler.instance.windowType
-  },
-  'request-window-is-maximized': (event) => {
-    const win = BrowserWindow.fromId(event.sender.id)
-    return win?.isMaximized() === true
-  },
-
-  'request-minimize-window': onMinimize,
-  'request-maximize-window': onMaximize,
-  'request-restore-window': onRestore,
-  'request-close-window': onClose,
-
-  'request-change-window': onChangeWindow,
-
-  'request-user-authentication': onAuth
+type IpcCallbackType = {
+  [key: string]: (...args: any[]) => unknown // ignore (@typescript-eslint/no-explicit-any)
 }
 
-export function registerAllIpcCallbacks(): void {
-  for (const channel in ipcCallbacks) {
-    ipcMain.handle(channel, ipcCallbacks[channel])
+export type IpcRequesterType<T extends IpcCallbackType> = {
+  [key in keyof T]: (...args: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
+}
+export type IpcAsyncRequesterType<T extends IpcCallbackType> = {
+  [key in keyof T]: (...args: Parameters<T[key]>) => ReturnType<T[key]>
+}
+export type IpcListenerType<T extends IpcCallbackType> = {
+  [key in keyof T]: (event: IpcMainInvokeEvent, ...args: Parameters<T[key]>) => ReturnType<T[key]>
+}
+
+function registerIpcListeners(obj: IpcListenerType<IpcCallbackType>): void {
+  for (const key in obj) {
+    ipcMain.handle(key, obj[key])
+    ipcMain.on(key, obj[key])
   }
+}
+export function registerAllIpcCallbacks(): void {
+  registerIpcListeners(WindowControlIpcListeners)
+  registerIpcListeners(WindowStatusIpcListeners)
+  registerIpcListeners(AuthorizationIpcListeners)
 }

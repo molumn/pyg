@@ -6,11 +6,11 @@ export interface WindowState {
 }
 
 const initialState: WindowState = {
-  maximized: await window.ipc('request-window-is-maximized')
+  maximized: await window.windowStatus.getWindowIsMaximized()
 }
 
 export const fetchWindowIsMaximized = createAsyncThunk('window/fetchIsMaximized', async () => {
-  return await window.ipc('request-window-is-maximized')
+  return await window.windowStatus.getWindowIsMaximized()
 })
 
 export const windowSlice = createSlice({
