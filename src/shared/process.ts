@@ -1,94 +1,88 @@
-type Closure<Parameters extends unknown[], ReturnType = unknown> = (
-  ...parameters: Parameters
-) => ReturnType
-type ProcessSegment<Parameters extends unknown[], ReturnType = unknown> = {
-  async: boolean
-  closure: Closure<Parameters, ReturnType>
-}
-type ProcessSegments = {
-  [key: string]: ProcessSegment<any[], any>
-}
+import { hash } from './hash'
 
-class ProcessHandler {
-  protected __done: boolean
-  get done(): boolean {
-    return this.__done
+type ProcessClosure<Parameters extends any[]> = (...parameters: Parameters) => unknown
+type SortedClosureMap<ProcessParameters extends any[]> = {
+  alias: string
+  closure: ProcessClosure<ProcessParameters>
+}[]
+
+class ProcessInstance<T = unknown, TReturn = any, TNext = unknown> {
+  protected generatorFunction: Generator<T, TReturn, TNext>
+
+  constructor(generatorFunction: Generator<T, TReturn, TNext>) {
+    this.generatorFunction = generatorFunction
   }
 
-  protected readonly segments: ProcessSegments
-
-  constructor(segments: ProcessSegments) {
-    this.__done = false
-    this.segments = segments
+  next(...args: [] | [TNext]): IteratorResult<T, TReturn> {
+    return this.generatorFunction.next(...args)
+  }
+  return(value: TReturn): IteratorResult<T, TReturn> {
+    return this.generatorFunction.return(value)
+  }
+  throw(e: any): IteratorResult<T, TReturn> {
+    return this.generatorFunction.throw(e)
   }
 
-  private async *generator(): AsyncGenerator<unknown, void> {
-    for (const step of Object.keys(this.segments)) {
-      const segment = this.segments[step]
-      yield segment.async ? await segment.closure() : segment.closure()
-    }
-  }
-
-  async next(): any {
-    const result = await this.generator().next()
-    if (result.done) this.__done = true
-    return result.value
+  [Symbol.iterator](): Generator<T, TReturn, TNext> {
+    return this.generatorFunction[Symbol.iterator]()
   }
 }
 
-class ProcessHandlerBuilder {
-  protected step = 0
-  protected segments: ProcessSegments = {}
+class DeclaredProcess<ProcessParametersType extends any[]> {
+  protected readonly sortedClosureMap: SortedClosureMap<ProcessParametersType>
 
-  protected pass(): void {
-    this.step += 1
+  constructor(sortedClosureMap: SortedClosureMap<ProcessParametersType>) {
+    this.sortedClosureMap = sortedClosureMap
   }
 
-  sync<Parameters extends unknown[], ReturnType = unknown>(
-    closure: Closure<Parameters, ReturnType>
-  ): ProcessHandlerBuilder {
-    this.segments[this.step] = {
-      async: false,
-      closure: closure
+  protected *generator(..._parameters: ProcessParametersType): Generator {
+    for (const each of this.sortedClosureMap) {
+      yield each.closure(..._parameters)
     }
-    this.pass()
-    return this
   }
-  async<Parameters extends unknown[], ReturnType = unknown>(
-    closure: Closure<Parameters, ReturnType>
-  ): ProcessHandlerBuilder {
-    this.segments[this.step] = {
-      async: true,
-      closure: closure
-    }
-    this.pass()
+
+  instance(...parameters: ProcessParametersType): ProcessInstance {
+    return new ProcessInstance(this.generator(...parameters))
+  }
+}
+
+class ProcessBuilder<ProcessParametersType extends any[]> {
+  protected closureMap: SortedClosureMap<ProcessParametersType> = []
+
+  segment(alias: string, closure: ProcessClosure<ProcessParametersType>): this {
+    this.closureMap.push({
+      alias,
+      closure
+    })
     return this
   }
 
-  protected static build(builder: ProcessHandlerBuilder): ProcessHandler {
-    return new ProcessHandler(builder.segments)
+  protected static build<ProcessParameters extends any[]>(
+    builder: ProcessBuilder<ProcessParameters>
+  ): DeclaredProcess<ProcessParameters> {
+    return new DeclaredProcess(builder.closureMap)
   }
 }
 
-export class Process extends ProcessHandlerBuilder {
-  static simple<Parameters extends unknown[] = [], ReturnType = unknown>(
-    closure: Closure<Parameters, ReturnType>
-  ): ProcessHandler {
-    const builder = new ProcessHandlerBuilder()
-    builder.sync(closure)
-    return this.build(builder)
-  }
-  static simpleAsync<Parameters extends unknown[] = [], ReturnType = unknown>(
-    closure: Closure<Parameters, ReturnType>
-  ): ProcessHandler {
-    const builder = new ProcessHandlerBuilder()
-    builder.async(closure)
-    return this.build(builder)
+export class Process extends ProcessBuilder<any[]> {
+  static simple = <ProcessParameters extends any[]>(
+    closure: ProcessClosure<ProcessParameters>
+  ): DeclaredProcess<ProcessParameters> => {
+    const map: SortedClosureMap<ProcessParameters> = [
+      {
+        alias: hash(Math.random().toString(16)),
+        closure
+      }
+    ]
+    return new DeclaredProcess(map)
   }
 
-  static from(appliance: (builder: ProcessHandlerBuilder) => void): ProcessHandler {
-    const builder = new ProcessHandlerBuilder()
+  static complex = <ProcessParameters extends any[]>(
+    appliance: (builder: ProcessBuilder<ProcessParameters>) => void
+  ): DeclaredProcess<ProcessParameters> => {
+    const builder = new ProcessBuilder()
     appliance(builder)
-    return this.build(builder)
+
+    return Process.build(builder)
   }
 }
