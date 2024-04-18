@@ -3,20 +3,26 @@ import { app } from 'electron'
 
 export class LocalStore<Schema extends object> {
   private readonly _name: string
-  private _store: Schema
+  private store: Schema
   public get name(): string {
     return this._name
-  }
-  public get store(): Schema {
-    return this._store
   }
 
   constructor(name: string, defaultValue: Schema) {
     this._name = name
-    this._store = defaultValue
+    this.store = defaultValue
   }
-  public get(key: string): unknown {
-    return this._store[key]
+
+  public get<Type>(getter: (store: Schema) => Type): Type | undefined {
+    try {
+      return getter(this.store)
+    } catch (e) {
+      return undefined
+    }
+  }
+
+  public edit(setter: (store: Schema) => void): void {
+    setter(this.store)
   }
 
   get filepath(): string {
@@ -25,9 +31,9 @@ export class LocalStore<Schema extends object> {
 
   initialize(): void {
     if (fs.existsSync(this.filepath) === false)
-      fs.writeFileSync(this.filepath, JSON.stringify(this._store))
+      fs.writeFileSync(this.filepath, JSON.stringify(this.store))
     try {
-      this._store = JSON.parse(fs.readFileSync(this.filepath, 'utf-8'))
+      this.store = JSON.parse(fs.readFileSync(this.filepath, 'utf-8'))
     } catch (err) {
       // todo: do nothing?
     }

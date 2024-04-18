@@ -6,6 +6,7 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerAllIpcCallbacks } from './ipc'
 
 import { ApplicationHandler } from './handle/application'
+import { initializeAllStores, saveAllStores } from './lib/store'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('me.molumn')
@@ -20,7 +21,12 @@ app.whenReady().then(() => {
   ApplicationHandler.instance.createWindow()
 
   app.on('activate', () => {
+    initializeAllStores()
     if (BrowserWindow.getAllWindows().length === 0) ApplicationHandler.instance.createWindow()
+  })
+
+  app.on('before-quit', () => {
+    saveAllStores()
   })
 
   // app.on('login', (event, webContents, authenticationResponseDetails, authInfo, callback) => {

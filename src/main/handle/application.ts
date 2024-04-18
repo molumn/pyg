@@ -26,8 +26,9 @@ export class ApplicationHandler {
   }
 
   changeToWorkspaceWindow(workspaceKey?: WorkspaceKey): void {
-    if (!workspaceKey) Workspace.createAndApplyDemo('demo')
-    else Workspace.createAndApplyWorkspace(workspaceKey)
+    if (!workspaceKey) Workspace.createDemo('demo')
+    else Workspace.createWorkspace(workspaceKey)
+    Workspace.findAndApplyWorkspace(workspaceKey?.name ?? 'demo')
 
     WindowManager.instance.switch('workspace')
     WindowManager.instance.display()

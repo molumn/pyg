@@ -37,8 +37,15 @@ export const WindowControlIpcListeners: IpcListenerType<WindowControlIpcCallback
   onChangeToStart: () => {
     ApplicationHandler.instance.changeToStartWindow()
   },
-  onChangeToWorkspace: () => {
+  onChangeToWorkspace: (_, workspaceNickName) => {
     // todo : find recent opened workspace or registered workspace
-    ApplicationHandler.instance.changeToWorkspaceWindow()
+    if (!workspaceNickName) ApplicationHandler.instance.changeToWorkspaceWindow()
+    else {
+      // ApplicationHandler.instance.changeToWorkspaceWindow({
+      //   workspaceNickName: workspaceNickName,
+      // })
+      // todo : create new Workspace
+      ApplicationHandler.instance.changeToWorkspaceWindow()
+    }
   }
 }

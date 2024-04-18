@@ -23,7 +23,7 @@ export const StartPage = (): ReactNode => {
             aside
           </Column>
           <Column className={twMerge('flex-1 px-4 py-3', themeClass.dust.sections.footer)}>
-            <button onClick={async () => window.windowControl.onChangeToWorkspace()}>Demo Workspace</button>
+            <button onClick={async () => window.windowControl.onChangeToWorkspace(undefined)}>Demo Workspace</button>
           </Column>
         </Row>
       </Frame>

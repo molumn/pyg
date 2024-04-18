@@ -2,15 +2,16 @@ import { ipcMain, IpcMainInvokeEvent } from 'electron'
 import { WindowControlIpcListeners } from './window-control'
 import { WindowStatusIpcListeners } from './window-status'
 import { AuthorizationIpcListeners } from './auth'
+import { WorkspaceIpcListeners } from './workspace'
 
 type IpcCallbackType = {
   [key: string]: (...args: any[]) => unknown // ignore (@typescript-eslint/no-explicit-any)
 }
 
-export type IpcRequesterType<T extends IpcCallbackType> = {
+export type IpcPromiseRequesterType<T extends IpcCallbackType> = {
   [key in keyof T]: (...args: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
 }
-export type IpcAsyncRequesterType<T extends IpcCallbackType> = {
+export type IpcRawRequesterType<T extends IpcCallbackType> = {
   [key in keyof T]: (...args: Parameters<T[key]>) => ReturnType<T[key]>
 }
 export type IpcListenerType<T extends IpcCallbackType> = {
@@ -27,4 +28,5 @@ export function registerAllIpcCallbacks(): void {
   registerIpcListeners(WindowControlIpcListeners)
   registerIpcListeners(WindowStatusIpcListeners)
   registerIpcListeners(AuthorizationIpcListeners)
+  registerIpcListeners(WorkspaceIpcListeners)
 }
