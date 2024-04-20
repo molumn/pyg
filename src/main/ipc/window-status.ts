@@ -1,6 +1,6 @@
 import { WindowType } from '../../shared/types'
 import { BrowserWindow } from 'electron'
-import { IpcListenerType } from './index'
+import { IpcHandleListenerType } from './index'
 import { ApplicationHandler } from '../handle/application'
 
 export type WindowStatusIpcCallbacks = {
@@ -8,7 +8,7 @@ export type WindowStatusIpcCallbacks = {
   getWindowIsMaximized: () => boolean
 }
 
-export const WindowStatusIpcListeners: IpcListenerType<WindowStatusIpcCallbacks> = {
+export const WindowStatusIpcListeners: IpcHandleListenerType<WindowStatusIpcCallbacks> = {
   getWindowType: () => {
     return ApplicationHandler.instance.windowType
   },

@@ -16,5 +16,5 @@ export const WorkspaceIpcListeners: IpcListenerType<WorkspaceIpcCallbacks> = {
   onCreateFile: (_, parent: FilePointer, relpath: string, type: FileType): FileNode => {
   },
   onCreateDirectory: (_, parent: FilePointer, relpath: string): FileNode => {
-  }
+  },
 }
