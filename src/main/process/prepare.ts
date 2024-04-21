@@ -1,8 +1,9 @@
 import { Socket } from '../../shared/socket'
 import { BrowserWindow, ipcMain } from 'electron'
 import { ApplicationHandler } from '../handle/application'
-import { WorkspaceKey } from '../handle/workspace'
 import { WindowManager } from '../handle/window'
+import localStores from '../lib/store'
+import { WorkspaceKey } from '../../shared/types'
 
 export const prepareSockets = (): void => {
   const socket = Socket.listener(ipcMain)
@@ -50,5 +51,25 @@ export const prepareSockets = (): void => {
   })
   socket.handle('windowStatus', 'getWindowType', () => {
     return WindowManager.instance.mainType
+  })
+
+  /**
+   * Inter-Process Communication: Workspace
+   */
+  socket.handle('workspace', 'getCreatedWorkspaces', () => {
+    const createdWorkspace: WorkspaceKey[] = []
+    localStores.workspaceStore.get((store) => {
+      for (const key in store.createdWorkspaces) {
+        createdWorkspace.push(store.createdWorkspaces[key])
+      }
+    })
+    return createdWorkspace
+  })
+
+  /**
+   * Inter-Process Communication: Workspace
+   */
+  socket.on('authentication', 'onAuth', () => {
+    // todo : recall
   })
 }

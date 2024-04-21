@@ -10,7 +10,7 @@ export interface CategorizedChannels {
     | 'onChangeToStart'
     | 'onChangeToWorkspace'
   windowStatus: 'getWindowIsMaximized' | 'getWindowType'
-  workspace: 'openFile' | 'saveFile' | 'createFile' | 'createDirectory'
+  workspace: 'openFile' | 'saveFile' | 'createFile' | 'createDirectory' | 'getCreatedWorkspaces'
   authentication: 'onAuth'
 }
 

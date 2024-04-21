@@ -1,6 +1,6 @@
-import { WindowType } from '../../shared/types'
+import { WindowType, WorkspaceKey } from '../../shared/types'
 import { WindowManager } from './window'
-import { Workspace, WorkspaceKey } from './workspace'
+import { Workspace } from './workspace'
 
 export class ApplicationHandler {
   static readonly instance: ApplicationHandler = new ApplicationHandler()

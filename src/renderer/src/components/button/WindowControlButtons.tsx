@@ -1,9 +1,6 @@
-import { ComponentProps, ReactNode, useEffect } from 'react'
+import { ComponentProps, ReactNode, useEffect, useState } from 'react'
 
 import { twMerge } from 'tailwind-merge'
-
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { fetchWindowIsMaximized, selectWindowIsMaximized } from '../../store/state/window'
 
 import {
   VscChromeClose,
@@ -32,25 +29,28 @@ const WindowControlButton = ({
 }
 
 export const WindowControlButtons = (): ReactNode => {
-  const maximized = useAppSelector(selectWindowIsMaximized)
-  const dispatch = useAppDispatch()
+  const [isMaximized, setIsMaximized] = useState(false)
 
   useEffect(() => {
-    function handleResize(): void {
-      dispatch(fetchWindowIsMaximized())
+    async function fetchIsMaximized(): Promise<void> {
+      const socket = Socket.requester(window)
+      const response: boolean = await socket.request('windowStatus', 'getWindowIsMaximized')
+      setIsMaximized(response)
     }
-    window.addEventListener('resize', handleResize)
+    fetchIsMaximized()
+
+    window.addEventListener('resize', fetchIsMaximized)
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', fetchIsMaximized)
     }
-  })
+  }, [])
 
   const onMinimize = (): void => {
     Socket.requester(window).command('windowControl', 'onMinimized')
   }
   const onMaximizeOrRestore = (): void => {
     const requester = Socket.requester(window)
-    if (maximized) requester.command('windowControl', 'onRestore')
+    if (isMaximized) requester.command('windowControl', 'onRestore')
     else requester.command('windowControl', 'onMaximized')
   }
   const onClose = (): void => {
@@ -74,7 +74,7 @@ export const WindowControlButtons = (): ReactNode => {
           onClick={onMaximizeOrRestore}
           className={themeClass.dust.control.maximize}
         >
-          {maximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+          {isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
         </WindowControlButton>
       ) : (
         <></>

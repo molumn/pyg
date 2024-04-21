@@ -2,14 +2,7 @@ import { join } from 'path'
 import { app } from 'electron'
 import { mkdirSync } from 'fs'
 import localStores from '../lib/store'
-
-export type WorkspaceType = 'planning-game' | 'demo'
-
-export type WorkspaceKey = {
-  name: string
-  rootPath: string
-  type: WorkspaceType
-}
+import { WorkspaceKey, WorkspaceType } from '../../shared/types'
 
 export class Workspace {
   private static _demo: Workspace = new Workspace(

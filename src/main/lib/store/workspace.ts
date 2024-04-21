@@ -1,5 +1,5 @@
 import { LocalStore } from './type'
-import { WorkspaceKey } from '../../handle/workspace'
+import { WorkspaceKey } from '../../../shared/types'
 
 type WorkspaceStoreSchema = {
   createdWorkspaces: {
