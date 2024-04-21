@@ -18,10 +18,11 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => console.log('pong'))
   registerAllIpcCallbacks()
 
+  initializeAllStores()
+
   ApplicationHandler.instance.createWindow()
 
   app.on('activate', () => {
-    initializeAllStores()
     if (BrowserWindow.getAllWindows().length === 0) ApplicationHandler.instance.createWindow()
   })
 
