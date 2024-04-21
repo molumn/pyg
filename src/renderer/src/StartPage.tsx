@@ -8,6 +8,8 @@ import GrowingDiv from './components/base/GrowingDiv'
 import { TitleBarSection } from './components/TitleBar'
 import { Socket } from '../../shared/socket'
 import { WorkspaceKey } from '../../shared/types'
+import { WorkspaceEntryButton } from './components/button/WorkspaceEntryButton'
+import { hash } from '../../shared/hash'
 
 export const StartPage = (): ReactNode => {
   const [createdWorkspaces, resetCreatedWorkspaces] = useState<WorkspaceKey[]>([])
@@ -39,16 +41,7 @@ export const StartPage = (): ReactNode => {
           </Column>
           <Column className={twMerge('flex-1 px-4 py-3', themeClass.dust.sections.footer)}>
             {createdWorkspaces.map((key) => {
-              return (
-                <button
-                  key={`start-page-workspace-button${key.name}`}
-                  onClick={() =>
-                    Socket.requester(window).command('windowControl', 'onChangeToWorkspace', key)
-                  }
-                >
-                  {key.name}
-                </button>
-              )
+              return <WorkspaceEntryButton key={hash(key.name)} workspaceKey={key} />
             })}
           </Column>
         </Row>
