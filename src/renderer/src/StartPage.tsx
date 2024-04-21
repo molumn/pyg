@@ -6,6 +6,7 @@ import { twMerge } from 'tailwind-merge'
 import { themeClass } from './utils'
 import GrowingDiv from './components/base/GrowingDiv'
 import { TitleBarSection } from './components/TitleBar'
+import { Socket } from '../../shared/socket'
 
 export const StartPage = (): ReactNode => {
   return (
@@ -23,7 +24,7 @@ export const StartPage = (): ReactNode => {
             aside
           </Column>
           <Column className={twMerge('flex-1 px-4 py-3', themeClass.dust.sections.footer)}>
-            <button onClick={async () => window.windowControl.onChangeToWorkspace(undefined)}>Demo Workspace</button>
+            <button onClick={async () => Socket.requester(window).command('windowControl', 'onChangeToWorkspace', undefined)}>Demo Workspace</button>
           </Column>
         </Row>
       </Frame>

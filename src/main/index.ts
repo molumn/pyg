@@ -3,10 +3,9 @@ import 'dotenv/config.js'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 
-import { registerAllIpcCallbacks } from './ipc'
-
 import { ApplicationHandler } from './handle/application'
 import { initializeAllStores, saveAllStores } from './lib/store'
+import { prepareSockets } from './process/prepare'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('me.molumn')
@@ -15,8 +14,8 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  prepareSockets()
   ipcMain.on('ping', () => console.log('pong'))
-  registerAllIpcCallbacks()
 
   initializeAllStores()
 

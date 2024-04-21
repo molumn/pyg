@@ -14,6 +14,7 @@ import {
 
 import { windowPage } from '../../utils'
 import { themeClass } from '../../utils'
+import { Socket } from '../../../../shared/socket'
 
 const WindowControlButton = ({
   className,
@@ -45,17 +46,18 @@ export const WindowControlButtons = (): ReactNode => {
   })
 
   const onMinimize = (): void => {
-    window.windowControl.onMinimize()
+    Socket.requester(window).command('windowControl', 'onMinimized')
   }
   const onMaximizeOrRestore = (): void => {
-    if (maximized) window.windowControl.onRestore()
-    else window.windowControl.onMaximize()
+    const requester = Socket.requester(window)
+    if (maximized) requester.command('windowControl', 'onRestore')
+    else requester.command('windowControl', 'onMaximized')
   }
   const onClose = (): void => {
     if (windowPage.isWorkspacePage) {
       // todo : popup
     }
-    window.windowControl.onClose()
+    Socket.requester(window).command('windowControl', 'onClose')
   }
 
   return window.electron.process.platform !== 'darwin' ? (

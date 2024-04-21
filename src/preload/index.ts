@@ -1,14 +1,15 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer, IpcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { ipcRequesters } from '../main/ipc/ipcRequesters'
 
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
-
-    for (const key in ipcRequesters) {
-      contextBridge.exposeInMainWorld(key, ipcRequesters[key])
-    }
+    contextBridge.exposeInMainWorld(
+      'borrowRequester',
+      (callback: (ipcRenderer: IpcRenderer) => any): any => {
+        return callback(ipcRenderer)
+      }
+    )
   } catch (error) {
     console.error(error)
   }
