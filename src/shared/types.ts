@@ -6,11 +6,15 @@ export type AuthenticationRequest = {
   }
 } & (
   | {
+      type: 'email'
       email: string
       password: string
     }
   | {
-      type: 'google' | 'github'
+      type: 'google'
+    }
+  | {
+      type: 'github'
     }
 )
 export type AuthenticationResponse = {

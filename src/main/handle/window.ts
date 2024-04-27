@@ -65,11 +65,9 @@ export function getBrowserWindowOptions(
 class WindowHandler {
   private instance: BrowserWindow
   readonly type: WindowType
-  private readonly url: string | undefined
-  constructor(windowType: WindowType, url?: string, parent?: WindowHandler) {
+  constructor(windowType: WindowType, parent?: WindowHandler) {
     this.type = windowType
     this.instance = new BrowserWindow(getBrowserWindowOptions(windowType, parent?.instance))
-    this.url = url
   }
 
   preload(): void {
@@ -85,13 +83,7 @@ class WindowHandler {
   }
 
   render(): void {
-    if (this.url) {
-      try {
-        this.instance.loadURL(this.url)
-      } catch (err) {
-        this.instance.loadURL('about:blank')
-      }
-    } else if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       this.instance.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/#${this.type}`)
     } else {
       this.instance.loadFile(join(__dirname, `../renderer/index.html/#${this.type}`))
@@ -112,8 +104,6 @@ export class WindowManager {
     return this.main?.type ?? 'login'
   }
 
-  private childWindow: WindowHandler | null = null
-
   display(): void {
     if (this.main) this.main.render()
   }
@@ -124,10 +114,7 @@ export class WindowManager {
     this.main.preload()
   }
 
-  child(url: string): void {
-    if (!this.main || this.child !== null) return
-    this.childWindow = new WindowHandler('popup', url, this.main)
-    this.childWindow.preload()
-    this.childWindow.render()
+  static createWindowInstance(options: BrowserWindowConstructorOptions = {}): BrowserWindow {
+    return new BrowserWindow(options)
   }
 }

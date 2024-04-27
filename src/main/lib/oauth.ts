@@ -1,33 +1,34 @@
-import { ApplicationHandler } from '../handle/application'
-import { AuthenticationResponse } from '../../shared/types'
+import { WindowManager } from '../handle/window'
 
-export const loginWithGoogle = async (): Promise<AuthenticationResponse> => {
-  ApplicationHandler.instance.popupWindow(
-    'https://accounts.google.com/o/oauth2/v2/auth?' +
-      'scope=email%20profile&' +
-      'response_type=code&' +
-      'redirect_uri=http://[::1]:3000/start&' +
-      `client_id=${process.env.GOOGLE_OAUTH_CLIENT_ID}`
-  )
-  // todo : wait for popup finish ?
-  return {
-    result: true,
-    type: 'SignIn'
-  }
+type GoogleTokenResponse = {
+  token: string
+  expires_in: number
+  refresh_token: string
+  token_type: string
+  id_token: string
 }
 
-export const loginWithGithub = async (): Promise<AuthenticationResponse> => {
-  // todo
-  return {
-    result: true,
-    type: 'SignIn'
-  }
-}
+export class GoogleOAuthHandler {
+  static readonly clientId: string = process.env.GOOGLE_OAUTH_CLIENT_ID ?? ''
+  static readonly clientSecret: string = process.env.GOOGLE_OAUTH_CLIENT_SECRET ?? ''
 
-export const loginWithEmail = async (email: string, password: string): Promise<AuthenticationResponse> => {
-  // todo
-  return {
-    result: true,
-    type: 'SignIn'
+  static async profile(
+    requestId: string,
+    redirectURL: string = 'http://localhost'
+  ): Promise<GoogleTokenResponse> {
+    let token_received = false
+    let token: string = ''
+    let expire_in: string = ''
+    let refresh_token: string = ''
+    let token_type: string = ''
+    let id_token: string = ''
+
+    return {
+      token,
+      expires_in: Number.parseInt(expire_in),
+      refresh_token,
+      id_token,
+      token_type
+    }
   }
 }

@@ -34,6 +34,12 @@ app.whenReady().then(() => {
   // })
 })
 
+app.setAsDefaultProtocolClient('pyg-protocol')
+
+app.on('open-url', (_, url: string) => {
+  console.log(url)
+})
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()

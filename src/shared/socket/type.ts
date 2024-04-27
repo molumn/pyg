@@ -1,4 +1,9 @@
-export type ChannelCategory = 'windowControl' | 'windowStatus' | 'workspace' | 'authentication'
+export type ChannelCategory =
+  | 'windowControl'
+  | 'windowStatus'
+  | 'workspace'
+  | 'authentication'
+  | 'nodeUtilities'
 
 export interface CategorizedChannels {
   windowControl:
@@ -12,6 +17,7 @@ export interface CategorizedChannels {
   windowStatus: 'getWindowIsMaximized' | 'getWindowType'
   workspace: 'openFile' | 'saveFile' | 'createFile' | 'createDirectory' | 'getCreatedWorkspaces'
   authentication: 'onAuth'
+  nodeUtilities: ''
 }
 
 export const getChannelString = <Category extends ChannelCategory>(

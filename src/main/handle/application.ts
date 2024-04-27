@@ -33,8 +33,4 @@ export class ApplicationHandler {
     WindowManager.instance.switch('workspace')
     WindowManager.instance.display()
   }
-
-  popupWindow(url: string): void {
-    WindowManager.instance.child(url)
-  }
 }

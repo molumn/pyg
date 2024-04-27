@@ -169,6 +169,7 @@ export const EmailLoginForm = (): ReactNode => {
               req: {
                 type: 'SignIn'
               },
+              type: 'email',
               email,
               password
             })
