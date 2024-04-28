@@ -3,8 +3,7 @@ import { BrowserWindow, ipcMain } from 'electron'
 import { ApplicationHandler } from '../handle/application'
 import { WindowManager } from '../handle/window'
 import localStores from '../lib/store'
-import { AuthenticationRequest, AuthenticationResponse, WorkspaceKey } from '../../shared/types'
-import { GoogleOAuthHandler } from '../lib/oauth'
+import { WorkspaceKey } from '../../shared/types'
 
 export const prepareSockets = (): void => {
   const socket = Socket.listener(ipcMain)
@@ -70,20 +69,15 @@ export const prepareSockets = (): void => {
   /**
    * Inter-Process Communication: Workspace
    */
-  socket.handle(
-    'authentication',
-    'onAuth',
-    async (event, authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
-      const redirectURL = BrowserWindow.fromId(event.sender.id)?.webContents.getURL()
-      if (authInfo.type === 'google') {
-        await GoogleOAuthHandler.profile('', redirectURL).then((res) => {
-          console.log(res)
-        })
-      }
-      return {
-        result: true,
-        type: 'SignIn'
-      }
-    }
-  )
+  // socket.handle(
+  //   'authentication',
+  //   'onAuth',
+  //   async (_, authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
+  //     // todo : authentication
+  //     return {
+  //       result: true,
+  //       type: 'SignIn'
+  //     }
+  //   }
+  // )
 }

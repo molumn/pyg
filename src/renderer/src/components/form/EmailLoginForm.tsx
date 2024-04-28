@@ -9,6 +9,7 @@ import { CentralizedDiv, Column, Row } from '../../utils/class/Layout'
 
 import { themeClass } from '../../utils'
 import { login } from '../../utils/login'
+import { Socket } from '../../../../shared/socket'
 
 const EmailInput = (): ReactNode => {
   return (
@@ -197,6 +198,12 @@ export const EmailLoginForm = (): ReactNode => {
         <Row className={'mt-4 justify-center gap-x-4'}>
           <GoogleLoginButton />
           <GithubLoginButton />
+          {/* Guest Button */}
+          <button
+            onClick={() => Socket.requester(window).command('windowControl', 'onChangeToStart')}
+          >
+            Guest
+          </button>
         </Row>
       </div>
     </Column>
