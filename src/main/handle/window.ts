@@ -84,9 +84,9 @@ class WindowHandler {
 
   render(): void {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      this.instance.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/#${this.type}`)
+      this.instance.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#${this.type}`)
     } else {
-      this.instance.loadFile(join(__dirname, `../renderer/index.html/#${this.type}`))
+      this.instance.loadURL(`file://${join(__dirname, `../renderer/index.html#${this.type}`)}`)
     }
   }
 
