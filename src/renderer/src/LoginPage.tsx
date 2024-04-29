@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { CentralizedDiv } from './utils/class/Layout'
+import { CentralizedDiv } from './components/layout/utils/Layout'
 import { twMerge } from 'tailwind-merge'
 import { themeClass } from './utils'
 import { EmailLoginForm } from './components/form/EmailLoginForm'

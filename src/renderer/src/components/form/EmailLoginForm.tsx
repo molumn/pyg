@@ -5,7 +5,7 @@ import { IoLogoGithub } from 'react-icons/io'
 
 import { twMerge } from 'tailwind-merge'
 
-import { CentralizedDiv, Column, Row } from '../../utils/class/Layout'
+import { CentralizedDiv, Column, Row } from '../layout/utils/Layout'
 
 import { themeClass } from '../../utils'
 import { login } from '../../utils/login'
@@ -200,6 +200,7 @@ export const EmailLoginForm = (): ReactNode => {
           <GithubLoginButton />
           {/* Guest Button */}
           <button
+            className={'w-[40px] h-[40px] rounded-full'}
             onClick={() => Socket.requester(window).command('windowControl', 'onChangeToStart')}
           >
             Guest

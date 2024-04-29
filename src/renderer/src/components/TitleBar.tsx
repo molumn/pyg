@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { WindowControlButtons } from './button/WindowControlButtons'
 
-import { Row } from '../utils/class/Layout'
+import { Row } from './layout/utils/Layout'
 import { themeClass } from '../utils'
 
 export const TitleBarSection = ({

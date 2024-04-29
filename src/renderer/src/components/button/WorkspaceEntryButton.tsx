@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { WorkspaceKey } from '../../../../shared/types'
 import { Socket } from '../../../../shared/socket'
-import { Column, Row } from '../../utils/class/Layout'
+import { Column, Row } from '../layout/utils/Layout'
 import { PiDotsThreeVertical } from 'react-icons/pi'
 
 export const WorkspaceEntryButton = ({
@@ -10,7 +10,7 @@ export const WorkspaceEntryButton = ({
   workspaceKey: WorkspaceKey
 }): ReactNode => {
   return (
-    <Row className={'group w-full h-[50px] px-3 rounded-xl items-center hover:bg-dust-concentrate'}>
+    <Row className={'group w-full h-[50px] px-3 py-1 rounded-xl items-center hover:bg-dust-concentrate'}>
       <Column
         className={'grow'}
         onClick={() =>
