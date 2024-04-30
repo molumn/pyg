@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  }
+}
+
+@layer base {
+  #root {
+    @apply h-full;
+  }
+  html,
+  body {
+    @apply h-full;
+    @apply select-none;
+    @apply bg-transparent;
+    @apply font-mono antialiased text-black dark:text-gray-600;
+    @apply overflow-hidden;
+  }
+
+  *:focus {
+    outline-width: 0;
+  }
+}
+
+@layer components {
+  .titlebar {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  button {
+    -webkit-app-region: no-drag;
+  }
+}
