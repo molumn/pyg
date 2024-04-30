@@ -1,9 +1,0 @@
-{
-  "files": [
-    "out",
-    "src",
-    "resources",
-    "build"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
-}
