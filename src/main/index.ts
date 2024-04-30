@@ -7,6 +7,8 @@ import { ApplicationHandler } from './handle/application'
 import { initializeAllStores, saveAllStores } from './lib/store'
 import { prepareSockets } from './process/prepare'
 
+if (require('electron-squirrel-startup')) app.quit();
+
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('me.molumn')
 
