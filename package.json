@@ -1,7 +1,7 @@
 {
   "name": "pyg",
   "productName": "pyg",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A Note Application for planning game",
   "main": ".vite/build/main.js",
   "scripts": {
