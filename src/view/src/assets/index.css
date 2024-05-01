@@ -31,6 +31,10 @@
   *:focus {
     outline-width: 0;
   }
+
+  button {
+    -webkit-app-region: no-drag;
+  }
 }
 
 @layer components {
@@ -38,9 +42,5 @@
     -webkit-app-region: drag;
     -webkit-user-select: none;
     user-select: none;
-  }
-
-  button {
-    -webkit-app-region: no-drag;
   }
 }

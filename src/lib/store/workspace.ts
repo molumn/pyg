@@ -1,5 +1,6 @@
 import { LocalStore } from './type'
-import { WorkspaceKey } from '../../../shared/types'
+import { WorkspaceKey } from '../../common/type'
+import { existsSync } from 'fs'
 
 type WorkspaceStoreSchema = {
   createdWorkspaces: {
@@ -12,5 +13,12 @@ export class WorkspaceStore extends LocalStore<WorkspaceStoreSchema> {
     super('workspace', {
       createdWorkspaces: {}
     })
+  }
+  initialize(): void {
+    super.initialize()
+    for (const workspaceNickname in this.store.createdWorkspaces) {
+      const workspaceKey = this.store.createdWorkspaces[workspaceNickname]
+      workspaceKey.isExisted = existsSync(workspaceKey.rootPath)
+    }
   }
 }

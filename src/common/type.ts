@@ -28,4 +28,5 @@ export type WorkspaceKey = {
   name: string
   rootPath: string
   type: WorkspaceType
+  isExisted: boolean
 }

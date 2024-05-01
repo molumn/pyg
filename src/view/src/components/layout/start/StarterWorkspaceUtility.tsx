@@ -7,7 +7,7 @@ import { hash } from '../../../../../common/hash'
 import { WorkspaceKey } from '../../../../../common/type'
 import { IpcSocket } from '../../../../../common/socket'
 
-import GrowingDiv from '../../base/GrowingDiv'
+import GrowingDiv from '../utils/GrowingDiv'
 import { Column, Row } from '../utils/Layout'
 import { DisplayOptional } from '../utils/DisplayOptional'
 import { WorkspaceEntryButton } from '../../button/WorkspaceEntryButton'

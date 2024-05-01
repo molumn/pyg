@@ -7,6 +7,7 @@ export const CentralizedDiv = ({
   children,
   ...props
 }: ComponentProps<'div'>): JSX.Element => {
+  console.log(children)
   return (
     <div
       className={twMerge(

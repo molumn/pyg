@@ -4,6 +4,10 @@
   "version": "0.3.3",
   "description": "A Note Application for planning game",
   "main": ".vite/build/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/molumn/pyg"
+  },
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -21,6 +25,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron/fuses": "^1.8.0",

@@ -2,8 +2,8 @@ import fs from 'fs'
 import { app } from 'electron'
 
 export class LocalStore<Schema extends object> {
-  private readonly _name: string
-  private store: Schema
+  protected readonly _name: string
+  protected store: Schema
   public get name(): string {
     return this._name
   }

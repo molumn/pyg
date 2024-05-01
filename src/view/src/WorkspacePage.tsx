@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Frame } from './components/Frame'
+import { Frame } from './components/layout/Frame'
 import {
   WorkspaceFooter,
   WorkspaceHeader,
