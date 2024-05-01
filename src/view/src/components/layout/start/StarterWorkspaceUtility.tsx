@@ -32,7 +32,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
 
   return (
     <>
-      <DisplayOptional display={layout === 'list'} slideIn={'Left'}>
+      <DisplayOptional display={layout === 'list'}>
         <Column className={twMerge('flex-1 px-4 py-3', '', themeClass.dust.sections.footer)}>
           <Row className={'h-[40px] px-1 items-center'}>
             <GrowingDiv />
@@ -50,7 +50,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
           })}
         </Column>
       </DisplayOptional>
-      <DisplayOptional display={layout === 'new'} slideIn={'Left'}>
+      <DisplayOptional display={layout === 'new'}>
         <Column className={twMerge('flex-1 px-4 py-3 gap-2', themeClass.dust.sections.footer)}>
           <Row className={'h-[40px] px-1 items-center'}>
             <button

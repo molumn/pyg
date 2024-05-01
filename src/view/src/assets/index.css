@@ -43,6 +43,17 @@
     -webkit-user-select: none;
     user-select: none;
   }
+
+  .workspace-section-type:after {
+  }
+  .workspace-section-type:before {
+  }
+
+  .centralize {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 @layer utilities {

@@ -22,8 +22,8 @@ export const StartPage = (): JSX.Element => {
       <Frame>
         <TabbableArea layout={'row'}>
           <TabSidebar className={twMerge('w-[280px] px-2 py-3', themeClass.dust.start.sidebar)}>
-            <TabButton name={'workspace'} activateClassName={'bg-dust-concentrate'}/>
-            <TabButton name={'configuration'} />
+            <TabButton name={'workspace'}>Workspace</TabButton>
+            <TabButton name={'configuration'}>Configuration</TabButton>
           </TabSidebar>
           <TabViewArea className={'w-full'}>
             <TabView name={'workspace'}>
