@@ -26,14 +26,15 @@ export class Workspace {
       store.createdWorkspaces[name] = {
         name,
         rootPath: workspaceRoot,
-        type: 'demo'
+        type: 'demo',
+        isExisted: true
       }
     })
   }
 
   static createWorkspace(key?: WorkspaceKey): void {
     if (!key) return
-    mkdirSync(key.rootPath, { recursive: true })
+    if (!key.isExisted) mkdirSync(key.rootPath, { recursive: true })
     localStores.workspaceStore.edit((store) => {
       store.createdWorkspaces[key.name] = key
     })

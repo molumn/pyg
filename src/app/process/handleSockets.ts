@@ -1,11 +1,12 @@
 import { BrowserWindow, ipcMain } from 'electron'
 
-import { WorkspaceKey } from '../../common/type'
+import { AuthenticationRequest, WorkspaceKey } from '../../common/type'
 import { IpcSocket } from '../../common/socket'
 
 import { ApplicationHandler } from '../../structure/application'
 
 import localStores from '../../lib/store'
+import { Workspace } from '../../structure/workspace'
 
 export const handleSockets = (): void => {
   IpcSocket.createListener(ipcMain)
@@ -68,11 +69,19 @@ export const handleSockets = (): void => {
     })
     return createdWorkspace
   })
+  socket.on('workspace', 'createWorkspace', (event, key: WorkspaceKey) => {
+    Workspace.createWorkspace(key)
+    ApplicationHandler.changeToWorkspaceWindow(key)
+  })
+  socket.on('workspace', 'createDemo', () => {
+    Workspace.createDemo('demo')
+    ApplicationHandler.changeToWorkspaceWindow()
+  })
 
   /**
-   * Inter-Process Communication: Workspace
+   * Inter-Process Communication: Authentication
    */
-  // IpcSocket.handle(
+  // socket.handle(
   //   'authentication',
   //   'onAuth',
   //   async (_, authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
@@ -83,4 +92,16 @@ export const handleSockets = (): void => {
   //     }
   //   }
   // )
+
+  /**
+   * Inter-Process Communication: NodeUtilities
+   */
+  socket.handle(
+    'nodeUtilities',
+    'checkDirectoryIsFree',
+    async (_, directory: string): Promise<boolean> => {
+      let result: boolean =  /^(\/?[a-z0-9A-Z\-]+)+$/.test(directory)
+      return result
+    }
+  )
 }

@@ -15,9 +15,9 @@ export interface CategorizedChannels {
     | 'onChangeToStart'
     | 'onChangeToWorkspace'
   windowStatus: 'getWindowIsMaximized' | 'getWindowType'
-  workspace: 'openFile' | 'saveFile' | 'createFile' | 'createDirectory' | 'getCreatedWorkspaces'
+  workspace: 'openFile' | 'saveFile' | 'createFile' | 'createDirectory' | 'getCreatedWorkspaces' | 'createWorkspace' | 'createDemo'
   authentication: 'onAuth'
-  nodeUtilities: ''
+  nodeUtilities: 'checkDirectoryIsFree'
 }
 
 export const getChannelString = <Category extends ChannelCategory>(

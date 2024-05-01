@@ -2,27 +2,27 @@ import { ComponentProps, useState } from 'react'
 import { Column, Row } from './Layout'
 import { twMerge } from 'tailwind-merge'
 import { hash } from '../../../../../common/hash'
-import { DisplayOptional } from './DisplayOptional'
 
 type TabButtonProps = {
   name: string
-}
+  activateClassName?: string
+} & ComponentProps<'button'>
 type TabViewProps = {
   name: string
 } & ComponentProps<'div'>
 export const TabButton = (props: TabButtonProps): JSX.Element => { return null }
 export const TabView = (props: TabViewProps): JSX.Element => { return null }
 
-const TabButtonImpl = ({ sidebarLayout, children, onClick }: { sidebarLayout: 'col' | 'row' } & ComponentProps<'button'>): JSX.Element => {
-  let className: string
+const TabButtonImpl = ({ sidebarLayout, className, children, onClick, ...props }: { sidebarLayout: 'col' | 'row' } & ComponentProps<'button'>): JSX.Element => {
+  let defaultClassName: string
   if (sidebarLayout === 'row') {
-    className = ''
+    defaultClassName = ''
   } else {
-    className = ''
+    defaultClassName = ''
   }
 
   return (
-    <button className={className} onClick={onClick}>
+    <button className={twMerge('hover:bg-dust-concentrate focus:bg-dust-concentrate', defaultClassName, className)} onClick={onClick} {...props}>
       {children}
     </button>
   )
@@ -34,10 +34,11 @@ export const TabViewArea = (props: ComponentProps<'div'>): JSX.Element => { retu
 type TabSidebarImplProps = {
   layout: 'col' | 'row'
   tabs: string[]
+  buttonActivatedClassName: string
   onTabClick: (tab: string) => void
   focusedTab: string
 } & ComponentProps<'div'>
-const TabSidebarImpl = ({ layout, tabs, className, focusedTab, onTabClick }: TabSidebarImplProps): JSX.Element => {
+const TabSidebarImpl = ({ layout, tabs, buttonActivatedClassName, focusedTab, onTabClick, className }: TabSidebarImplProps): JSX.Element => {
   let Layout: (props: ComponentProps<'div'>) => JSX.Element
   if (layout === 'col') Layout = Column
   else Layout = Row
@@ -45,7 +46,7 @@ const TabSidebarImpl = ({ layout, tabs, className, focusedTab, onTabClick }: Tab
   return (
     <Layout className={twMerge('', className)}>
       {
-        tabs.map((tab) => <TabButtonImpl sidebarLayout={layout} key={hash(`tabbable-area-sidebar-tab-${tab}-${Math.random()}`)} onClick={() => onTabClick(tab)}>{tab}</TabButtonImpl>)
+        tabs.map((tab) => <TabButtonImpl sidebarLayout={layout} key={hash(`tabbable-area-sidebar-tab-${tab}-${Math.random()}`)} className={twMerge(tab === focusedTab ? buttonActivatedClassName : '')} onClick={() => onTabClick(tab)}>{tab}</TabButtonImpl>)
       }
     </Layout>
   )
@@ -80,8 +81,6 @@ export const TabbableArea = ({ layout, className, children }: TabbableAreaProps)
     viewOptionProps = viewProps.children === undefined ? [] : [viewProps.children as JSX.Element]
   }
 
-  console.log(sidebarProps)
-
   const tabs: string[] = tabButtonProps.map((element) => element.props.name)
   const views: { [name: string]: JSX.Element } = {}
 
@@ -99,6 +98,7 @@ export const TabbableArea = ({ layout, className, children }: TabbableAreaProps)
     ...sidebarProps,
     layout: layout === 'row' ? 'col' : 'row',
     tabs,
+    buttonActivatedClassName: tabButtonProps[0].props.activateClassName,
     focusedTab,
     onTabClick: setFocusedTab
   }

@@ -1,9 +1,11 @@
 import React, { ComponentProps } from 'react'
 
 export const DisplayOptional = ({
-  optional,
+  display,
+  slideIn,
+  className,
   children
-}: { optional?: boolean } & ComponentProps<'div'>): JSX.Element => {
-  if (!optional) return <></>
-  return <>{children}</>
+}: { display?: boolean, slideIn: 'Left' | 'Light' } & ComponentProps<'div'>): JSX.Element => {
+  if (!display) return <div className={className}></div>
+  return <div className={'w-full h-full'}>{children}</div>
 }

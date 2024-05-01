@@ -32,8 +32,8 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
 
   return (
     <>
-      <DisplayOptional optional={layout === 'list'}>
-        <Column className={twMerge('flex-1 px-4 py-3', themeClass.dust.sections.footer)}>
+      <DisplayOptional display={layout === 'list'} slideIn={'Left'}>
+        <Column className={twMerge('flex-1 px-4 py-3', '', themeClass.dust.sections.footer)}>
           <Row className={'h-[40px] px-1 items-center'}>
             <GrowingDiv />
             <button
@@ -50,7 +50,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
           })}
         </Column>
       </DisplayOptional>
-      <DisplayOptional optional={layout === 'new'}>
+      <DisplayOptional display={layout === 'new'} slideIn={'Left'}>
         <Column className={twMerge('flex-1 px-4 py-3 gap-2', themeClass.dust.sections.footer)}>
           <Row className={'h-[40px] px-1 items-center'}>
             <button
@@ -66,16 +66,44 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
               className={
                 'w-[80px] h-[25px] flex items-center justify-center rounded-[5px] bg-dust-utility'
               }
-              onClick={(): void => setLayout('list')}
+              onClick={async (): Promise<void> => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const name = document.getElementById('workspace-new-name')?.value ?? ''
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const path = document.getElementById('workspace-new-path')?.value ?? ''
+
+                const socket = IpcSocket.requester
+                if (!await socket.request('nodeUtilities', 'checkDirectoryIsFree', path)) {
+                  return
+                }
+
+                const key: WorkspaceKey = {
+                  name,
+                  type: 'planning-game',
+                  rootPath: path,
+                  isExisted: false
+                }
+
+                socket.command('workspace', 'createWorkspace', key)
+              }}
             >
               Create
             </button>
+            <div className={'w-[5px]'}></div>
+            <button
+              className={'w-[120px] h-[25px] flex items-center justify-center rounded-[5px] bg-gray-300'}
+              onClick={() => IpcSocket.requester.command('workspace', 'createDemo')}
+            >
+              Create Demo
+            </button>
           </Row>
           <div>
-            Workspace Name : <input />
+            Workspace Name : <input id={'workspace-new-name'} className={''} />
           </div>
           <div>
-            Workspace Location : <input />
+            Workspace Location : <input id={'workspace-new-path'} className={''} />
           </div>
         </Column>
       </DisplayOptional>
