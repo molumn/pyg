@@ -8,9 +8,13 @@ import { twMerge } from 'tailwind-merge'
 import { IpcSocket } from '../../../../common/socket'
 
 import { themeClass } from '../../utils'
-import { login } from '../../utils/login'
 
 import { CentralizedDiv, Column, Row } from '../layout/utils/Layout'
+import { AuthenticationRequest, AuthenticationResponse } from '../../../../common/type'
+
+const login = async (authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
+  return await IpcSocket.requester.request('authentication', 'onAuth', authInfo)
+}
 
 const EmailInput = (): JSX.Element => {
   return (
