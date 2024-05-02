@@ -1,3 +1,2 @@
-
-export * from './WorkspaceSection'
+export * from './WorkspaceSandboxArea'
 export * from './WorkspaceFooter'

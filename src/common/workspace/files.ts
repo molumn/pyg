@@ -1,5 +1,5 @@
-export type FileType = EncodingType | 'DIRECTORY'
-export type EncodingType = 'md' | 'txt'
+export type FileType = FileEncodingType | 'DIRECTORY'
+export type FileEncodingType = 'md' | 'raw'
 
 export type FileNode = {
   name: string
@@ -11,6 +11,6 @@ export type FileNode = {
 export type FileContent = {
   name: string
   path: string
-  encoding: EncodingType
+  encoding: FileEncodingType
   content: string
 }

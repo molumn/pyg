@@ -10,7 +10,7 @@ import { ApplicationHandler } from '../../structure/application'
 
 import localStores from '../../lib/store'
 import { Workspace } from '../../structure/workspace'
-import { FileContent, FileNode, FileType } from '../../common/workspace/files'
+import { FileEncodingType, FileContent, FileNode, FileType } from '../../common/workspace/files'
 
 export const handleSockets = (): void => {
   IpcSocket.createListener(ipcMain)
@@ -81,108 +81,114 @@ export const handleSockets = (): void => {
     Workspace.createDemo('demo')
     ApplicationHandler.changeToWorkspaceWindow()
   })
-  socket.handle('workspace', 'readFile', async (event, fileNode: FileNode): Promise<FileContent> => {
-    if (!fileNode || fileNode.type === 'DIRECTORY') return {
-      name: '',
-      path: '',
-      content: '',
-      encoding: 'txt'
+  socket.handle(
+    'workspace',
+    'readFile',
+    async (event, fileNode: FileNode): Promise<FileContent> => {
+      const rootPath = Workspace.instance.rootPath
+      const childPath = fileNode.path
+      const absPath = path.join(rootPath, childPath)
+
+      const fileContent: FileContent = {
+        name: fileNode.name,
+        path: fileNode.path,
+        content: '',
+        encoding: 'raw'
+      }
+
+      if (!fs.existsSync(absPath)) {
+        fileContent.name += ' -- No Such File'
+        return fileContent
+      }
+
+      try {
+        const content = fs.readFileSync(absPath, { encoding: 'utf-8' })
+        fileContent.content = content
+        fileContent.encoding = fileNode.name.substring(
+          fileNode.name.lastIndexOf('.') + 1
+        ) as FileEncodingType
+      } catch (err) {
+        /* empty */
+        console.log('FS readFileSync Error')
+      }
+
+      return fileContent
     }
+  )
+  socket.handle(
+    'workspace',
+    'saveFile',
+    async (event, fileContent: FileContent): Promise<boolean> => {
+      // todo : handle other process
 
-    console.log(fileNode)
+      console.log('save')
 
+      const rootPath = Workspace.instance.rootPath
+      const absPath = path.join(rootPath, fileContent.path)
 
-    const rootPath = Workspace.instance.rootPath
-    if (!fs.existsSync(rootPath)) return {
-      ...fileNode,
-      content: '',
-      encoding: 'txt'
-    }
-
-    const content = fs.readFileSync(path.join(rootPath, fileNode.path), { encoding: 'utf-8' })
-
-    return {
-      ...fileNode,
-      content,
-      encoding: fileNode.type
-    }
-  })
-  socket.handle('workspace', 'saveFile', async (event, fileContent: FileContent): Promise<boolean> => {
-    console.log('saveFile!')
-
-    const rootPath = Workspace.instance.rootPath
-    try {
-      fs.writeFileSync(path.join(rootPath, fileContent.path), fileContent.content)
-      return true
-    } catch (err) {
-      return false
-    }
-  })
-  socket.handle('workspace', 'getRootNode', async (): Promise<FileNode> => {
-    const name = Workspace.instance.name
-    const rootPath = Workspace.instance.rootPath
-
-    if (!fs.existsSync(rootPath)) return {
-      name: '!!!No Workspace Exist!!!',
-      path: '.',
-      type: 'DIRECTORY',
-      children: []
-    }
-
-    const root: FileNode = {
-      name: `Project [${name}]`,
-        path: '.',
-      type: 'DIRECTORY',
-      children: []
-    }
-
-    let files: string[]
-
-    try {
-      files = fs.readdirSync(rootPath, { encoding: 'utf-8' })
-    } catch (err) {
-      return {
-        name: '!!!Read Directory Error!!!',
-        path: '.',
-        type: 'DIRECTORY',
-        children: []
+      try {
+        console.log(absPath)
+        console.log(fileContent.content)
+        fs.writeFileSync(absPath, fileContent.content, { encoding: 'utf-8', flag: 'w' })
+        console.log(fs.readFileSync(absPath, { encoding: 'utf-8' }))
+        return true
+      } catch (err) {
+        console.log('fs saveFileSync Error')
+        return false
       }
     }
+  )
+  socket.handle('workspace', 'getRootNode', async (): Promise<FileNode> => {
+    const rootPath = Workspace.instance.rootPath
+    const name = Workspace.instance.name
+
+    const rootNode: FileNode = {
+      name,
+      path: '',
+      type: 'DIRECTORY',
+      children: []
+    }
+
+    if (!fs.existsSync(rootPath)) {
+      rootNode.name += ' -- No Exist'
+      return rootNode
+    }
+
+    const getChild = (parent: FileNode, childName: string): FileNode | undefined =>
+      parent.children.find((child) => child.name === childName)
+
+    const files = fs.readdirSync(rootPath, { encoding: 'utf-8' })
 
     for (const file of files) {
-      const road = file.replace(rootPath, '').split('/')
+      const nodes = file.split('/')
+      let history = '.'
+      let parent: FileNode = rootNode
 
-      let history: string = '.'
-      let parent: FileNode = root
-      for (const node of road) {
-        const existedOrNull = parent.children.find((child) => child.name === node)
-        if (existedOrNull) {
-          parent = existedOrNull
-        } else {
-          const child: FileNode = {
+      for (const node of nodes) {
+        history += '/'
+        history += node
+
+        if (!getChild(parent, node))
+          parent.children.push({
             name: node,
             path: history,
             type: 'DIRECTORY',
             children: []
-          }
-          parent.children.push(child)
-          parent = child
-        }
-        history += `/${node}`
+          })
+        parent = getChild(parent, node)
+        parent.type = 'DIRECTORY'
       }
 
       try {
-        parent.type = parent.name.substring(parent.name.lastIndexOf('.') + 1) as FileType
+        parent.type = parent.name.substring(parent.name.lastIndexOf('.') + 1) as FileEncodingType
       } catch (err) {
-        fs.lstatSync(path.join(rootPath, parent.path)).isDirectory()
-          ? parent.type = 'DIRECTORY'
-          : parent.type = 'txt'
+        if (fs.lstatSync(path.join(rootPath, parent.path)).isFile()) {
+          parent.type = 'raw'
+        }
       }
-
-      parent = root
     }
 
-    return root
+    return rootNode
   })
 
   /**
@@ -207,7 +213,7 @@ export const handleSockets = (): void => {
     'nodeUtilities',
     'checkDirectoryIsFree',
     async (_, directory: string): Promise<boolean> => {
-      let result: boolean =  /^(\/?[a-z0-9A-Z\-]+)+$/.test(directory)
+      const result: boolean = /^(\/?[a-z0-9A-Z\-]+)+$/.test(directory)
       return result
     }
   )

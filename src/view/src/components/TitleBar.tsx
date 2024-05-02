@@ -1,4 +1,5 @@
 import React, { ComponentProps } from 'react'
+
 import { twMerge } from 'tailwind-merge'
 
 import { WindowControlButtons } from './button/WindowControlButtons'

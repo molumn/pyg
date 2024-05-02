@@ -75,7 +75,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
                 const path = document.getElementById('workspace-new-path')?.value ?? ''
 
                 const socket = IpcSocket.requester
-                if (!await socket.request('nodeUtilities', 'checkDirectoryIsFree', path)) {
+                if (!(await socket.request('nodeUtilities', 'checkDirectoryIsFree', path))) {
                   return
                 }
 
@@ -93,7 +93,9 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
             </button>
             <div className={'w-[5px]'}></div>
             <button
-              className={'w-[120px] h-[25px] flex items-center justify-center rounded-[5px] bg-gray-300'}
+              className={
+                'w-[120px] h-[25px] flex items-center justify-center rounded-[5px] bg-gray-300'
+              }
               onClick={() => IpcSocket.requester.command('workspace', 'createDemo')}
             >
               Create Demo

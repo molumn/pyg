@@ -23,10 +23,7 @@ export const CentralizedDiv = ({
 
 export const Column = ({ className, children, ...props }: ComponentProps<'div'>): JSX.Element => {
   return (
-    <div
-      className={twMerge('w-full h-full flex flex-col bg-transparent', className)}
-      {...props}
-    >
+    <div className={twMerge('w-full h-full flex flex-col bg-transparent', className)} {...props}>
       {children}
     </div>
   )
@@ -34,10 +31,7 @@ export const Column = ({ className, children, ...props }: ComponentProps<'div'>)
 
 export const Row = ({ className, children, ...props }: ComponentProps<'div'>): JSX.Element => {
   return (
-    <div
-      className={twMerge('w-full h-full flex flex-row bg-transparent', className)}
-      {...props}
-    >
+    <div className={twMerge('w-full h-full flex flex-row bg-transparent', className)} {...props}>
       {children}
     </div>
   )

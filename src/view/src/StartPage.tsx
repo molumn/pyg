@@ -5,7 +5,13 @@ import GrowingDiv from './components/layout/utils/GrowingDiv'
 import { Frame } from './components/layout/Frame'
 import { StarterWorkspaceUtility } from './components/layout/start/StarterWorkspaceUtility'
 import { TitleBarSection } from './components/TitleBar'
-import { TabbableArea, TabButton, TabSidebar, TabView, TabViewArea } from './components/layout/utils/TabbableArea'
+import {
+  TabbableArea,
+  TabButton,
+  TabSidebar,
+  TabView,
+  TabViewArea
+} from './components/layout/utils/TabbableArea'
 import { twMerge } from 'tailwind-merge'
 import { themeClass } from './utils'
 
@@ -22,7 +28,9 @@ export const StartPage = (): JSX.Element => {
       <Frame>
         <TabbableArea layout={'row'}>
           <TabSidebar className={twMerge('w-[280px] px-2 py-3', themeClass.dust.start.sidebar)}>
-            <TabButton name={'workspace'}>Workspace</TabButton>
+            <TabButton name={'workspace'} activateClassName={'bg-dust-concentrate'}>
+              Workspace
+            </TabButton>
             <TabButton name={'configuration'}>Configuration</TabButton>
           </TabSidebar>
           <TabViewArea className={'w-full'}>

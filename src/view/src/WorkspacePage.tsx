@@ -1,33 +1,51 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import { VscBookmark, VscGithubProject } from 'react-icons/vsc'
+import { VscArchive, VscBookmark } from 'react-icons/vsc'
 
 import { twMerge } from 'tailwind-merge'
 
+import { Row } from './components/layout/utils/Layout'
 import { Frame } from './components/layout/Frame'
-import {
-  WorkspaceFooter,
-  WorkspaceSection, WorkspaceSectionSidebarType
-} from './components/layout/workspace'
 import { TitleBarSection } from './components/TitleBar'
 import GrowingDiv from './components/layout/utils/GrowingDiv'
+import { WorkspaceFooter, WorkspaceSandboxArea } from './components/layout/workspace'
+import { useWorkspaceSidebarButtons } from './hooks'
+import { DisplayOptional } from './components/layout/utils/DisplayOptional'
+import { WorkspaceProjectSidebar } from './components/layout/workspace/sidebar'
 
 export const WorkspacePage = (): JSX.Element => {
-  const [sectionSidebar, setSectionSidebar] = useState<WorkspaceSectionSidebarType>('project')
-
-  const chooseSectionSidebar = (name: WorkspaceSectionSidebarType) => () => {
-    setSectionSidebar(name)
-  }
+  const { buttonList, selectedWorkspaceSidebarTypeButton, onButtonFocus } =
+    useWorkspaceSidebarButtons([
+      ['project', <VscArchive key={'workspace-sidebar-button-src-project'} />],
+      ['flag', <VscBookmark key={'workspace-sidebar-button-src-flag'} />]
+    ])
 
   return (
     <>
       <TitleBarSection className={'px-2 gap-1'}>
-        <button className={twMerge('w-[32px] h-[32px] mt-1 rounded-t-xl centralize', sectionSidebar === 'project' ? 'bg-dust-concentrate workspace-section-type' : '')} onClick={chooseSectionSidebar('project')}><VscGithubProject /></button>
-        <button className={twMerge('w-[32px] h-[32px] mt-1 rounded-t-xl centralize', sectionSidebar === 'flag' ? 'bg-dust-concentrate workspace-section-type' : '')} onClick={chooseSectionSidebar('flag')}><VscBookmark /></button>
+        {...buttonList.map((button) => (
+          <button
+            key={`workspace-sidebar-button-${button[0]}`}
+            className={twMerge(
+              'w-[32px] h-[32px] centralize',
+              selectedWorkspaceSidebarTypeButton === button[0] ? 'bg-dust-concentrate' : ''
+            )}
+            onClick={onButtonFocus(button[0])}
+          >
+            {button[1]}
+          </button>
+        ))}
         <GrowingDiv />
       </TitleBarSection>
       <Frame className={'flex flex-col'}>
-        <WorkspaceSection sidebar={sectionSidebar} />
+        <Row className={'w-auto'}>
+          <DisplayOptional display={selectedWorkspaceSidebarTypeButton === 'project'}>
+            <WorkspaceProjectSidebar />
+          </DisplayOptional>
+          <WorkspaceSandboxArea
+            selectedWorkspaceSidebarTypeButton={selectedWorkspaceSidebarTypeButton}
+          />
+        </Row>
         <WorkspaceFooter />
       </Frame>
     </>

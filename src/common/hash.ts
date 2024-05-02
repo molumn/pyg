@@ -7,10 +7,9 @@ const md5 = (input: string): string => {
   let d0 = 0x10325476
 
   const s: number[] = [
-    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
-    5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
-    4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
-    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
+    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9,
+    14, 20, 5, 9, 14, 20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21,
+    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
   ]
 
   const K: number[] = []
@@ -81,7 +80,7 @@ const md5 = (input: string): string => {
 type HashAlgorithm = 'md5'
 
 export const hash = (value: string, algorithm: HashAlgorithm = 'md5'): HashCode => {
-  let hash: string = ''
+  let hash = ''
   if (algorithm === 'md5') {
     hash = md5(value)
   }

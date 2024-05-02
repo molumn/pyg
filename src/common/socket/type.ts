@@ -15,7 +15,15 @@ export interface CategorizedChannels {
     | 'onChangeToStart'
     | 'onChangeToWorkspace'
   windowStatus: 'getWindowIsMaximized' | 'getWindowType'
-  workspace: 'readFile' | 'saveFile' | 'createFile' | 'createDirectory' | 'getCreatedWorkspaces' | 'createWorkspace' | 'createDemo' | 'getRootNode'
+  workspace:
+    | 'readFile'
+    | 'saveFile'
+    | 'createFile'
+    | 'createDirectory'
+    | 'getCreatedWorkspaces'
+    | 'createWorkspace'
+    | 'createDemo'
+    | 'getRootNode'
   authentication: 'onAuth'
   nodeUtilities: 'checkDirectoryIsFree'
 }
