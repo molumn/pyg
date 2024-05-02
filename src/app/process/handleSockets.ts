@@ -127,10 +127,7 @@ export const handleSockets = (): void => {
       const absPath = path.join(rootPath, fileContent.path)
 
       try {
-        console.log(absPath)
-        console.log(fileContent.content)
         fs.writeFileSync(absPath, fileContent.content, { encoding: 'utf-8', flag: 'w' })
-        console.log(fs.readFileSync(absPath, { encoding: 'utf-8' }))
         return true
       } catch (err) {
         console.log('fs saveFileSync Error')

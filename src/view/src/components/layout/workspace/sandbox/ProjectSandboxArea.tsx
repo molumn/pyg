@@ -3,8 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks'
 import { FileContent } from '../../../../../../common/workspace/files'
 import {
   changeContentOfSelectedFileContent,
+  selectFocusFileContentByPath,
   selectRegisteredFileContents,
-  selectSelectedFileContentInRegisteredFileContents
+  selectSelectedFileContentInRegisteredFileContents,
+  unregisterFileContentByPath
 } from '../../../../store/workspace/ProjectFileEditor'
 import { MarkdownEditor } from '../editor/MarkdownEditor'
 import { IpcSocket } from '../../../../../../common/socket'
@@ -27,9 +29,22 @@ export const ProjectSandboxArea = (): JSX.Element => {
     <Column>
       <Row className={'h-[30px] bg-dust-utility text-xs'}>
         {...registeredFileContents.map((content) => (
-          <button key={`workspace-project-registered-file-content-${content.path}`}>
-            {content.name}
-          </button>
+          <Row key={`workspace-project-registered-file-content-${content.path}`}>
+            <button
+              onClick={(): void => {
+                dispatcher(selectFocusFileContentByPath(content.path))
+              }}
+            >
+              {content.name}
+            </button>
+            <button
+              onClick={(): void => {
+                dispatcher(unregisterFileContentByPath(content.path))
+              }}
+            >
+              X
+            </button>
+          </Row>
         ))}
       </Row>
       {selectedFileContent?.encoding === 'md' ? (

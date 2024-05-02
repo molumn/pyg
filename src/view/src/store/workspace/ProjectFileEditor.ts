@@ -40,6 +40,10 @@ export const ProjectFileEditorStateSlice = createSlice({
     changeContentOfSelectedFileContent(state, action): void {
       if (!state.selectedFileContent) return
       state.selectedFileContent.content = action.payload.content
+    },
+    selectFocusFileContentByPath(state, action): void {
+      const find = state.registeredFileContents.find((content) => content.path === action.payload)
+      if (find) state.selectedFileContent = find
     }
   }
 })
@@ -54,5 +58,6 @@ export const selectSelectedFileContentInRegisteredFileContents = (
 export const {
   registerFileContent,
   unregisterFileContentByPath,
-  changeContentOfSelectedFileContent
+  changeContentOfSelectedFileContent,
+  selectFocusFileContentByPath
 } = ProjectFileEditorStateSlice.actions
