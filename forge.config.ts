@@ -56,8 +56,8 @@ const config: ForgeConfig = {
           owner: 'molumn',
           name: 'pyg'
         },
-        prerelease: !process.env.PUBLISH_TO_RELEASE,
-        draft: process.env.PUBLISH_TO_DRAFT
+        prerelease: process.env.PUBLISH_TO_PRERELEASE,
+        draft: false
       }
     }
   ]

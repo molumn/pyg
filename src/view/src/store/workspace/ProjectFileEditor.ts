@@ -15,7 +15,6 @@ export const ProjectFileEditorStateSlice = createSlice({
   initialState,
   reducers: {
     registerFileContent: (state, action): void => {
-      console.log('registerFileContent', action.payload)
       if (state.registeredFileContents.find((content) => content.path === action.payload.path))
         return
 
@@ -23,7 +22,6 @@ export const ProjectFileEditorStateSlice = createSlice({
       state.selectedFileContent = action.payload
     },
     unregisterFileContentByPath: (state, action): void => {
-      console.log(action.payload)
       const find = state.registeredFileContents.find((content) => content.path === action.payload)
       if (!find) return
       const index = state.registeredFileContents.indexOf(find)
