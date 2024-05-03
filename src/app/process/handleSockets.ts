@@ -47,7 +47,17 @@ export const handleSockets = (): void => {
     ApplicationHandler.changeToStartWindow()
   })
   socket.on('windowControl', 'onChangeToWorkspace', (_, workspaceKey?: WorkspaceKey) => {
-    ApplicationHandler.changeToWorkspaceWindow(workspaceKey)
+    let realWorkspaceKey: WorkspaceKey | null = null
+
+    localStores.workspaceStore.initialize()
+    localStores.workspaceStore.get((store) => {
+      const find = store.createdWorkspaces[workspaceKey?.name ?? '']
+      if (find) realWorkspaceKey = find
+    })
+
+    if (!realWorkspaceKey) return
+
+    ApplicationHandler.changeToWorkspaceWindow(realWorkspaceKey)
   })
 
   /**
@@ -120,8 +130,6 @@ export const handleSockets = (): void => {
     'saveFile',
     async (event, fileContent: FileContent): Promise<boolean> => {
       // todo : handle other process
-
-      console.log('save')
 
       const rootPath = Workspace.instance.rootPath
       const absPath = path.join(rootPath, fileContent.path)

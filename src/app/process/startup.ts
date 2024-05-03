@@ -6,7 +6,9 @@ export default async function startup(app: Electron.App): Promise<void> {
 }
 
 const electron_check_update = (): void => {
-  updateElectronApp()
+  updateElectronApp({
+    notifyUser: true
+  })
 }
 
 const electron_startup = (app: Electron.App): void => {

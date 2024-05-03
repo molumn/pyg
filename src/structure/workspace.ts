@@ -1,5 +1,5 @@
-import { join } from 'path'
-import { mkdirSync } from 'fs'
+import path, { join } from 'path'
+import fs, { mkdirSync } from 'fs'
 
 import { app } from 'electron'
 
@@ -22,6 +22,14 @@ export class Workspace {
   static createDemo(name: string): void {
     const workspaceRoot: string = join(app.getPath('userData'), `defaults/demo-workspaces/${name}`)
     mkdirSync(workspaceRoot, { recursive: true })
+
+    // create WELCOME.md
+    fs.writeFileSync(path.join(workspaceRoot, 'WELCOME.md'), '# WELCOME TO DEMO WORKSPACE', {
+      flag: 'w',
+      encoding: 'utf-8'
+    })
+    //
+
     localStores.workspaceStore.edit((store) => {
       store.createdWorkspaces[name] = {
         name,

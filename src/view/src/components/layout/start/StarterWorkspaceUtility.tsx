@@ -17,12 +17,13 @@ type StarterWorkspaceLayout = 'list' | 'new'
 export const StarterWorkspaceUtility = (): JSX.Element => {
   const [createdWorkspaces, resetCreatedWorkspaces] = useState<WorkspaceKey[]>([])
 
+  async function fetchCreatedWorkspace(): Promise<void> {
+    const socket = IpcSocket.requester
+    const response: WorkspaceKey[] = await socket.request('workspace', 'getCreatedWorkspaces')
+    resetCreatedWorkspaces(response)
+  }
+
   useEffect(() => {
-    async function fetchCreatedWorkspace(): Promise<void> {
-      const socket = IpcSocket.requester
-      const response: WorkspaceKey[] = await socket.request('workspace', 'getCreatedWorkspaces')
-      resetCreatedWorkspaces(response)
-    }
     if (createdWorkspaces.length === 0) {
       fetchCreatedWorkspace()
     }
@@ -40,13 +41,19 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
               className={
                 'w-[60px] h-[25px] flex items-center justify-center rounded-[5px] bg-dust-utility'
               }
-              onClick={() => setLayout('new')}
+              onClick={(): void => setLayout('new')}
             >
               New
             </button>
           </Row>
-          {createdWorkspaces.map((key) => {
-            return <WorkspaceEntryButton key={hash(key.name)} workspaceKey={key} />
+          {...createdWorkspaces.map((key) => {
+            return (
+              <WorkspaceEntryButton
+                key={hash(key.name)}
+                workspaceKey={key}
+                fetchWorkspaceKeys={fetchCreatedWorkspace}
+              />
+            )
           })}
         </Column>
       </DisplayOptional>
@@ -96,7 +103,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
               className={
                 'w-[120px] h-[25px] flex items-center justify-center rounded-[5px] bg-gray-300'
               }
-              onClick={() => IpcSocket.requester.command('workspace', 'createDemo')}
+              onClick={(): void => IpcSocket.requester.command('workspace', 'createDemo')}
             >
               Create Demo
             </button>

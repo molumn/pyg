@@ -21,4 +21,17 @@ export class WorkspaceStore extends LocalStore<WorkspaceStoreSchema> {
       workspaceKey.isExisted = existsSync(workspaceKey.rootPath)
     }
   }
+
+  save(): void {
+    super.save()
+    const renewedCreatedWorkspaces: {
+      [workspaceNickname: string]: WorkspaceKey
+    } = {}
+
+    for (const workspaceNickname in this.store.createdWorkspaces)
+      if (this.store.createdWorkspaces[workspaceNickname].isExisted === true) {
+        renewedCreatedWorkspaces[workspaceNickname] =
+          this.store.createdWorkspaces[workspaceNickname]
+      }
+  }
 }

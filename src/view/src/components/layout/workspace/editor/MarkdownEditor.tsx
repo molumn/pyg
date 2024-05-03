@@ -1,15 +1,30 @@
 import { useRef } from 'react'
 
 import {
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  diffSourcePlugin,
+  directivesPlugin,
+  frontmatterPlugin,
   headingsPlugin,
+  imagePlugin,
+  linkDialogPlugin,
+  linkPlugin,
   listsPlugin,
   markdownShortcutPlugin,
   MDXEditor,
   MDXEditorMethods,
-  quotePlugin
+  quotePlugin,
+  sandpackPlugin,
+  tablePlugin,
+  thematicBreakPlugin,
+  toolbarPlugin
 } from '@mdxeditor/editor'
 
+import '@mdxeditor/editor/style.css'
+
 import { FileContent } from '../../../../../../common/workspace/files'
+import { twMerge } from 'tailwind-merge'
 
 export const MarkdownEditor = ({
   contents,
@@ -32,8 +47,38 @@ export const MarkdownEditor = ({
       markdown={contents?.content ?? ''}
       onChange={onSaveFileContent}
       onBlur={onSaveFileContent}
-      plugins={[headingsPlugin(), listsPlugin(), quotePlugin(), markdownShortcutPlugin()]}
-      contentEditableClassName="outline-none h-full max-w-none text-lg px-8 py-5 caret-yellow-500 prose prose-invert prose-p:my-3 prose-p:leading-relaxed prose-headings:my-4 prose-blockquote:my-4 prose-ul:my-2 prose-li:my-0 prose-code:px-1 prose-code:text-red-500 prose-code:before:content-[''] prose-code:after:content-['']"
+      plugins={[
+        toolbarPlugin({ toolbarContents: () => <></> }),
+        listsPlugin(),
+        quotePlugin(),
+        headingsPlugin(),
+        linkPlugin(),
+        linkDialogPlugin(),
+        imagePlugin(),
+        tablePlugin(),
+        thematicBreakPlugin(),
+        frontmatterPlugin(),
+        codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+        // sandpackPlugin({ sandpackConfig: virtuosoSampleSandpackConfig }),
+        codeMirrorPlugin({
+          codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' }
+        }),
+        // directivesPlugin({ directiveDescriptors: [YoutubeDirectiveDescriptor, AdmonitionDirectiveDescriptor] }),
+        diffSourcePlugin({ viewMode: 'rich-text', diffMarkdown: 'boo' }),
+        markdownShortcutPlugin()
+      ]}
+      contentEditableClassName={twMerge(
+        'bg-gray-600',
+        'outline-none h-full max-h-screen max-w-none px-8 py-5',
+        'overflow-x-scroll overflow-y-scroll',
+        'caret-yellow-500',
+        'prose prose-invert',
+        'prose-p:my-3 prose-p:leading-relaxed',
+        'prose-headings:my-4',
+        'prose-blockquote:my-4',
+        'prose-ul:my-2 prose-li:my-0',
+        "prose-code:px-1 prose-code:text-red-500 prose-code:before:content-[''] prose-code:after:content-['']"
+      )}
     />
   )
 }
