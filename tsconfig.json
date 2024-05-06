@@ -11,6 +11,19 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@app/process/*": ["./src/app/process/*"],
+      "@app/structure/*": ["./src/app/structure/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@view/*": ["./src/view/src/*"],
+      "@view/assets/*": ["./src/view/src/assets/*"],
+      "@view/components/*": ["./src/view/src/components/*"],
+      "@view/store/*": ["./src/view/src/store/*"],
+      "@view/hook/*": ["./src/view/src/hook/*"],
+      "@view/utils/*": ["./src/view/src/utils/*"],
+      "@common/*": ["./src/common/*"]
+    }
   }
 }

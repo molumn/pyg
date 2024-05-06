@@ -2,12 +2,12 @@ import React from 'react'
 
 import { twMerge } from 'tailwind-merge'
 
-import { themeClass } from './utils'
+import { themeClass } from '@view/utils'
 
-import { CentralizedDiv } from './components/layout/utils/Layout'
+import { CentralizedDiv } from '@view/components/layout/utils/Layout'
 
-import { TitleBarSection } from './components/TitleBar'
-import { EmailLoginForm } from './components/form/EmailLoginForm'
+import { TitleBarSection } from '@view/components/TitleBar'
+import { EmailLoginForm } from '@view/components/form/EmailLoginForm'
 
 export const LoginPage = (): JSX.Element => {
   return (

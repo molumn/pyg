@@ -1,9 +1,13 @@
-import { Column, Row } from '../../../utils/Layout'
-import { useAppDispatch, useProjectFileStructure } from '../../../../../hooks'
 import { useEffect } from 'react'
-import { FileContent, FileNode } from '../../../../../../../common/workspace/files'
-import { registerFileContent } from '../../../../../store/workspace/ProjectFileEditor'
-import { IpcSocket } from '../../../../../../../common/socket'
+
+import { FileContent, FileNode } from '@common/workspace/files'
+import { IpcSocket } from '@common/socket'
+
+import { useAppDispatch, useProjectFileStructure } from '@view/hooks'
+
+import { Column, Row } from '@view/components/layout/utils/Layout'
+
+import { registerFileContent } from '@view/store/workspace/ProjectFileEditor'
 
 export const WorkspaceProjectFileStructureSidebarView = (): JSX.Element => {
   const { rootNode, fetchRootNode } = useProjectFileStructure()

@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { IpcRendererCopy } from './common/socket/impl'
+import { IpcRendererCopy } from '@common/socket/impl'
 
 if (process.contextIsolated) {
   try {

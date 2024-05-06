@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { FileContent } from '../../../../common/workspace/files'
+
+import { FileContent } from '@common/workspace/files'
+
 import { RootState } from '../root'
 
 const initialState: {

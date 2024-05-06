@@ -1,4 +1,4 @@
-export type EventCopy<Params extends object = {}> = {
+export type EventCopy<Params extends object = object> = {
   preventDefault: () => void
   readonly defaultPrevented: boolean
 } & Params

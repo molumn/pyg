@@ -5,15 +5,48 @@ import { IoLogoGithub } from 'react-icons/io'
 
 import { twMerge } from 'tailwind-merge'
 
-import { IpcSocket } from '../../../../common/socket'
+import { AuthenticationRequest, AuthenticationResponse } from '@common/type'
+import { IpcSocket } from '@common/socket'
 
-import { themeClass } from '../../utils'
+import { themeClass } from '@view/utils'
 
-import { CentralizedDiv, Column, Row } from '../layout/utils/Layout'
-import { AuthenticationRequest, AuthenticationResponse } from '../../../../common/type'
+import { CentralizedDiv, Column, Row } from '@view/components/layout/utils/Layout'
 
 const login = async (authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
   return await IpcSocket.requester.request('authentication', 'onAuth', authInfo)
+}
+
+const emailLogin = async (
+  email: string,
+  password: string,
+  type: 'SignIn' | 'SignUp' = 'SignIn'
+): Promise<AuthenticationResponse> => {
+  return await login({
+    type: 'email',
+    email,
+    password,
+    req: {
+      type
+    }
+  })
+}
+
+const googleLogin = async (): Promise<AuthenticationResponse> => {
+  return await login({
+    type: 'google',
+    req: {
+      type: 'SignIn'
+    }
+  })
+}
+
+const githubLogin = async (): Promise<AuthenticationResponse> => {
+  return await login({
+    type: 'github',
+    req: {
+      type: 'SignIn'
+    }
+  })
 }
 
 const EmailInput = (): JSX.Element => {
@@ -106,12 +139,7 @@ const GoogleLoginButton = (): JSX.Element => {
     >
       <button
         onClick={async (): Promise<void> => {
-          const res = await login({
-            req: {
-              type: 'SignIn'
-            },
-            type: 'google'
-          })
+          const res = await googleLogin()
           // fixme: tested -> success : await user social login and response of token
           // if (res.result) {
           //   window.ipc('request-change-window', 'start')
@@ -133,12 +161,7 @@ const GithubLoginButton = (): JSX.Element => {
     >
       <button
         onClick={async (): Promise<void> => {
-          const res = await login({
-            req: {
-              type: 'SignIn'
-            },
-            type: 'github'
-          })
+          const res = await githubLogin()
           // fixme: tested -> success : await user social login and response of token
           // if (res.result) {
           //   window.ipc('request-change-window', 'start')
@@ -171,14 +194,7 @@ export const EmailLoginForm = (): JSX.Element => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const password = document.getElementById('password-input')?.value
-            const res = await login({
-              req: {
-                type: 'SignIn'
-              },
-              type: 'email',
-              email,
-              password
-            })
+            const res = await emailLogin(email, password)
             // fixme: tested -> success : await user social login and response of token
             // if (res.result) {
             //   window.ipc('request-change-window', 'start')

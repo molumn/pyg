@@ -1,9 +1,11 @@
 import { VscFolder } from 'react-icons/vsc'
 
-import { WorkspaceProjectFileStructureSidebarView } from './view/WorkspaceProjectFileStructureSidebarView'
-import { useTabArea } from '../../../../hooks/useTabs'
-import { Column, Row } from '../../utils/Layout'
-import { DisplayOptional } from '../../utils/DisplayOptional'
+import { useTabArea } from '@view/hooks/useTabs'
+
+import { Column, Row } from '@view/components/layout/utils/Layout'
+import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
+
+import { WorkspaceProjectFileStructureSidebarView } from '@view/components/layout/workspace/sidebar/view'
 
 export const WorkspaceProjectSidebar = (): JSX.Element => {
   const { selectedTab, TabButton } = useTabArea(['File Structure'], true)

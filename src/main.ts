@@ -1,14 +1,14 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 
-import { initializeAllStores, saveAllStores } from './lib/store'
+import store from '@lib/store'
 
-import { ApplicationHandler } from './structure/application'
+import { ApplicationHandler } from '@app/structure/application'
 
-import startup from './app/process/startup'
-import { handleSockets } from './app/process/handleSockets'
+import { handle, preinit } from '@app/process'
 
-startup(app)
+preinit.electron_check_update()
+preinit.electron_startup(app)
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('me.molumn')
@@ -17,10 +17,9 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  handleSockets()
-  ipcMain.on('ping', () => console.log('pong'))
+  handle.handleSockets()
 
-  initializeAllStores()
+  store.init()
 
   ApplicationHandler.createWindow()
 
@@ -29,7 +28,7 @@ app.whenReady().then(() => {
   })
 
   app.on('before-quit', () => {
-    saveAllStores()
+    store.save()
   })
 
   // app.on('login', (event, webContents, authenticationResponseDetails, authInfo, callback) => {

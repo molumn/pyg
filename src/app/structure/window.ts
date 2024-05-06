@@ -3,7 +3,7 @@ import { join } from 'path'
 import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
 import { is } from '@electron-toolkit/utils'
 
-import { WindowType } from '../common/type'
+import { WindowType } from '@common/type'
 
 const browserWindowOptions: BrowserWindowConstructorOptions = {
   show: false,
@@ -43,21 +43,15 @@ export function getBrowserWindowOptions(
       minHeight: 750,
       width: 1000,
       height: 750,
+      modal: true,
       ...browserWindowOptions
     }
   else if (type === 'workspace')
     return {
-      minWidth: 1000,
-      minHeight: 750,
+      minWidth: 1600,
+      minHeight: 1200,
+      modal: true,
       ...browserWindowOptions
-    }
-  else if (type === 'popup')
-    return {
-      width: 400,
-      height: 600,
-      autoHideMenuBar: true,
-      center: true,
-      parent
     }
   else return browserWindowOptions
 }

@@ -1,4 +1,5 @@
 import { ComponentProps, useState } from 'react'
+
 import { twMerge } from 'tailwind-merge'
 
 export const useTabArea = (
@@ -6,6 +7,7 @@ export const useTabArea = (
   ableToEmpty?: boolean
 ): {
   selectedTab: string
+  checkTab: (tab: string) => boolean
   TabButton: (props: { name: string } & ComponentProps<'button'>) => JSX.Element
 } => {
   const tabs = _tabs
@@ -13,9 +15,13 @@ export const useTabArea = (
 
   const onTabClick = (tab: string) => (): void => {
     if (!tabs.includes(tab)) return
-    if (ableToEmpty) {
-      tab === selectedTab ? setSelectedTab('') : setSelectedTab(tab)
-    }
+    console.log('check')
+    if (ableToEmpty && tab === selectedTab) setSelectedTab('')
+    else setSelectedTab(tab)
+  }
+
+  const checkTab = (tab: string): boolean => {
+    return selectedTab === tab && tabs.includes(tab)
   }
 
   const TabButton = ({
@@ -42,6 +48,7 @@ export const useTabArea = (
 
   return {
     selectedTab,
+    checkTab,
     TabButton
   }
 }

@@ -1,8 +1,8 @@
 import React, { ComponentProps } from 'react'
 
 export const DisplayOptional = ({
-  display,
-  div,
+  display = false,
+  div = false,
   className,
   children
 }: { display?: boolean; div?: boolean } & ComponentProps<'div'>): JSX.Element => {

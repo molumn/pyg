@@ -1,14 +1,15 @@
-import './assets/index.css'
+import '@view/assets/index.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import { Provider } from 'react-redux'
 
-import { store } from './store'
+import { IpcSocket } from '@common/socket'
+
+import { store } from '@view/store'
 
 import App from './App'
-import { IpcSocket } from '../../common/socket'
 
 window.addEventListener('DOMContentLoaded', () => {
   IpcSocket.createRequester(window)

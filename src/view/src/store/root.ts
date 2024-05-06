@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+
 import { ProjectFileEditorStateSlice } from './workspace/ProjectFileEditor'
 
 export const store = configureStore({

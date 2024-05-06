@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import { FileNode } from '../../../common/workspace/files'
-import { IpcSocket } from '../../../common/socket'
+import { FileNode } from '@common/workspace/files'
+import { IpcSocket } from '@common/socket'
 
 export const useProjectFileStructure = () => {
   const [rootNode, setRootNode] = useState<FileNode | null>(null)

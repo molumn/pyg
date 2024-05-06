@@ -1,6 +1,8 @@
-import { LocalStore } from './type'
-import { WorkspaceKey } from '../../common/type'
 import { existsSync } from 'fs'
+
+import { WorkspaceKey } from '@common/type'
+
+import { LocalStore } from './type'
 
 type WorkspaceStoreSchema = {
   createdWorkspaces: {
@@ -10,7 +12,7 @@ type WorkspaceStoreSchema = {
 
 export class WorkspaceStore extends LocalStore<WorkspaceStoreSchema> {
   constructor() {
-    super('workspace', {
+    super('configs', 'workspace', {
       createdWorkspaces: {}
     })
   }
@@ -23,15 +25,17 @@ export class WorkspaceStore extends LocalStore<WorkspaceStoreSchema> {
   }
 
   save(): void {
+    // const renewedCreatedWorkspaces: {
+    //   [workspaceNickname: string]: WorkspaceKey
+    // } = {}
+    //
+    // for (const workspaceNickname in this.store.createdWorkspaces)
+    //   if (this.store.createdWorkspaces[workspaceNickname].isExisted === true) {
+    //     renewedCreatedWorkspaces[workspaceNickname] =
+    //       this.store.createdWorkspaces[workspaceNickname]
+    //   }
+    //
+    // this.store.createdWorkspaces = renewedCreatedWorkspaces
     super.save()
-    const renewedCreatedWorkspaces: {
-      [workspaceNickname: string]: WorkspaceKey
-    } = {}
-
-    for (const workspaceNickname in this.store.createdWorkspaces)
-      if (this.store.createdWorkspaces[workspaceNickname].isExisted === true) {
-        renewedCreatedWorkspaces[workspaceNickname] =
-          this.store.createdWorkspaces[workspaceNickname]
-      }
   }
 }

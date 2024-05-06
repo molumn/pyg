@@ -1,4 +1,4 @@
-import { WindowType, WorkspaceKey } from '../common/type'
+import { WindowType, WorkspaceKey } from '@common/type'
 
 import { WindowManager } from './window'
 import { Workspace } from './workspace'

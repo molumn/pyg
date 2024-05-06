@@ -3,12 +3,17 @@ import { app } from 'electron'
 
 export class LocalStore<Schema extends object> {
   protected readonly _name: string
+  protected readonly _category: string
   protected store: Schema
   public get name(): string {
     return this._name
   }
+  public get category(): string {
+    return this._category
+  }
 
-  constructor(name: string, defaultValue: Schema) {
+  constructor(category: string, name: string, defaultValue: Schema) {
+    this._category = category
     this._name = name
     this.store = defaultValue
   }
@@ -26,16 +31,22 @@ export class LocalStore<Schema extends object> {
   }
 
   get filepath(): string {
-    return `${app.getPath('userData')}/${this.name}.json`
+    return `${app.getPath('userData')}/${this.category}/${this.name}.json`
+  }
+  get parentDir(): string {
+    return `${app.getPath('userData')}/${this.category}`
   }
 
   initialize(): void {
-    if (fs.existsSync(this.filepath) === false)
-      fs.writeFileSync(this.filepath, JSON.stringify(this.store))
+    if (fs.existsSync(this.filepath) === false) {
+      fs.mkdirSync(this.parentDir)
+      fs.writeFileSync(this.filepath, JSON.stringify(this.store), { encoding: 'utf-8', flag: 'w' })
+    }
     try {
       this.store = JSON.parse(fs.readFileSync(this.filepath, 'utf-8'))
     } catch (err) {
       // todo: do nothing?
+      console.log('Store Initialization: json parse error')
     }
   }
 

@@ -1,16 +1,17 @@
 import React from 'react'
 
-import GrowingDiv from './components/layout/utils/GrowingDiv'
+import { useTabArea } from '@view/hooks/useTabs'
 
-import { Frame } from './components/layout/Frame'
-import { StarterWorkspaceUtility } from './components/layout/start/StarterWorkspaceUtility'
-import { TitleBarSection } from './components/TitleBar'
-import { useTabArea } from './hooks/useTabs'
-import { Column, Row } from './components/layout/utils/Layout'
-import { DisplayOptional } from './components/layout/utils/DisplayOptional'
+import { Frame } from '@view/components/layout/Frame'
+import { Column, Row } from '@view/components/layout/utils/Layout'
+import { GrowingDiv } from '@view/components/layout/utils/GrowingDiv'
+import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
+
+import { TitleBarSection } from '@view/components/TitleBar'
+import { StarterWorkspaceUtility } from '@view/components/layout/start/StarterWorkspaceUtility'
 
 export const StartPage = (): JSX.Element => {
-  const { selectedTab, TabButton } = useTabArea(['workspace', 'configuration'])
+  const { checkTab, TabButton } = useTabArea(['workspace', 'configuration'])
 
   return (
     <>
@@ -27,23 +28,11 @@ export const StartPage = (): JSX.Element => {
             <TabButton name={'workspace'}>workspace</TabButton>
             <TabButton name={'configuration'}>configuration</TabButton>
           </Column>
-          <DisplayOptional display={selectedTab === 'workspace'}>
+          <DisplayOptional display={checkTab('workspace')}>
             <StarterWorkspaceUtility />
           </DisplayOptional>
+          <DisplayOptional display={checkTab('configuration')}>configuration</DisplayOptional>
         </Row>
-        {/*<TabbableArea layout={'row'}>*/}
-        {/*  <TabSidebar className={twMerge('w-[280px] px-2 py-3', themeClass.dust.start.sidebar)}>*/}
-        {/*    <TabButton name={'workspace'} activateClassName={'bg-dust-concentrate'}>*/}
-        {/*      Workspace*/}
-        {/*    </TabButton>*/}
-        {/*    <TabButton name={'configuration'}>Configuration</TabButton>*/}
-        {/*  </TabSidebar>*/}
-        {/*  <TabViewArea className={'w-full'}>*/}
-        {/*    <TabView name={'workspace'}>*/}
-        {/*      <StarterWorkspaceUtility />*/}
-        {/*    </TabView>*/}
-        {/*  </TabViewArea>*/}
-        {/*</TabbableArea>*/}
       </Frame>
     </>
   )

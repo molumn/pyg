@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
 import { twMerge } from 'tailwind-merge'
-import { themeClass } from '../../../utils'
 
-import { hash } from '../../../../../common/hash'
-import { WorkspaceKey } from '../../../../../common/type'
-import { IpcSocket } from '../../../../../common/socket'
+import { themeClass } from '@view/utils'
 
-import GrowingDiv from '../utils/GrowingDiv'
-import { Column, Row } from '../utils/Layout'
-import { DisplayOptional } from '../utils/DisplayOptional'
-import { WorkspaceEntryButton } from '../../button/WorkspaceEntryButton'
+import { hash } from '@common/hash'
+import { WorkspaceKey } from '@common/type'
+import { IpcSocket } from '@common/socket'
+
+import { GrowingDiv } from '@view/components/layout/utils/GrowingDiv'
+import { Column, Row } from '@view/components/layout/utils/Layout'
+import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
+
+import { WorkspaceEntryButton } from '@view/components/button/WorkspaceEntryButton'
 
 type StarterWorkspaceLayout = 'list' | 'new'
 

@@ -4,21 +4,27 @@ import { VscArchive, VscBookmark } from 'react-icons/vsc'
 
 import { twMerge } from 'tailwind-merge'
 
-import { Row } from './components/layout/utils/Layout'
-import { Frame } from './components/layout/Frame'
-import { TitleBarSection } from './components/TitleBar'
-import GrowingDiv from './components/layout/utils/GrowingDiv'
-import { WorkspaceFooter, WorkspaceSandboxArea } from './components/layout/workspace'
 import { useWorkspaceSidebarButtons } from './hooks'
+
+import { Frame } from './components/layout/Frame'
+import { Row } from './components/layout/utils/Layout'
+import { GrowingDiv } from './components/layout/utils/GrowingDiv'
 import { DisplayOptional } from './components/layout/utils/DisplayOptional'
+
+import { TitleBarSection } from './components/TitleBar'
+import { WorkspaceFooter, WorkspaceSandboxArea } from './components/layout/workspace'
 import { WorkspaceProjectSidebar } from './components/layout/workspace/sidebar'
 
 export const WorkspacePage = (): JSX.Element => {
-  const { buttonList, selectedWorkspaceSidebarTypeButton, onButtonFocus } =
-    useWorkspaceSidebarButtons([
-      ['project', <VscArchive key={'workspace-sidebar-button-src-project'} />],
-      ['flag', <VscBookmark key={'workspace-sidebar-button-src-flag'} />]
-    ])
+  const {
+    buttonList,
+    selectedWorkspaceSidebarTypeButton,
+    checkWorkspaceSidebarTypeButton,
+    onButtonFocus
+  } = useWorkspaceSidebarButtons([
+    ['project', <VscArchive key={'workspace-sidebar-button-src-project'} />],
+    ['flag', <VscBookmark key={'workspace-sidebar-button-src-flag'} />]
+  ])
 
   return (
     <>
@@ -39,7 +45,7 @@ export const WorkspacePage = (): JSX.Element => {
       </TitleBarSection>
       <Frame className={'flex flex-col'}>
         <Row className={'w-auto'}>
-          <DisplayOptional display={selectedWorkspaceSidebarTypeButton === 'project'}>
+          <DisplayOptional display={checkWorkspaceSidebarTypeButton('project')}>
             <WorkspaceProjectSidebar />
           </DisplayOptional>
           <WorkspaceSandboxArea

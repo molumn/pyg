@@ -1,1 +1,1 @@
-import './view/src/main'
+import '@view/main'

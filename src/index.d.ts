@@ -1,4 +1,4 @@
-import { IpcRendererCopy } from '../shared/socket/impl'
+import { IpcRendererCopy } from '../shared/listener/impl'
 import { ElectronAPI } from '@electron-toolkit/preload'
 
 declare global {

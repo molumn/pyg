@@ -2,10 +2,10 @@ import React from 'react'
 
 import { PiDotsThreeVertical } from 'react-icons/pi'
 
-import { WorkspaceKey } from '../../../../common/type'
-import { IpcSocket } from '../../../../common/socket'
+import { WorkspaceKey } from '@common/type'
+import { IpcSocket } from '@common/socket'
 
-import { Column, Row } from '../layout/utils/Layout'
+import { Column, Row } from '@view/components/layout/utils/Layout'
 
 export const WorkspaceEntryButton = ({
   workspaceKey,

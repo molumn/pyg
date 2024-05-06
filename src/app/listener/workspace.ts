@@ -1,82 +1,20 @@
 import fs from 'fs'
 import path from 'path'
 
-import { BrowserWindow, ipcMain } from 'electron'
+import { ListenerSocket } from '@common/socket/listen'
 
-import { AuthenticationRequest, WorkspaceKey } from '../../common/type'
-import { IpcSocket } from '../../common/socket'
+import { WorkspaceKey } from '@common/type'
 
-import { ApplicationHandler } from '../../structure/application'
+import store from '@lib/store'
 
-import localStores from '../../lib/store'
-import { Workspace } from '../../structure/workspace'
-import { FileEncodingType, FileContent, FileNode, FileType } from '../../common/workspace/files'
+import { Workspace } from '@app/structure/workspace'
+import { ApplicationHandler } from '@app/structure/application'
+import { FileContent, FileEncodingType, FileNode } from '@common/workspace/files'
 
-export const handleSockets = (): void => {
-  IpcSocket.createListener(ipcMain)
-  const socket = IpcSocket.listener
-
-  /**
-   * Inter-Process Communication: WindowControl
-   */
-
-  socket.on('windowControl', 'onMinimized', (event) => {
-    const win = BrowserWindow.fromId(event.sender.id)
-    if (!win) return
-    win.minimize()
-  })
-  socket.on('windowControl', 'onMaximized', (event) => {
-    const win = BrowserWindow.fromId(event.sender.id)
-    if (!win) return
-    win.maximize()
-  })
-  socket.on('windowControl', 'onRestore', (event) => {
-    const win = BrowserWindow.fromId(event.sender.id)
-    if (!win) return
-    win.restore()
-  })
-  socket.on('windowControl', 'onClose', (event) => {
-    const win = BrowserWindow.fromId(event.sender.id)
-    if (!win) return
-    win.close()
-  })
-  socket.on('windowControl', 'onChangeToLogin', () => {
-    ApplicationHandler.changeToLoginWindow()
-  })
-  socket.on('windowControl', 'onChangeToStart', () => {
-    ApplicationHandler.changeToStartWindow()
-  })
-  socket.on('windowControl', 'onChangeToWorkspace', (_, workspaceKey?: WorkspaceKey) => {
-    let realWorkspaceKey: WorkspaceKey | null = null
-
-    localStores.workspaceStore.initialize()
-    localStores.workspaceStore.get((store) => {
-      const find = store.createdWorkspaces[workspaceKey?.name ?? '']
-      if (find) realWorkspaceKey = find
-    })
-
-    if (!realWorkspaceKey) return
-
-    ApplicationHandler.changeToWorkspaceWindow(realWorkspaceKey)
-  })
-
-  /**
-   * Inter-Process Communication: WindowStatus
-   */
-  socket.handle('windowStatus', 'getWindowIsMaximized', (event) => {
-    const win = BrowserWindow.fromId(event.sender.id)
-    return win?.isMaximized() === true
-  })
-  socket.handle('windowStatus', 'getWindowType', () => {
-    return ApplicationHandler.applicationRunningType
-  })
-
-  /**
-   * Inter-Process Communication: Workspace
-   */
+export function registerWorkspaceListener(socket: ListenerSocket): void {
   socket.handle('workspace', 'getCreatedWorkspaces', () => {
     const createdWorkspace: WorkspaceKey[] = []
-    localStores.workspaceStore.get((store) => {
+    store.localStores.workspaceStore.get((store) => {
       for (const key in store.createdWorkspaces) {
         createdWorkspace.push(store.createdWorkspaces[key])
       }
@@ -112,13 +50,11 @@ export const handleSockets = (): void => {
       }
 
       try {
-        const content = fs.readFileSync(absPath, { encoding: 'utf-8' })
-        fileContent.content = content
+        fileContent.content = fs.readFileSync(absPath, { encoding: 'utf-8' })
         fileContent.encoding = fileNode.name.substring(
           fileNode.name.lastIndexOf('.') + 1
         ) as FileEncodingType
       } catch (err) {
-        /* empty */
         console.log('FS readFileSync Error')
       }
 
@@ -195,31 +131,4 @@ export const handleSockets = (): void => {
 
     return rootNode
   })
-
-  /**
-   * Inter-Process Communication: Authentication
-   */
-  // socket.handle(
-  //   'authentication',
-  //   'onAuth',
-  //   async (_, authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
-  //     // todo : authentication
-  //     return {
-  //       result: true,
-  //       type: 'SignIn'
-  //     }
-  //   }
-  // )
-
-  /**
-   * Inter-Process Communication: NodeUtilities
-   */
-  socket.handle(
-    'nodeUtilities',
-    'checkDirectoryIsFree',
-    async (_, directory: string): Promise<boolean> => {
-      const result: boolean = /^(\/?[a-z0-9A-Z\-]+)+$/.test(directory)
-      return result
-    }
-  )
 }

@@ -1,5 +1,7 @@
 import { useRef } from 'react'
 
+import { twMerge } from 'tailwind-merge'
+
 import {
   codeBlockPlugin,
   codeMirrorPlugin,
@@ -20,11 +22,9 @@ import {
   thematicBreakPlugin,
   toolbarPlugin
 } from '@mdxeditor/editor'
-
 import '@mdxeditor/editor/style.css'
 
-import { FileContent } from '../../../../../../common/workspace/files'
-import { twMerge } from 'tailwind-merge'
+import { FileContent } from '@common/workspace/files'
 
 export const MarkdownEditor = ({
   contents,

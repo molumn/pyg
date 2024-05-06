@@ -9,9 +9,9 @@ import {
   VscChromeRestore
 } from 'react-icons/vsc'
 
-import { windowPage } from '../../utils'
-import { themeClass } from '../../utils'
-import { IpcSocket } from '../../../../common/socket'
+import { IpcSocket } from '@common/socket'
+
+import { windowPage, themeClass } from '@view/utils'
 
 const WindowControlButton = ({
   className,

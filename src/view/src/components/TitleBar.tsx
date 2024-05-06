@@ -2,10 +2,10 @@ import React, { ComponentProps } from 'react'
 
 import { twMerge } from 'tailwind-merge'
 
-import { WindowControlButtons } from './button/WindowControlButtons'
+import { themeClass } from '@view/utils'
 
-import { Row } from './layout/utils/Layout'
-import { themeClass } from '../utils'
+import { Row } from '@view/components/layout/utils/Layout'
+import { WindowControlButtons } from '@view/components/button/WindowControlButtons'
 
 export const TitleBarSection = ({
   className,

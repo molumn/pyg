@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { WorkspaceSidebarTypeButtonType } from '../../../hooks'
+import { WorkspaceSidebarTypeButtonType } from '@view/hooks'
+
+import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
 import { ProjectSandboxArea } from './sandbox/ProjectSandboxArea'
 
 type WorkspaceSectionProps = {
@@ -11,13 +13,12 @@ export const WorkspaceSandboxArea = ({
 }: WorkspaceSectionProps): JSX.Element => {
   return (
     <>
-      {selectedWorkspaceSidebarTypeButton === 'project' ? (
+      <DisplayOptional display={selectedWorkspaceSidebarTypeButton === 'project'}>
         <ProjectSandboxArea />
-      ) : selectedWorkspaceSidebarTypeButton === 'flag' ? (
-        <>flag</>
-      ) : (
-        <></>
-      )}
+      </DisplayOptional>
+      <DisplayOptional display={selectedWorkspaceSidebarTypeButton === 'flag'}>
+        flag
+      </DisplayOptional>
     </>
   )
 }

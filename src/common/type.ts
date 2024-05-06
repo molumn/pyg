@@ -1,4 +1,4 @@
-export type WindowType = 'start' | 'workspace' | 'login' | 'popup'
+export type WindowType = 'start' | 'workspace' | 'login'
 
 export type AuthenticationRequest = {
   req: {

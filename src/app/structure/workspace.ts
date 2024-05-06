@@ -3,16 +3,20 @@ import fs, { mkdirSync } from 'fs'
 
 import { app } from 'electron'
 
-import localStores from '../lib/store'
+import store from '../../lib/store'
 
-import { WorkspaceKey, WorkspaceType } from '../common/type'
+import { WorkspaceKey, WorkspaceType } from '@common/type'
 
 export class Workspace {
-  private static _demo: Workspace = new Workspace(
-    'demo',
-    join(app.getPath('userData'), 'demo-workspace/demo'),
-    'demo'
-  )
+  private static get _demo(): Workspace {
+    const demo = new Workspace(
+      'demo',
+      join(app.getPath('userData'), 'defaults/demo-workspaces/demo'),
+      'demo'
+    )
+    Workspace.createDemo(demo.name)
+    return demo
+  }
 
   private static _instance: Workspace | undefined
   static get instance(): Workspace {
@@ -30,7 +34,7 @@ export class Workspace {
     })
     //
 
-    localStores.workspaceStore.edit((store) => {
+    store.localStores.workspaceStore.edit((store) => {
       store.createdWorkspaces[name] = {
         name,
         rootPath: workspaceRoot,
@@ -43,13 +47,13 @@ export class Workspace {
   static createWorkspace(key?: WorkspaceKey): void {
     if (!key) return
     if (!key.isExisted) mkdirSync(key.rootPath, { recursive: true })
-    localStores.workspaceStore.edit((store) => {
+    store.localStores.workspaceStore.edit((store) => {
       store.createdWorkspaces[key.name] = key
     })
   }
 
   static findAndApplyWorkspace(workspaceNickname: string): void {
-    const key = localStores.workspaceStore.get((store) => {
+    const key = store.localStores.workspaceStore.get((store) => {
       return store.createdWorkspaces[workspaceNickname]
     })
     if (!key) {
