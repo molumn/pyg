@@ -222,7 +222,8 @@ export const EmailLoginForm = (): JSX.Element => {
           {/* Guest Button */}
           <button
             className={'w-[40px] h-[40px] rounded-full'}
-            onClick={(): void => IpcSocket.requester.command('windowControl', 'onChangeToStart')}
+            // onClick={(): void => IpcSocket.requester.command('windowControl', 'onChangeToStart')}
+            // todo : change form
           >
             Guest
           </button>

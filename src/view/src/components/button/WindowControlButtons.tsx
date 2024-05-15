@@ -11,7 +11,9 @@ import {
 
 import { IpcSocket } from '@common/socket'
 
-import { windowPage, themeClass } from '@view/utils'
+import { themeClass } from '@view/utils'
+
+import { Row } from '@view/components/layout/utils/Layout'
 
 const WindowControlButton = ({
   className,
@@ -29,6 +31,7 @@ const WindowControlButton = ({
 }
 
 export const WindowControlButtons = (): JSX.Element => {
+  // todo : safe close
   const [isMaximized, setIsMaximized] = useState(false)
 
   useEffect(() => {
@@ -55,35 +58,24 @@ export const WindowControlButtons = (): JSX.Element => {
     else IpcSocket.requester.command('windowControl', 'onMaximized')
   }
   const onClose = (): void => {
-    if (windowPage.isWorkspacePage) {
-      // todo : popup
-    }
     IpcSocket.requester.command('windowControl', 'onClose')
   }
 
   return window.electron.process.platform !== 'darwin' ? (
-    <div
-      className={
-        'fixed top-0 right-0 justify-self-center flex flex-row items-center justify-center bg-inherit'
-      }
-    >
+    <Row className={'fixed w-auto h-auto top-0 right-0 item-center justify-center bg-inherit'}>
       <WindowControlButton onClick={onMinimize} className={themeClass.dust.control.minimize}>
         <VscChromeMinimize />
       </WindowControlButton>
-      {!windowPage.isLoginPage ? (
-        <WindowControlButton
-          onClick={onMaximizeOrRestore}
-          className={themeClass.dust.control.maximize}
-        >
-          {isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
-        </WindowControlButton>
-      ) : (
-        <></>
-      )}
+      <WindowControlButton
+        onClick={onMaximizeOrRestore}
+        className={themeClass.dust.control.maximize}
+      >
+        {isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+      </WindowControlButton>
       <WindowControlButton onClick={onClose} className={themeClass.dust.control.close}>
         <VscChromeClose />
       </WindowControlButton>
-    </div>
+    </Row>
   ) : (
     <></>
   )

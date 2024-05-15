@@ -12,7 +12,7 @@ import { store } from '@view/store'
 import App from './App'
 
 window.addEventListener('DOMContentLoaded', () => {
-  IpcSocket.createRequester(window)
+  const socket = IpcSocket.createRequester(window)
 })
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

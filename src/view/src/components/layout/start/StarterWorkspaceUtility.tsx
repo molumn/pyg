@@ -4,7 +4,6 @@ import { twMerge } from 'tailwind-merge'
 
 import { themeClass } from '@view/utils'
 
-import { hash } from '@common/hash'
 import { WorkspaceKey } from '@common/type'
 import { IpcSocket } from '@common/socket'
 
@@ -36,7 +35,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
   return (
     <>
       <DisplayOptional display={layout === 'list'}>
-        <Column className={twMerge('flex-1 px-4 py-3', '', themeClass.dust.sections.footer)}>
+        <Column className={twMerge('flex-1 px-4 py-3', themeClass.dust.sections.body)}>
           <Row className={'h-[40px] px-1 items-center'}>
             <GrowingDiv />
             <button
@@ -51,7 +50,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
           {...createdWorkspaces.map((key) => {
             return (
               <WorkspaceEntryButton
-                key={hash(key.name)}
+                key={`workspace-entry-button-[${key.name}]`}
                 workspaceKey={key}
                 fetchWorkspaceKeys={fetchCreatedWorkspace}
               />
@@ -60,7 +59,7 @@ export const StarterWorkspaceUtility = (): JSX.Element => {
         </Column>
       </DisplayOptional>
       <DisplayOptional display={layout === 'new'}>
-        <Column className={twMerge('flex-1 px-4 py-3 gap-2', themeClass.dust.sections.footer)}>
+        <Column className={twMerge('flex-1 px-4 py-3 gap-2', themeClass.dust.sections.body)}>
           <Row className={'h-[40px] px-1 items-center'}>
             <button
               className={

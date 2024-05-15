@@ -66,12 +66,6 @@ export class Workspace {
   readonly name: string
   readonly rootPath: string
   readonly type: WorkspaceType
-  // private idNodePair: {
-  //   [id in HashCode]: FileNode
-  // }
-
-  // get root(): RootNode {
-  // }
 
   constructor(name: string, rootPath: string, type: WorkspaceType) {
     this.name = name

@@ -22,12 +22,10 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
     return createdWorkspace
   })
   socket.on('workspace', 'createWorkspace', (event, key: WorkspaceKey) => {
-    Workspace.createWorkspace(key)
-    ApplicationHandler.changeToWorkspaceWindow(key)
+    // todo
   })
   socket.on('workspace', 'createDemo', () => {
-    Workspace.createDemo('demo')
-    ApplicationHandler.changeToWorkspaceWindow()
+    // todo
   })
   socket.handle(
     'workspace',

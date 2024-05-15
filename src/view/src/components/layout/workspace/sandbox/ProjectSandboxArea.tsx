@@ -13,8 +13,8 @@ export const ProjectSandboxArea = (): JSX.Element => {
   } = useSelectedFileContent()
 
   return (
-    <Column>
-      <Row className={'h-[30px] bg-dust-utility text-xs'}>
+    <Column className={''}>
+      <Row className={'min-h-[30px] h-[30px] bg-dust-utility text-xs'}>
         {...registeredFileContents.map((content) => (
           <Row key={`workspace-project-registered-file-content-${content.path}`}>
             <button onClick={(): void => selectFileContent(content.path)}>{content.name}</button>

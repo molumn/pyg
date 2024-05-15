@@ -6,15 +6,8 @@ export type ChannelCategory =
   | 'nodeUtilities'
 
 export interface CategorizedChannels {
-  windowControl:
-    | 'onMinimized'
-    | 'onMaximized'
-    | 'onRestore'
-    | 'onClose'
-    | 'onChangeToLogin'
-    | 'onChangeToStart'
-    | 'onChangeToWorkspace'
-  windowStatus: 'getWindowIsMaximized' | 'getWindowType'
+  windowControl: 'onMinimized' | 'onMaximized' | 'onRestore' | 'onClose'
+  windowStatus: 'getWindowIsMaximized'
   workspace:
     | 'readFile'
     | 'saveFile'

@@ -1,5 +1,3 @@
-export type WindowType = 'start' | 'workspace' | 'login'
-
 export type AuthenticationRequest = {
   req: {
     type: 'SignIn' | 'SignUp' | 'SignInWithCredentials'

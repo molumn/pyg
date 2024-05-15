@@ -31,27 +31,4 @@ export function registerWindowControlListener(socket: ListenerSocket): void {
     if (!win) return
     win.close()
   })
-
-  socket.on('windowControl', 'onChangeToLogin', () => {
-    ApplicationHandler.changeToLoginWindow()
-  })
-
-  socket.on('windowControl', 'onChangeToStart', () => {
-    ApplicationHandler.changeToStartWindow()
-  })
-
-  socket.on('windowControl', 'onChangeToWorkspace', (_, workspaceKey?: WorkspaceKey) => {
-    let realWorkspaceKey: WorkspaceKey | null = null
-
-    // store.localStores.workspaceStore.initialize()
-    store.localStores.workspaceStore.get((store) => {
-      const find = store.createdWorkspaces[workspaceKey?.name ?? '']
-      if (find) realWorkspaceKey = find
-    })
-
-    if (!realWorkspaceKey) return
-    // todo : handle process
-
-    ApplicationHandler.changeToWorkspaceWindow(realWorkspaceKey)
-  })
 }

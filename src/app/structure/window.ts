@@ -3,8 +3,6 @@ import { join } from 'path'
 import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
 import { is } from '@electron-toolkit/utils'
 
-import { WindowType } from '@common/type'
-
 const browserWindowOptions: BrowserWindowConstructorOptions = {
   show: false,
   autoHideMenuBar: true,
@@ -20,53 +18,23 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
     preload: join(__dirname, 'preload.js'),
     sandbox: false,
     contextIsolation: true
-  }
-}
+  },
 
-export function getBrowserWindowOptions(
-  type: WindowType,
-  parent?: BrowserWindow
-): BrowserWindowConstructorOptions {
-  if (type === 'login')
-    return {
-      minWidth: 800,
-      minHeight: 600,
-      width: 800,
-      height: 600,
-      maximizable: false,
-      roundedCorners: false,
-      ...browserWindowOptions
-    }
-  else if (type === 'start')
-    return {
-      minWidth: 1000,
-      minHeight: 750,
-      width: 1000,
-      height: 750,
-      modal: true,
-      ...browserWindowOptions
-    }
-  else if (type === 'workspace')
-    return {
-      minWidth: 1600,
-      minHeight: 1200,
-      modal: true,
-      ...browserWindowOptions
-    }
-  else return browserWindowOptions
+  minWidth: 1960,
+  minHeight: 1200,
+  width: 1960,
+  height: 1200,
+  modal: true
 }
 
 class WindowHandler {
   private instance: BrowserWindow
-  readonly type: WindowType
-  constructor(windowType: WindowType, parent?: WindowHandler) {
-    this.type = windowType
-    this.instance = new BrowserWindow(getBrowserWindowOptions(windowType, parent?.instance))
+  constructor() {
+    this.instance = new BrowserWindow(browserWindowOptions)
   }
 
   preload(): void {
     this.instance.on('ready-to-show', () => {
-      // todo : pass window type
       this.instance.show()
     })
 
@@ -78,35 +46,30 @@ class WindowHandler {
 
   render(): void {
     if (is.dev && MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      this.instance.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}#${this.type}`)
+      this.instance.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}`)
     } else {
-      this.instance.loadURL(
-        `file://${join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html#${this.type}`)}`
-      )
+      // this.instance.loadURL(
+      //   `file://${join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)}`
+      // )
+      this.instance.loadFile(join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
     }
   }
 
   close(): void {
-    // this.instance.webContents.send('beforeClose')
+    // todo : socket send before close
     this.instance.close()
   }
 }
 
 export class WindowManager {
-  static readonly instance: WindowManager = new WindowManager()
+  private static main: WindowHandler | null = null
 
-  private main: WindowHandler | null = null
-  get mainType(): WindowType {
-    return this.main?.type ?? 'login'
-  }
-
-  display(): void {
+  static display(): void {
     if (this.main) this.main.render()
   }
 
-  switch(type: WindowType): void {
-    if (this.main) this.main.close()
-    this.main = new WindowHandler(type)
+  static registerMainInstance(): void {
+    if (!this.main) this.main = new WindowHandler()
     this.main.preload()
   }
 

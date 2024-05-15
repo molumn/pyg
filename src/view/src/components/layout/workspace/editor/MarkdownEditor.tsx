@@ -22,9 +22,25 @@ import {
   thematicBreakPlugin,
   toolbarPlugin
 } from '@mdxeditor/editor'
-import '@mdxeditor/editor/style.css'
+// import '@mdxeditor/editor/style.css'
+import '@view/assets/mdxeditor.css'
 
 import { FileContent } from '@common/workspace/files'
+
+import { Row } from '@view/components/layout/utils/Layout'
+
+const MarkdownEditorToolbar = (): JSX.Element => {
+  return (
+    <Row className={'h-[25px] items-center'}>
+      <button>a</button>
+      <button>b</button>
+      <button>c</button>
+      <button>d</button>
+      <button>e</button>
+      <button>f</button>
+    </Row>
+  )
+}
 
 export const MarkdownEditor = ({
   contents,
@@ -48,7 +64,7 @@ export const MarkdownEditor = ({
       onChange={onSaveFileContent}
       onBlur={onSaveFileContent}
       plugins={[
-        toolbarPlugin({ toolbarContents: () => <></> }),
+        toolbarPlugin({ toolbarContents: MarkdownEditorToolbar }),
         listsPlugin(),
         quotePlugin(),
         headingsPlugin(),
@@ -69,7 +85,7 @@ export const MarkdownEditor = ({
       ]}
       contentEditableClassName={twMerge(
         'bg-gray-600',
-        'outline-none h-full max-h-screen max-w-none px-8 py-5',
+        'outline-none min-h-[80%] max-h-screen max-w-none px-8 py-5',
         'overflow-x-scroll overflow-y-scroll',
         'caret-yellow-500',
         'prose prose-invert',
