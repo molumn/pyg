@@ -8,7 +8,6 @@ import { WorkspaceKey } from '@common/type'
 import store from '@lib/store'
 
 import { Workspace } from '@app/structure/workspace'
-import { ApplicationHandler } from '@app/structure/application'
 import { FileContent, FileEncodingType, FileNode } from '@common/workspace/files'
 
 export function registerWorkspaceListener(socket: ListenerSocket): void {
@@ -31,16 +30,19 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
     'workspace',
     'readFile',
     async (event, fileNode: FileNode): Promise<FileContent> => {
-      const rootPath = Workspace.instance.rootPath
-      const childPath = fileNode.path
-      const absPath = path.join(rootPath, childPath)
-
       const fileContent: FileContent = {
         name: fileNode.name,
         path: fileNode.path,
         content: '',
         encoding: 'raw'
       }
+
+      const workspace = Workspace.instance
+      if (!workspace) return fileContent
+
+      const rootPath = workspace.rootPath
+      const childPath = fileNode.path
+      const absPath = path.join(rootPath, childPath)
 
       if (!fs.existsSync(absPath)) {
         fileContent.name += ' -- No Such File'
@@ -64,8 +66,10 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
     'saveFile',
     async (event, fileContent: FileContent): Promise<boolean> => {
       // todo : handle other process
+      const workspace = Workspace.instance
+      if (!workspace) return false
 
-      const rootPath = Workspace.instance.rootPath
+      const rootPath = workspace.rootPath
       const absPath = path.join(rootPath, fileContent.path)
 
       try {
@@ -78,15 +82,18 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
     }
   )
   socket.handle('workspace', 'getRootNode', async (): Promise<FileNode> => {
-    const rootPath = Workspace.instance.rootPath
-    const name = Workspace.instance.name
-
     const rootNode: FileNode = {
-      name,
+      name: '',
       path: '',
       type: 'DIRECTORY',
       children: []
     }
+
+    const workspace = Workspace.instance
+    if (!workspace) return rootNode
+
+    const rootPath = workspace.rootPath
+    const name = workspace.name
 
     if (!fs.existsSync(rootPath)) {
       rootNode.name += ' -- No Exist'
@@ -107,14 +114,19 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
         history += '/'
         history += node
 
-        if (!getChild(parent, node))
-          parent.children.push({
+        const childOrNull = getChild(parent, node)
+        if (!childOrNull) {
+          const newChild: FileNode = {
             name: node,
             path: history,
             type: 'DIRECTORY',
             children: []
-          })
-        parent = getChild(parent, node)
+          }
+          parent.children.push(newChild)
+          parent = newChild
+        } else {
+          parent = childOrNull
+        }
         parent.type = 'DIRECTORY'
       }
 

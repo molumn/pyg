@@ -13,7 +13,7 @@ import {
 
 export const useSelectedFileContent = (): {
   registeredFileContents: FileContent[]
-  selectedFileContent: FileContent
+  selectedFileContent: FileContent | null
   saveSelectedFileContent: (content: string) => Promise<void>
   selectFileContent: (path: string) => void
   unregisterFileContent: (path: string) => void

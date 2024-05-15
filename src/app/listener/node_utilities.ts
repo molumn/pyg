@@ -5,8 +5,8 @@ export function registerNodeUtilitiesListener(socket: ListenerSocket): void {
     'nodeUtilities',
     'checkDirectoryIsFree',
     async (_, directory: string): Promise<boolean> => {
-      const result: boolean = /^(\/?[a-z0-9A-Z-]+)+$/.test(directory)
-      return result
+      // todo : security check
+      return /^(\/?[a-z0-9A-Z-]+)+$/.test(directory)
     }
   )
 }

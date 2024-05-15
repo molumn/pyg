@@ -7,21 +7,23 @@ export class IpcSocket {
   private static _requester: RequesterSocket | undefined = undefined
 
   static get listener(): ListenerSocket {
-    try {
-      return this._listener
-    } catch (err) {
+    if (this._listener) return this._listener
+    else {
       console.error(
-        'Listener Socket is not initialized! please call IpcSocket.createListener(ipcMain: IpcMainCopy) before calling it'
+        'Listener Socket is not initialized! please call IpcSocket.createListener(ipcMain: IpcMain) before calling it'
       )
+      //@ts-ignore
+      return
     }
   }
   static get requester(): RequesterSocket {
-    try {
-      return this._requester
-    } catch (err) {
+    if (this._requester) return this._requester
+    else {
       console.error(
         'Requester Socket is not initialized! please call IpcSocket.createRequester(ipcRequester: IpcRequester) before calling it'
       )
+      //@ts-ignore
+      return
     }
   }
 

@@ -53,7 +53,7 @@ export const MarkdownEditor = ({
 
   const onSaveFileContent = async (): Promise<void> => {
     const content = editorRef.current?.getMarkdown()
-    await saveFileContent(content)
+    if (content) await saveFileContent(content)
   }
 
   return (

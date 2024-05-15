@@ -6,14 +6,13 @@ export const useWorkspaceSidebarButtons = (
   buttons: [WorkspaceSidebarTypeButtonType, JSX.Element][] = []
 ): {
   buttonList: [WorkspaceSidebarTypeButtonType, JSX.Element][]
-  selectedWorkspaceSidebarTypeButton: WorkspaceSidebarTypeButtonType | undefined
+  selectedWorkspaceSidebarTypeButton: WorkspaceSidebarTypeButtonType
   checkWorkspaceSidebarTypeButton: (buttonType: WorkspaceSidebarTypeButtonType) => boolean
   onButtonFocus: (button: WorkspaceSidebarTypeButtonType) => () => Promise<void>
 } => {
   const [buttonList] = useState<[WorkspaceSidebarTypeButtonType, JSX.Element][]>(buttons)
-  const [selectedWorkspaceSidebarTypeButton, setSelectedWorkspaceSidebarTypeButton] = useState(
-    buttons[0][0]
-  )
+  const [selectedWorkspaceSidebarTypeButton, setSelectedWorkspaceSidebarTypeButton] =
+    useState<WorkspaceSidebarTypeButtonType>(buttons[0][0])
 
   const checkWorkspaceSidebarTypeButton = (buttonType: WorkspaceSidebarTypeButtonType): boolean => {
     return (
