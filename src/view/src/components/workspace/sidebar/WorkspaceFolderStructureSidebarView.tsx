@@ -3,18 +3,14 @@ import { useEffect } from 'react'
 import { FileContent, FileNode } from '@common/workspace/files'
 import { IpcSocket } from '@common/socket'
 
-import { useAppDispatch, useProjectFileStructure } from '@view/hooks'
+import { useAppDispatch, useProjectFileStructure, useThemeContext } from '@view/hooks'
 
 import { Column, Row } from '@view/components/layout/utils/Layout'
 import { AccordVertical } from '@view/components/layout/utils/AnimatedDisplay'
 
 import { registerFileContent } from '@view/store/workspace/ProjectFileEditor'
 
-export const WorkspaceFolderStructureSidebarView = ({
-  sidebarOnOff
-}: {
-  sidebarOnOff: boolean
-}): JSX.Element => {
+export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
   const { rootNode, fetchRootNode } = useProjectFileStructure()
 
   useEffect(() => {
@@ -62,18 +58,19 @@ export const WorkspaceFolderStructureSidebarView = ({
     )
   }
 
+  const theme = useThemeContext()
+
   return (
-    <AccordVertical
-      animate={sidebarOnOff}
-      className={'border-gray-500 border-r-[1px] border-b-[1px]'}
+    <Column
+      style={{
+        backgroundColor: theme.color.base,
+        borderColor: theme.color.separator
+      }}
+      className={
+        'w-full h-full p-2 bg-dust-secondary border-gray-500 text-xs overflow-x-hidden overflow-y-scroll'
+      }
     >
-      <Column
-        className={
-          'w-[280px] h-full p-2 bg-dust-secondary border-gray-500 border-l-[1px] text-xs overflow-x-hidden overflow-y-scroll'
-        }
-      >
-        {rootNode !== null ? <RenderDirectory node={rootNode} /> : <></>}
-      </Column>
-    </AccordVertical>
+      {rootNode !== null ? <RenderDirectory node={rootNode} /> : <></>}
+    </Column>
   )
 }

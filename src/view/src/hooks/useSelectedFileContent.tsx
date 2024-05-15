@@ -18,6 +18,8 @@ export const useSelectedFileContent = (): {
   selectFileContent: (path: string) => void
   unregisterFileContent: (path: string) => void
 } => {
+  // todo : re-design hook
+
   const registeredFileContents = useAppSelector(selectRegisteredFileContents)
   const selectedFileContent: FileContent | null = useAppSelector(
     selectSelectedFileContentInRegisteredFileContents

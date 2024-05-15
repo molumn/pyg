@@ -9,7 +9,7 @@ import {
 
 import { twMerge } from 'tailwind-merge'
 
-import { useWorkspaceSidebarButtons } from './hooks'
+import { useThemeContext, useWorkspaceSidebarButtons } from './hooks'
 
 import { Frame } from './components/layout/Frame'
 import { Row } from './components/layout/utils/Layout'
@@ -24,6 +24,7 @@ import {
 } from './components/layout/workspace'
 
 export const WorkspacePage = (): JSX.Element => {
+  const theme = useThemeContext()
   const [sidebarOnOff, setSidebarOnOff] = useState(true)
 
   const {
@@ -32,21 +33,36 @@ export const WorkspacePage = (): JSX.Element => {
     checkWorkspaceSidebarTypeButton,
     onButtonFocus
   } = useWorkspaceSidebarButtons([
-    ['project', <VscArchive key={'workspace-sidebar-button-src-project'} />],
-    ['flag', <VscBookmark key={'workspace-sidebar-button-src-flag'} />]
+    [
+      'project',
+      <VscArchive
+        key={'workspace-sidebar-button-src-project'}
+        size={16}
+        style={{ color: theme.color.icon }}
+      />
+    ],
+    [
+      'flag',
+      <VscBookmark
+        key={'workspace-sidebar-button-src-flag'}
+        size={16}
+        style={{ color: theme.color.icon }}
+      />
+    ]
   ])
 
   return (
     <>
       <TitleBar>
         <button
-          className={'w-[40px] h-full centralize'}
+          style={{ color: theme.color.icon }}
+          className={'w-[40px] h-[32px] centralize'}
           onClick={() => setSidebarOnOff(!sidebarOnOff)}
         >
           {sidebarOnOff ? (
-            <VscLayoutSidebarLeft size={20} />
+            <VscLayoutSidebarLeft size={16} />
           ) : (
-            <VscLayoutSidebarLeftOff size={20} />
+            <VscLayoutSidebarLeftOff size={16} />
           )}
         </button>
         {...buttonList.map((button) => (

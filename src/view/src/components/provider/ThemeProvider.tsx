@@ -1,19 +1,16 @@
 import { createContext, useEffect, useState } from 'react'
 
-export const ThemeContext = createContext<ThemeSchema>({
+const defaultValue: ThemeSchema = {
   color: {
     base: '#2B2D30',
+    icon: '#DEE0E4',
     separator: '#1E1F22'
   }
-})
+}
+export const ThemeContext = createContext<ThemeSchema>(defaultValue)
 
 export const ThemeProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
-  const [themeSchema, setThemeSchema] = useState<ThemeSchema>({
-    color: {
-      base: '#2B2D30',
-      separator: '#1E1F22'
-    }
-  })
+  const [themeSchema, setThemeSchema] = useState<ThemeSchema>(defaultValue)
 
   useEffect(() => {
     const refreshTheme = async () => {

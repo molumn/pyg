@@ -60,7 +60,7 @@ export const WindowControlButtons = (): JSX.Element => {
   }
 
   return window.electron.process.platform !== 'darwin' ? (
-    <Row className={'fixed w-auto h-auto top-0 right-0 item-center justify-center bg-inherit'}>
+    <>
       <WindowControlButton onClick={onMinimize}>
         <VscChromeMinimize />
       </WindowControlButton>
@@ -70,7 +70,7 @@ export const WindowControlButtons = (): JSX.Element => {
       <WindowControlButton onClick={onClose}>
         <VscChromeClose />
       </WindowControlButton>
-    </Row>
+    </>
   ) : (
     <></>
   )

@@ -15,7 +15,6 @@ export const useTabArea = (
 
   const onTabClick = (tab: string) => (): void => {
     if (!tabs.includes(tab)) return
-    console.log('check')
     if (ableToEmpty && tab === selectedTab) setSelectedTab('')
     else setSelectedTab(tab)
   }

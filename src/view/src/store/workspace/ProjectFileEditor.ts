@@ -4,6 +4,8 @@ import { FileContent } from '@common/workspace/files'
 
 import { RootState } from '../root'
 
+// todo: necessary to take more global states?
+
 const initialState: {
   registeredFileContents: FileContent[]
   selectedFileContent: FileContent | null

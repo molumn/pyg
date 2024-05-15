@@ -1,5 +1,6 @@
 type ThemeColorSchema = {
   base: string
+  icon: string
   separator: string
 }
 
