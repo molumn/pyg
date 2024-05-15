@@ -6,10 +6,15 @@ import { IpcSocket } from '@common/socket'
 import { useAppDispatch, useProjectFileStructure } from '@view/hooks'
 
 import { Column, Row } from '@view/components/layout/utils/Layout'
+import { AccordVertical } from '@view/components/layout/utils/AnimatedDisplay'
 
 import { registerFileContent } from '@view/store/workspace/ProjectFileEditor'
 
-export const WorkspaceProjectFileStructureSidebarView = (): JSX.Element => {
+export const WorkspaceFolderStructureSidebarView = ({
+  sidebarOnOff
+}: {
+  sidebarOnOff: boolean
+}): JSX.Element => {
   const { rootNode, fetchRootNode } = useProjectFileStructure()
 
   useEffect(() => {
@@ -39,6 +44,7 @@ export const WorkspaceProjectFileStructureSidebarView = (): JSX.Element => {
   }
 
   const RenderDirectory = ({ node }: { node: FileNode }): JSX.Element => {
+    if (node.name === '') return <></>
     if (node.type !== 'DIRECTORY') return <RenderSingleNode node={node} />
 
     return (
@@ -57,12 +63,17 @@ export const WorkspaceProjectFileStructureSidebarView = (): JSX.Element => {
   }
 
   return (
-    <Column
-      className={
-        'w-[180px] h-full p-2 bg-dust-secondary border-l-[1px] border-gray-500 text-xs overflow-x-hidden overflow-y-scroll'
-      }
+    <AccordVertical
+      animate={sidebarOnOff}
+      className={'border-gray-500 border-r-[1px] border-b-[1px]'}
     >
-      {rootNode !== null ? <RenderDirectory node={rootNode} /> : <></>}
-    </Column>
+      <Column
+        className={
+          'w-[280px] h-full p-2 bg-dust-secondary border-gray-500 border-l-[1px] text-xs overflow-x-hidden overflow-y-scroll'
+        }
+      >
+        {rootNode !== null ? <RenderDirectory node={rootNode} /> : <></>}
+      </Column>
+    </AccordVertical>
   )
 }

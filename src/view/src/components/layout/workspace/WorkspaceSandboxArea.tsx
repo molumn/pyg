@@ -3,7 +3,7 @@ import React from 'react'
 import { WorkspaceSidebarTypeButtonType } from '@view/hooks'
 
 import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
-import { ProjectSandboxArea } from './sandbox/ProjectSandboxArea'
+import { ProjectSandboxArea } from './ProjectSandboxArea'
 
 type WorkspaceSectionProps = {
   selectedWorkspaceSidebarTypeButton: WorkspaceSidebarTypeButtonType

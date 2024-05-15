@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { VscArchive, VscBookmark } from 'react-icons/vsc'
+import {
+  VscArchive,
+  VscBookmark,
+  VscLayoutSidebarLeft,
+  VscLayoutSidebarLeftOff
+} from 'react-icons/vsc'
 
 import { twMerge } from 'tailwind-merge'
 
@@ -11,11 +16,16 @@ import { Row } from './components/layout/utils/Layout'
 import { GrowingDiv } from './components/layout/utils/GrowingDiv'
 import { DisplayOptional } from './components/layout/utils/DisplayOptional'
 
-import { TitleBarSection } from './components/TitleBar'
-import { WorkspaceFooter, WorkspaceSandboxArea } from './components/layout/workspace'
-import { WorkspaceProjectSidebar } from './components/layout/workspace/sidebar'
+import { TitleBar } from './components/TitleBar'
+import {
+  WorkspaceFooter,
+  WorkspaceSidebar,
+  WorkspaceSandboxArea
+} from './components/layout/workspace'
 
 export const WorkspacePage = (): JSX.Element => {
+  const [sidebarOnOff, setSidebarOnOff] = useState(true)
+
   const {
     buttonList,
     selectedWorkspaceSidebarTypeButton,
@@ -28,7 +38,17 @@ export const WorkspacePage = (): JSX.Element => {
 
   return (
     <>
-      <TitleBarSection className={'px-2 gap-1'}>
+      <TitleBar>
+        <button
+          className={'w-[40px] h-full centralize'}
+          onClick={() => setSidebarOnOff(!sidebarOnOff)}
+        >
+          {sidebarOnOff ? (
+            <VscLayoutSidebarLeft size={20} />
+          ) : (
+            <VscLayoutSidebarLeftOff size={20} />
+          )}
+        </button>
         {...buttonList.map((button) => (
           <button
             key={`workspace-sidebar-button-${button[0]}`}
@@ -42,12 +62,10 @@ export const WorkspacePage = (): JSX.Element => {
           </button>
         ))}
         <GrowingDiv />
-      </TitleBarSection>
+      </TitleBar>
       <Frame className={'flex flex-col'}>
         <Row className={'w-auto'}>
-          <DisplayOptional display={checkWorkspaceSidebarTypeButton('project')}>
-            <WorkspaceProjectSidebar />
-          </DisplayOptional>
+          <WorkspaceSidebar sidebarOnOff={sidebarOnOff} />
           <WorkspaceSandboxArea
             selectedWorkspaceSidebarTypeButton={selectedWorkspaceSidebarTypeButton}
           />

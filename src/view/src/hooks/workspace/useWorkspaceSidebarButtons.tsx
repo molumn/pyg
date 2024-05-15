@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { ComponentProps, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 export type WorkspaceSidebarTypeButtonType = 'project' | 'flag'
 

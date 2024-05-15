@@ -1,1 +1,1 @@
-export * from './WorkspaceProjectFileStructureSidebarView'
+export * from './WorkspaceFolderStructureSidebarView'

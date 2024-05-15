@@ -1,6 +1,6 @@
 import { Column, Row } from '@view/components/layout/utils/Layout'
 
-import { MarkdownEditor } from '../editor/MarkdownEditor'
+import { MarkdownEditor } from './editor/MarkdownEditor'
 import { useSelectedFileContent } from '@view/hooks/useSelectedFileContent'
 
 export const ProjectSandboxArea = (): JSX.Element => {

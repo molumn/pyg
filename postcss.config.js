@@ -1,6 +1,9 @@
 module.exports = {
   plugins: {
     tailwindcss: {},
-    autoprefixer: {}
+    autoprefixer: {},
+    ...(process.env.PUBLISH_TO_PRERELEASE === 'false' && process.env.PUBLISH_TO_DRAFT === 'false'
+      ? { cssnano: {} }
+      : {})
   }
 }

@@ -11,8 +11,6 @@ import {
 
 import { IpcSocket } from '@common/socket'
 
-import { themeClass } from '@view/utils'
-
 import { Row } from '@view/components/layout/utils/Layout'
 
 const WindowControlButton = ({
@@ -63,16 +61,13 @@ export const WindowControlButtons = (): JSX.Element => {
 
   return window.electron.process.platform !== 'darwin' ? (
     <Row className={'fixed w-auto h-auto top-0 right-0 item-center justify-center bg-inherit'}>
-      <WindowControlButton onClick={onMinimize} className={themeClass.dust.control.minimize}>
+      <WindowControlButton onClick={onMinimize}>
         <VscChromeMinimize />
       </WindowControlButton>
-      <WindowControlButton
-        onClick={onMaximizeOrRestore}
-        className={themeClass.dust.control.maximize}
-      >
+      <WindowControlButton onClick={onMaximizeOrRestore}>
         {isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
       </WindowControlButton>
-      <WindowControlButton onClick={onClose} className={themeClass.dust.control.close}>
+      <WindowControlButton onClick={onClose}>
         <VscChromeClose />
       </WindowControlButton>
     </Row>

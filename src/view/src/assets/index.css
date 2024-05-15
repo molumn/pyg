@@ -38,7 +38,7 @@
 }
 
 @layer components {
-  .titlebar {
+  .title_bar {
     -webkit-app-region: drag;
     -webkit-user-select: none;
     user-select: none;

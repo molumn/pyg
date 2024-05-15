@@ -8,8 +8,6 @@ import { twMerge } from 'tailwind-merge'
 import { AuthenticationRequest, AuthenticationResponse } from '@common/type'
 import { IpcSocket } from '@common/socket'
 
-import { themeClass } from '@view/utils'
-
 import { CentralizedDiv, Column, Row } from '@view/components/layout/utils/Layout'
 
 const login = async (authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
@@ -52,10 +50,7 @@ const githubLogin = async (): Promise<AuthenticationResponse> => {
 const EmailInput = (): JSX.Element => {
   return (
     <div>
-      <label
-        htmlFor={'email'}
-        className={twMerge('block text-sm font-medium leading-6', themeClass.dust.login.form.label)}
-      >
+      <label htmlFor={'email'} className={twMerge('block text-sm font-medium leading-6')}>
         Email Address
       </label>
       <div className={'mt-2'}>
@@ -67,7 +62,6 @@ const EmailInput = (): JSX.Element => {
           required={true}
           className={twMerge(
             'w-full block rounded-md py-1.5 shadow-sm ring-1 ring-inset',
-            themeClass.dust.login.form.input,
             'focus:ring-2 focus:ring-inset',
             'sm:text-sm sm-leading-6'
           )}
@@ -81,13 +75,7 @@ const PasswordInput = (): JSX.Element => {
   return (
     <div>
       <div className={'flex items-center justify-between'}>
-        <label
-          htmlFor={'email'}
-          className={twMerge(
-            'block text-sm font-medium leading-6',
-            themeClass.dust.login.form.label
-          )}
-        >
+        <label htmlFor={'email'} className={twMerge('block text-sm font-medium leading-6')}>
           Password
         </label>
         <div className="text-sm">
@@ -106,7 +94,6 @@ const PasswordInput = (): JSX.Element => {
           required={true}
           className={twMerge(
             'w-full block rounded-md py-1.5 shadow-sm ring-1 ring-inset',
-            themeClass.dust.login.form.input,
             'focus:ring-2 focus:ring-inset',
             'sm:text-sm sm-leading-6'
           )}
@@ -122,8 +109,7 @@ const SubmitButton = (): JSX.Element => {
       <button
         type={'submit'}
         className={twMerge(
-          'w-full flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
-          themeClass.dust.login.form.submit
+          'w-full flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
         )}
       >
         Sign in
@@ -134,9 +120,7 @@ const SubmitButton = (): JSX.Element => {
 
 const GoogleLoginButton = (): JSX.Element => {
   return (
-    <CentralizedDiv
-      className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
-    >
+    <CentralizedDiv className={twMerge('w-[40px] h-[40px] rounded-full')}>
       <button
         onClick={async (): Promise<void> => {
           const res = await googleLogin()
@@ -156,9 +140,7 @@ const GoogleLoginButton = (): JSX.Element => {
 
 const GithubLoginButton = (): JSX.Element => {
   return (
-    <CentralizedDiv
-      className={twMerge('w-[40px] h-[40px] rounded-full', themeClass.dust.login.form.media)}
-    >
+    <CentralizedDiv className={twMerge('w-[40px] h-[40px] rounded-full')}>
       <button
         onClick={async (): Promise<void> => {
           const res = await githubLogin()
