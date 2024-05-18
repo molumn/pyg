@@ -1,28 +1,23 @@
 import { useEffect } from 'react'
 
-import { FileContent, FileNode } from '@common/workspace/files'
-import { IpcSocket } from '@common/socket'
+import { FileNode } from '@common/workspace/files'
 
-import { useAppDispatch, useProjectFileStructure, useThemeContext } from '@view/hooks'
+import { useFileContentsHandler, useProjectFolderStructure, useThemeContext } from '@view/hooks'
 
-import { Column, Row } from '@view/components/layout/utils/Layout'
-import { AccordVertical } from '@view/components/layout/utils/AnimatedDisplay'
-
-import { registerFileContent } from '@view/store/workspace/ProjectFileEditor'
+import { CentralizedDiv, Column, Row } from '@view/components/layout/utils/Layout'
 
 export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
-  const { rootNode, fetchRootNode } = useProjectFileStructure()
+  const { rootNode, fetchRootNode } = useProjectFolderStructure()
 
   useEffect(() => {
     fetchRootNode()
   }, [])
 
-  const dispatcher = useAppDispatch()
+  const { registerFileContent } = useFileContentsHandler()
 
-  const onFileNodeSelected = async (node: FileNode): Promise<void> => {
+  const onFileNodeSelected = (node: FileNode): void => {
     if (node?.type === 'DIRECTORY') return
-    const response: FileContent = await IpcSocket.requester.request('workspace', 'readFile', node)
-    dispatcher(registerFileContent(response))
+    registerFileContent(node)
   }
 
   const RenderSingleNode = ({ node }: { node: FileNode }): JSX.Element => {
@@ -31,7 +26,7 @@ export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
         <p>ㄴ</p>
         <button
           className={'flex items-center'}
-          onDoubleClick={(): Promise<void> => onFileNodeSelected(node)}
+          onDoubleClick={(): void => onFileNodeSelected(node)}
         >
           {node?.name}
         </button>
@@ -70,7 +65,21 @@ export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
         'w-full h-full p-2 bg-dust-secondary border-gray-500 text-xs overflow-x-hidden overflow-y-scroll'
       }
     >
-      {rootNode !== null ? <RenderDirectory node={rootNode} /> : <></>}
+      {rootNode !== null ? (
+        <RenderDirectory node={rootNode} />
+      ) : (
+        <CentralizedDiv
+          style={{
+            backgroundColor: theme.color.base,
+            borderColor: theme.color.separator
+          }}
+          className={'w-full h-full overflow-x-hidden overflow-y-scroll flex-col'}
+        >
+          <button>New Workspace</button>
+          <button>Open Workspace</button>
+          <button>Open File</button>
+        </CentralizedDiv>
+      )}
     </Column>
   )
 }

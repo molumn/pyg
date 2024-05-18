@@ -1,10 +1,10 @@
 import { VscFolder } from 'react-icons/vsc'
 
-import { useTabArea } from '@view/hooks/useTabs'
+import { useTabArea } from '@view/hooks'
 
 import { Column, Row } from '@view/components/layout/utils/Layout'
 
-import { WorkspaceFolderStructureSidebarView } from '@view/components/layout/workspace/sidebar/view'
+import { WorkspaceFolderStructureSidebarView } from '@view/components/workspace/sidebar'
 import { useThemeContext } from '@view/hooks'
 import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
 import { AccordVertical } from '@view/components/layout/utils/AnimatedDisplay'
@@ -46,7 +46,7 @@ export const WorkspaceSidebar = ({ sidebarOnOff }: { sidebarOnOff: boolean }): J
           className={'border-l-[1px] h-full w-[280px]'}
         >
           <DisplayOptional display={checkTab('Folder Structure')}>
-            <WorkspaceFolderStructureSidebarView sidebarOnOff={sidebarOnOff} />
+            <WorkspaceFolderStructureSidebarView />
           </DisplayOptional>
           <DisplayOptional display={checkTab('Plot Hierarchy')}>
             <p>plot hierarchy</p>

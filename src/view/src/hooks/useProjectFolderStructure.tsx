@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { FileNode } from '@common/workspace/files'
 import { IpcSocket } from '@common/socket'
 
-export const useProjectFileStructure = () => {
+export const useProjectFolderStructure = () => {
   const [rootNode, setRootNode] = useState<FileNode | null>(null)
 
   async function fetchRootNode(): Promise<void> {

@@ -43,24 +43,28 @@ const MarkdownEditorToolbar = (): JSX.Element => {
 }
 
 export const MarkdownEditor = ({
-  contents,
+  content,
+  updateContent,
   saveFileContent
 }: {
-  contents: FileContent
-  saveFileContent: (content: string) => Promise<void>
+  content: FileContent
+  updateContent: (path: string, content: string) => void
+  saveFileContent: (path: string) => void
 }): JSX.Element => {
   const editorRef = useRef<MDXEditorMethods>(null)
 
-  const onSaveFileContent = async (): Promise<void> => {
-    const content = editorRef.current?.getMarkdown()
-    if (content) await saveFileContent(content)
+  const onSaveFileContent = (): void => {
+    const stringContent = editorRef.current?.getMarkdown()
+    if (!stringContent) return
+    updateContent(content.path, stringContent)
+    saveFileContent(stringContent)
   }
 
   return (
     <MDXEditor
       ref={editorRef}
-      key={contents?.name ?? '!empty!'}
-      markdown={contents?.content ?? ''}
+      key={content?.name ?? '!empty!'}
+      markdown={content?.content ?? ''}
       onChange={onSaveFileContent}
       onBlur={onSaveFileContent}
       plugins={[

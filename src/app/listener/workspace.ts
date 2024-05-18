@@ -81,19 +81,19 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
       }
     }
   )
-  socket.handle('workspace', 'getRootNode', async (): Promise<FileNode> => {
+  socket.handle('workspace', 'getRootNode', async (): Promise<FileNode | null> => {
+    const workspace = Workspace.instance
+    if (!workspace) return null
+
+    const rootPath = workspace.rootPath
+    const name = workspace.name
+
     const rootNode: FileNode = {
       name: '',
       path: '',
       type: 'DIRECTORY',
       children: []
     }
-
-    const workspace = Workspace.instance
-    if (!workspace) return rootNode
-
-    const rootPath = workspace.rootPath
-    const name = workspace.name
 
     if (!fs.existsSync(rootPath)) {
       rootNode.name += ' -- No Exist'

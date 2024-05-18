@@ -1,65 +1,82 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { FileContent } from '@common/workspace/files'
-
-import { RootState } from '../root'
-
-// todo: necessary to take more global states?
+import { FileContent, FileNode } from '@common/workspace/files'
+import { IpcSocket } from '@common/socket'
+import { RootState } from '@view/store'
 
 const initialState: {
-  registeredFileContents: FileContent[]
-  selectedFileContent: FileContent | null
+  focusedFileContent: FileContent | undefined
+  registeredFileContents: {
+    [path: string]: FileContent
+  }
 } = {
-  registeredFileContents: [],
-  selectedFileContent: null
+  focusedFileContent: undefined,
+  registeredFileContents: {}
 }
+
+export const registerFileContentByFileNode = createAsyncThunk(
+  'ProjectFileEditorState/requestContent',
+  async (fileNode: FileNode): Promise<FileContent> => {
+    const socket = IpcSocket.requester
+    const response: FileContent = await socket.request('workspace', 'readFile', fileNode)
+    return response
+  }
+)
 
 export const ProjectFileEditorStateSlice = createSlice({
   name: 'ProjectFileEditorState',
   initialState,
   reducers: {
-    registerFileContent: (state, action): void => {
-      if (state.registeredFileContents.find((content) => content.path === action.payload.path))
-        return
-
-      state.registeredFileContents.push(action.payload)
-      state.selectedFileContent = action.payload
-    },
-    unregisterFileContentByPath: (state, action): void => {
-      const find = state.registeredFileContents.find((content) => content.path === action.payload)
-      if (!find) return
-      const index = state.registeredFileContents.indexOf(find)
-
-      if (index <= -1) return
-
-      state.registeredFileContents.splice(index, 1)
-      if (state.registeredFileContents.length === 0) {
-        state.selectedFileContent = null
-      } else {
-        state.selectedFileContent = state.registeredFileContents[index - 1]
+    focusFileContentByPath: (state, action): void => {
+      const path = action.payload.path
+      const fileContentOrNull = state.registeredFileContents[path]
+      if (fileContentOrNull) {
+        state.focusedFileContent = fileContentOrNull
       }
     },
-    changeContentOfSelectedFileContent(state, action): void {
-      if (!state.selectedFileContent) return
-      state.selectedFileContent.content = action.payload.content
+    updateContentByPath: (state, action): void => {
+      const path = action.payload.path
+      const content = action.payload.content
+      const fileContentOrNull = state.registeredFileContents[path]
+      if (fileContentOrNull) {
+        fileContentOrNull.content = content
+      }
     },
-    selectFocusFileContentByPath(state, action): void {
-      const find = state.registeredFileContents.find((content) => content.path === action.payload)
-      if (find) state.selectedFileContent = find
+    saveFileContentByPath: (state, action): void => {
+      const socket = IpcSocket.requester
+      const path = action.payload.path
+      const fileContentOrNull = state.registeredFileContents[path]
+      if (fileContentOrNull) {
+        socket.request('workspace', 'saveFile', fileContentOrNull)
+      }
+    },
+    unregisterFileContentByPath: (state, action): void => {
+      const path = action.payload.path
+      const fileContentOrNull = state.registeredFileContents[path]
+      if (fileContentOrNull) {
+        delete state.registeredFileContents[path]
+      }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(registerFileContentByFileNode.fulfilled, (state, action): void => {
+      const fileContent: FileContent = action.payload
+      state.registeredFileContents[fileContent.path] = fileContent
+    })
   }
 })
 
-export const selectRegisteredFileContents = (state: RootState): FileContent[] =>
-  state.ProjectFileEditorState.registeredFileContents
-
-export const selectSelectedFileContentInRegisteredFileContents = (
+export const useFocusedFileContent = (state: RootState): FileContent | undefined =>
+  state.ProjectFileEditorState.focusedFileContent
+export const useRegisteredFileContents = (
   state: RootState
-): FileContent | null => state.ProjectFileEditorState.selectedFileContent
+): {
+  [path: string]: FileContent
+} => state.ProjectFileEditorState.registeredFileContents
 
 export const {
-  registerFileContent,
-  unregisterFileContentByPath,
-  changeContentOfSelectedFileContent,
-  selectFocusFileContentByPath
+  focusFileContentByPath,
+  updateContentByPath,
+  saveFileContentByPath,
+  unregisterFileContentByPath
 } = ProjectFileEditorStateSlice.actions
