@@ -1,10 +1,13 @@
+import '@blocknote/mantine/style.css'
+
+import { useEffect } from 'react'
+
+import { BlockNoteEditor } from '@blocknote/core'
+import { BlockNoteView } from '@blocknote/mantine'
 import { useCreateBlockNote } from '@blocknote/react'
 
 import { FileContent } from '@common/workspace/files'
-import { BlockNoteEditor } from '@blocknote/core'
-import { useEffect } from 'react'
 import { CentralizedDiv } from '@view/components/layout/utils/Layout'
-import { BlockNoteView } from '@blocknote/mantine'
 
 export const MarkdownEditor = ({
   content,
@@ -34,7 +37,11 @@ export const MarkdownEditor = ({
 
   return (
     <CentralizedDiv>
-      <BlockNoteView editor={editorRef} />
+      <BlockNoteView
+        className={'w-[80%] h-full mt-5'}
+        editor={editorRef}
+        onChange={onSaveFileContent}
+      />
     </CentralizedDiv>
   )
 }

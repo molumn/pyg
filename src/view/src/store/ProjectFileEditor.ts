@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { FileContent, FileNode } from '@common/workspace/files'
 import { IpcSocket } from '@common/socket'
-import { RootState } from '@view/store/index'
+import { RootState } from '@view/store/root'
 
 const initialState: {
   focusedFileContent: FileContent | undefined
@@ -47,21 +47,30 @@ export const ProjectFileEditorStateSlice = createSlice({
       const path = action.payload.path
       const fileContentOrNull = state.registeredFileContents[path]
       if (fileContentOrNull) {
-        socket.request('workspace', 'saveFile', fileContentOrNull)
+        const _clone: FileContent = {
+          name: fileContentOrNull.name,
+          path: fileContentOrNull.path,
+          content: fileContentOrNull.content,
+          encoding: fileContentOrNull.encoding
+        }
+        socket.request('workspace', 'saveFile', _clone)
       }
     },
     unregisterFileContentByPath: (state, action): void => {
       const path = action.payload.path
       const fileContentOrNull = state.registeredFileContents[path]
+      console.log('fileContentOrNull', fileContentOrNull)
       if (fileContentOrNull) {
         delete state.registeredFileContents[path]
       }
+      state.focusedFileContent = state.registeredFileContents[-1]
     }
   },
   extraReducers: (builder) => {
     builder.addCase(registerFileContentByFileNode.fulfilled, (state, action): void => {
       const fileContent: FileContent = action.payload
       state.registeredFileContents[fileContent.path] = fileContent
+      state.focusedFileContent = fileContent
     })
   }
 })

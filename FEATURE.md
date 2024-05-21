@@ -6,7 +6,6 @@
 
 ## TODO
 
- - [x] Better Markdown Editor
  - [ ] Better Workspace Manager
  - [ ] Workspace
    - [ ] Create Workspace
@@ -22,3 +21,4 @@
    - [x] File Selection
    - [x] File Editing
    - [x] File Saving
+ - [x] Better Markdown Editor

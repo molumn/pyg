@@ -5,7 +5,9 @@ export type FileNode = {
   name: string
   path: string
   type: FileType
-  children: FileNode[]
+  children: {
+    [nextNode: string]: FileNode | undefined
+  }
 }
 
 export type FileContent = {
@@ -13,4 +15,11 @@ export type FileContent = {
   path: string
   encoding: FileEncodingType
   content: string
+}
+
+export const getFileType = (filename: string): FileType => {
+  const ext = filename.substring(filename.lastIndexOf('.'))
+  if (ext === 'md') return 'md'
+  else if (ext === '') return 'DIRECTORY'
+  else return 'raw'
 }

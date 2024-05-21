@@ -47,9 +47,13 @@ export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
           <button className={'flex items-center'}>{node.name}</button>
         </Row>
         <Column className={'h-auto pl-2'}>
-          {...node?.children.map((child) => (
-            <RenderDirectory key={`project-file-structure-node-[${child.path}]`} node={child} />
-          ))}
+          {...Object.keys(node?.children).map((childNickname) => {
+            const child = node?.children[childNickname]
+            if (!child) return <></>
+            return (
+              <RenderDirectory key={`project-file-structure-node-[${child.path}]`} node={child} />
+            )
+          })}
         </Column>
       </Column>
     )
@@ -65,21 +69,7 @@ export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
       }}
       className={'w-full h-full p-2 text-xs overflow-x-hidden overflow-y-scroll'}
     >
-      {rootNode !== null ? (
-        <RenderDirectory node={rootNode} />
-      ) : (
-        <CentralizedDiv
-          style={{
-            backgroundColor: theme.color.base,
-            borderColor: theme.color.separator
-          }}
-          className={'w-full h-full overflow-x-hidden overflow-y-scroll flex-col'}
-        >
-          <TextButton size={'md'}>New Workspace</TextButton>
-          <TextButton size={'md'}>Open Workspace</TextButton>
-          <TextButton size={'md'}>Open File</TextButton>
-        </CentralizedDiv>
-      )}
+      {rootNode !== undefined ? <RenderDirectory node={rootNode} /> : <></>}
     </Column>
   )
 }

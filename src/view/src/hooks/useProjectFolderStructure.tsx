@@ -1,14 +1,12 @@
-import { useState } from 'react'
-
-import { FileNode } from '@common/workspace/files'
-import { IpcSocket } from '@common/socket'
+import { useAppDispatch, useAppSelector } from '@view/hooks/index'
+import { selectRootNode, updateRootNode } from '@view/store/ProjectFileNode'
 
 export const useProjectFolderStructure = () => {
-  const [rootNode, setRootNode] = useState<FileNode | null>(null)
+  const rootNode = useAppSelector(selectRootNode)
+  const dispatcher = useAppDispatch()
 
-  async function fetchRootNode(): Promise<void> {
-    const response: FileNode = await IpcSocket.requester.request('workspace', 'getRootNode')
-    setRootNode(response)
+  function fetchRootNode(): void {
+    dispatcher(updateRootNode())
   }
 
   return {

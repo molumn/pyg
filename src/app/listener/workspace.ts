@@ -20,11 +20,27 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
     })
     return createdWorkspace
   })
-  socket.on('workspace', 'createWorkspace', (event, key: WorkspaceKey) => {
-    // todo
+  socket.on('workspace', 'createWorkspace', (event, _key: WorkspaceKey): boolean => {
+    // todo : create workspace
+    const key = _key
+
+    key.isExisted = fs.existsSync(key.rootPath)
+
+    return Workspace.createWorkspace(key)
   })
-  socket.on('workspace', 'createDemo', () => {
-    // todo
+  socket.handle('workspace', 'registerWorkspace', (event, _key: WorkspaceKey): boolean => {
+    const key = store.localStores.workspaceStore.get((store) => {
+      return store.createdWorkspaces[_key.name]
+    })
+
+    if (!key) {
+      Workspace.createWorkspace(_key)
+    }
+
+    return Workspace.registerWorkspace(_key.name)
+  })
+  socket.handle('workspace', 'unregisterWorkspace', (): void => {
+    Workspace.unregisterWorkspace()
   })
   socket.handle(
     'workspace',
@@ -81,64 +97,8 @@ export function registerWorkspaceListener(socket: ListenerSocket): void {
       }
     }
   )
-  socket.handle('workspace', 'getRootNode', async (): Promise<FileNode | null> => {
+  socket.handle('workspace', 'getRootNode', async (): Promise<FileNode | undefined> => {
     const workspace = Workspace.instance
-    if (!workspace) return null
-
-    const rootPath = workspace.rootPath
-    const name = workspace.name
-
-    const rootNode: FileNode = {
-      name: '',
-      path: '',
-      type: 'DIRECTORY',
-      children: []
-    }
-
-    if (!fs.existsSync(rootPath)) {
-      rootNode.name += ' -- No Exist'
-      return rootNode
-    }
-
-    const getChild = (parent: FileNode, childName: string): FileNode | undefined =>
-      parent.children.find((child) => child.name === childName)
-
-    const files = fs.readdirSync(rootPath, { encoding: 'utf-8' })
-
-    for (const file of files) {
-      const nodes = file.split('/')
-      let history = '.'
-      let parent: FileNode = rootNode
-
-      for (const node of nodes) {
-        history += '/'
-        history += node
-
-        const childOrNull = getChild(parent, node)
-        if (!childOrNull) {
-          const newChild: FileNode = {
-            name: node,
-            path: history,
-            type: 'DIRECTORY',
-            children: []
-          }
-          parent.children.push(newChild)
-          parent = newChild
-        } else {
-          parent = childOrNull
-        }
-        parent.type = 'DIRECTORY'
-      }
-
-      try {
-        parent.type = parent.name.substring(parent.name.lastIndexOf('.') + 1) as FileEncodingType
-      } catch (err) {
-        if (fs.lstatSync(path.join(rootPath, parent.path)).isFile()) {
-          parent.type = 'raw'
-        }
-      }
-    }
-
-    return rootNode
+    return workspace?.rootNode
   })
 }
