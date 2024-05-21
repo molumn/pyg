@@ -2,6 +2,8 @@ import { VscFolder } from 'react-icons/vsc'
 
 import { useTabArea } from '@view/hooks'
 
+import { ReactIcon } from '@view/ui'
+
 import { Column, Row } from '@view/components/layout/utils/Layout'
 
 import { WorkspaceFolderStructureSidebarView } from '@view/components/workspace/sidebar'
@@ -18,16 +20,15 @@ export const WorkspaceSidebar = ({ sidebarOnOff }: { sidebarOnOff: boolean }): J
     <Row className={'w-auto'}>
       <Column
         style={{
-          backgroundColor: theme.color.base,
-          borderColor: theme.color.separator
+          backgroundColor: theme.color.base
         }}
-        className={'w-[38px] p-1 bg-dust-utility border-b-[1px]'}
+        className={'w-[38px] p-1 bg-dust-utility'}
       >
         <TabButton name={'Folder Structure'} className={'h-[32px]'}>
-          <VscFolder size={18} />
+          <ReactIcon reactIconType={VscFolder} size={18} />
         </TabButton>
         <TabButton name={'Plot Hierarchy'} className={'h-[32px]'}>
-          <VscFolder size={18} />
+          <ReactIcon reactIconType={VscFolder} size={18} />
         </TabButton>
       </Column>
       <AccordVertical
@@ -36,7 +37,7 @@ export const WorkspaceSidebar = ({ sidebarOnOff }: { sidebarOnOff: boolean }): J
           backgroundColor: theme.color.base,
           borderColor: theme.color.separator
         }}
-        className={'border-r-[1px] border-b-[1px]'}
+        className={'border-r-[1px]'}
       >
         {/* todo : resizable */}
         <div

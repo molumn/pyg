@@ -9,4 +9,5 @@ export function registerNodeUtilitiesListener(socket: ListenerSocket): void {
       return /^(\/?[a-z0-9A-Z-]+)+$/.test(directory)
     }
   )
+  socket.handle('nodeUtilities', 'null', async (): Promise<undefined> => undefined)
 }

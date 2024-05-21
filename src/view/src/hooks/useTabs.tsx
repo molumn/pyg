@@ -2,6 +2,8 @@ import { ComponentProps, useState } from 'react'
 
 import { twMerge } from 'tailwind-merge'
 
+import { FocusableButton } from '@view/ui'
+
 export const useTabArea = (
   _tabs: string[],
   ableToEmpty?: boolean
@@ -30,18 +32,15 @@ export const useTabArea = (
     ...props
   }: { name: string } & ComponentProps<'button'>): JSX.Element => {
     return (
-      <button
+      <FocusableButton
+        focused={name === selectedTab}
         key={`tab-button-name-${name}`}
-        className={twMerge(
-          'centralize hover:bg-dust-concentrate focus:bg-dust-concentrate',
-          name === selectedTab ? 'bg-dust-concentrate' : '',
-          className
-        )}
+        className={twMerge('centralize', className)}
         onClick={onTabClick(name)}
         {...props}
       >
         {children}
-      </button>
+      </FocusableButton>
     )
   }
 

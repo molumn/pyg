@@ -6,6 +6,7 @@
     "@electron-toolkit/eslint-config-ts/recommended",
     "@electron-toolkit/eslint-config-prettier"
   ],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "prettier/prettier": [
       "error",
@@ -15,8 +16,8 @@
     ]
   },
   "settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
+//    "import/resolver": {
+//      "typescript": {}
+//    }
   }
 }

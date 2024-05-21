@@ -18,7 +18,7 @@ export default defineConfig((env) => {
       outDir: `.vite/renderer/${name}`,
       rollupOptions: {
         output: {
-          manualChunks(id: string): string {
+          manualChunks(id: string): string | undefined {
             if (id.includes('node_modules')) {
               return id.toString().split('node_modules/')[1].split('/')[0].toString()
             }
@@ -39,6 +39,7 @@ export default defineConfig((env) => {
         { find: '@view/hook', replacement: path.resolve(__dirname, './src/view/src/hook') },
         { find: '@view/store', replacement: path.resolve(__dirname, './src/view/src/store') },
         { find: '@view/utils', replacement: path.resolve(__dirname, './src/view/src/utils') },
+        { find: '@view/ui', replacement: path.resolve(__dirname, './src/view/src/ui') },
         { find: '@common', replacement: path.resolve(__dirname, './src/common') }
       ]
     },

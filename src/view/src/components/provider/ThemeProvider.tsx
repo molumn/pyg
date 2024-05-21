@@ -1,9 +1,15 @@
 import { createContext, useEffect, useState } from 'react'
 
+import { IpcSocket } from '@common/socket'
+
 const defaultValue: ThemeSchema = {
   color: {
     base: '#2B2D30',
     icon: '#DEE0E4',
+    hover: {
+      button: '#43454A',
+      fatal: '#EA0000CD'
+    },
     separator: '#1E1F22'
   }
 }
@@ -13,9 +19,11 @@ export const ThemeProvider = ({ children }: { children: JSX.Element }): JSX.Elem
   const [themeSchema, setThemeSchema] = useState<ThemeSchema>(defaultValue)
 
   useEffect(() => {
-    const refreshTheme = async () => {
-      // const response: ThemeSchema = IpcSocket.requester.request()
-      // setThemeSchema(response)
+    const refreshTheme = async (): Promise<void> => {
+      // todo : request theme
+      const response: ThemeSchema = await IpcSocket.requester.request('nodeUtilities', 'null')
+      if (!response) return
+      setThemeSchema(response)
     }
     refreshTheme()
   }, [])

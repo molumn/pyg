@@ -1,6 +1,4 @@
-import React, { ComponentProps, useEffect, useState } from 'react'
-
-import { twMerge } from 'tailwind-merge'
+import { useEffect, useState } from 'react'
 
 import {
   VscChromeClose,
@@ -11,22 +9,7 @@ import {
 
 import { IpcSocket } from '@common/socket'
 
-import { Row } from '@view/components/layout/utils/Layout'
-
-const WindowControlButton = ({
-  className,
-  children,
-  ...props
-}: ComponentProps<'button'>): JSX.Element => {
-  return (
-    <button
-      className={twMerge('w-[40px] h-[32px] flex items-center justify-center', className)}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
+import { Button, FatalButton } from '@view/ui'
 
 export const WindowControlButtons = (): JSX.Element => {
   // todo : safe close
@@ -61,15 +44,21 @@ export const WindowControlButtons = (): JSX.Element => {
 
   return window.electron.process.platform !== 'darwin' ? (
     <>
-      <WindowControlButton onClick={onMinimize}>
+      <Button className={'w-[40px] h-[32px] flex items-center justify-center'} onClick={onMinimize}>
         <VscChromeMinimize />
-      </WindowControlButton>
-      <WindowControlButton onClick={onMaximizeOrRestore}>
+      </Button>
+      <Button
+        className={'w-[40px] h-[32px] flex items-center justify-center'}
+        onClick={onMaximizeOrRestore}
+      >
         {isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
-      </WindowControlButton>
-      <WindowControlButton onClick={onClose}>
+      </Button>
+      <FatalButton
+        className={'w-[40px] h-[32px] flex items-center justify-center'}
+        onClick={onClose}
+      >
         <VscChromeClose />
-      </WindowControlButton>
+      </FatalButton>
     </>
   ) : (
     <></>

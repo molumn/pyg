@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   VscArchive,
@@ -7,16 +7,15 @@ import {
   VscLayoutSidebarLeftOff
 } from 'react-icons/vsc'
 
-import { twMerge } from 'tailwind-merge'
+import { useThemeContext, useWorkspaceTitleBarButtons } from '@view/hooks'
 
-import { useThemeContext, useWorkspaceSidebarButtons } from './hooks'
+import { Button } from '@view/ui'
+import { ReactIcon } from '@view/ui'
 
-import { Frame } from './components/layout/Frame'
-import { Row } from './components/layout/utils/Layout'
-import { GrowingDiv } from './components/layout/utils/GrowingDiv'
-import { DisplayOptional } from './components/layout/utils/DisplayOptional'
-
-import { TitleBar } from './components/TitleBar'
+import { Frame } from '@view/components/layout/Frame'
+import { Row } from '@view/components/layout/utils/Layout'
+import { GrowingDiv } from '@view/components/layout/utils/GrowingDiv'
+import { TitleBar } from '@view/components/layout/TitleBar'
 import {
   WorkspaceFooter,
   WorkspaceSidebar,
@@ -27,55 +26,46 @@ export const WorkspacePage = (): JSX.Element => {
   const theme = useThemeContext()
   const [sidebarOnOff, setSidebarOnOff] = useState(true)
 
-  const {
-    buttonList,
-    selectedWorkspaceSidebarTypeButton,
-    checkWorkspaceSidebarTypeButton,
-    onButtonFocus
-  } = useWorkspaceSidebarButtons([
-    [
-      'project',
-      <VscArchive
-        key={'workspace-sidebar-button-src-project'}
-        size={16}
-        style={{ color: theme.color.icon }}
-      />
-    ],
-    [
-      'flag',
-      <VscBookmark
-        key={'workspace-sidebar-button-src-flag'}
-        size={16}
-        style={{ color: theme.color.icon }}
-      />
-    ]
-  ])
+  const { buttonList, selectedWorkspaceSidebarTypeButton, onButtonFocus, WorkspaceTitleBarButton } =
+    useWorkspaceTitleBarButtons([
+      [
+        'project',
+        <ReactIcon
+          reactIconType={VscArchive}
+          key={'workspace-sidebar-button-src-project'}
+          size={16}
+        />
+      ],
+      [
+        'flag',
+        <ReactIcon
+          reactIconType={VscBookmark}
+          key={'workspace-sidebar-button-src-flag'}
+          size={16}
+        />
+      ]
+    ])
 
   return (
     <>
       <TitleBar>
-        <button
-          style={{ color: theme.color.icon }}
+        <Button
           className={'w-[40px] h-[32px] centralize'}
-          onClick={() => setSidebarOnOff(!sidebarOnOff)}
+          onClick={(): void => setSidebarOnOff(!sidebarOnOff)}
         >
           {sidebarOnOff ? (
-            <VscLayoutSidebarLeft size={16} />
+            <ReactIcon reactIconType={VscLayoutSidebarLeft} size={16} />
           ) : (
-            <VscLayoutSidebarLeftOff size={16} />
+            <ReactIcon reactIconType={VscLayoutSidebarLeftOff} size={16} />
           )}
-        </button>
+        </Button>
         {...buttonList.map((button) => (
-          <button
+          <WorkspaceTitleBarButton
+            button={button}
             key={`workspace-sidebar-button-${button[0]}`}
-            className={twMerge(
-              'w-[32px] h-[32px] centralize',
-              selectedWorkspaceSidebarTypeButton === button[0] ? 'bg-dust-concentrate' : ''
-            )}
+            className={'w-[32px] h-[32px] centralize'}
             onClick={onButtonFocus(button[0])}
-          >
-            {button[1]}
-          </button>
+          />
         ))}
         <GrowingDiv />
       </TitleBar>

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { FileContent, FileNode } from '@common/workspace/files'
 import { IpcSocket } from '@common/socket'
-import { RootState } from '@view/store'
+import { RootState } from '@view/store/index'
 
 const initialState: {
   focusedFileContent: FileContent | undefined

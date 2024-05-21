@@ -9,7 +9,7 @@ import {
   registerFileContentByFileNode,
   saveFileContentByPath,
   updateContentByPath
-} from '@view/store/workspace/ProjectFileEditor'
+} from '@view/store/ProjectFileEditor'
 
 export const useSelectedFileContent = (): {
   focusedFileContent: FileContent | undefined

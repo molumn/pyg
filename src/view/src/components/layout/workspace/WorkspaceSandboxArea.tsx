@@ -1,12 +1,10 @@
-import React from 'react'
-
-import { useThemeContext, WorkspaceSidebarTypeButtonType } from '@view/hooks'
+import { useThemeContext, WorkspaceTitleBarButtonType } from '@view/hooks'
 
 import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
 import { ProjectSandboxArea } from './ProjectSandboxArea'
 
 type WorkspaceSectionProps = {
-  selectedWorkspaceSidebarTypeButton: WorkspaceSidebarTypeButtonType
+  selectedWorkspaceSidebarTypeButton: WorkspaceTitleBarButtonType
 }
 export const WorkspaceSandboxArea = ({
   selectedWorkspaceSidebarTypeButton

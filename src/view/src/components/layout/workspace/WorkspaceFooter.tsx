@@ -1,7 +1,18 @@
-import React from 'react'
+import { useThemeContext } from '@view/hooks'
 
 import { Row } from '@view/components/layout/utils/Layout'
 
 export const WorkspaceFooter = (): JSX.Element => {
-  return <Row className={'h-5'}>footer</Row>
+  const theme = useThemeContext()
+
+  return (
+    <Row
+      style={{
+        borderColor: theme.color.separator
+      }}
+      className={'h-5 border-t-[1px]'}
+    >
+      footer
+    </Row>
+  )
 }

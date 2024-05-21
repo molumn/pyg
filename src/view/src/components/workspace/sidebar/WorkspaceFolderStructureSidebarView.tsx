@@ -5,8 +5,10 @@ import { FileNode } from '@common/workspace/files'
 import { useFileContentsHandler, useProjectFolderStructure, useThemeContext } from '@view/hooks'
 
 import { CentralizedDiv, Column, Row } from '@view/components/layout/utils/Layout'
+import { TextButton } from '@view/ui'
 
 export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
+  // todo : globalize workspace information
   const { rootNode, fetchRootNode } = useProjectFolderStructure()
 
   useEffect(() => {
@@ -61,9 +63,7 @@ export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
         backgroundColor: theme.color.base,
         borderColor: theme.color.separator
       }}
-      className={
-        'w-full h-full p-2 bg-dust-secondary border-gray-500 text-xs overflow-x-hidden overflow-y-scroll'
-      }
+      className={'w-full h-full p-2 text-xs overflow-x-hidden overflow-y-scroll'}
     >
       {rootNode !== null ? (
         <RenderDirectory node={rootNode} />
@@ -75,9 +75,9 @@ export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
           }}
           className={'w-full h-full overflow-x-hidden overflow-y-scroll flex-col'}
         >
-          <button>New Workspace</button>
-          <button>Open Workspace</button>
-          <button>Open File</button>
+          <TextButton size={'md'}>New Workspace</TextButton>
+          <TextButton size={'md'}>Open Workspace</TextButton>
+          <TextButton size={'md'}>Open File</TextButton>
         </CentralizedDiv>
       )}
     </Column>

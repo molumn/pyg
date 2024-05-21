@@ -18,7 +18,7 @@ export interface CategorizedChannels {
     | 'createDemo'
     | 'getRootNode'
   authentication: 'onAuth'
-  nodeUtilities: 'checkDirectoryIsFree'
+  nodeUtilities: 'null' | 'checkDirectoryIsFree'
 }
 
 export const getChannelString = <Category extends ChannelCategory>(

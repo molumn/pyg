@@ -24,6 +24,7 @@
       "@view/store/*": ["./src/view/src/store/*"],
       "@view/hook/*": ["./src/view/src/hook/*"],
       "@view/utils/*": ["./src/view/src/utils/*"],
+      "@view/ui/*": ["./src/view/src/ui/*"],
       "@common/*": ["./src/common/*"]
     }
   }

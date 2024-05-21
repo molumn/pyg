@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import { ComponentProps } from 'react'
 
 import { twMerge } from 'tailwind-merge'
 
@@ -7,7 +7,6 @@ export const CentralizedDiv = ({
   children,
   ...props
 }: ComponentProps<'div'>): JSX.Element => {
-  console.log(children)
   return (
     <div
       className={twMerge(
