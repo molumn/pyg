@@ -6,7 +6,7 @@
 
 ## TODO
 
- - [ ] Better Markdown Editor
+ - [x] Better Markdown Editor
  - [ ] Better Workspace Manager
  - [ ] Workspace
    - [ ] Create Workspace
