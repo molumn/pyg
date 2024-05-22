@@ -1,6 +1,6 @@
-import { ListenerSocket } from '@common/socket/listen'
+import { MainProcessSocket } from '@common/socket/main-process'
 
-export function registerNodeUtilitiesListener(socket: ListenerSocket): void {
+export function registerNodeUtilitiesListener(socket: MainProcessSocket): void {
   socket.handle(
     'nodeUtilities',
     'checkDirectoryIsFree',

@@ -1,11 +1,12 @@
 # FEATURE
 
-## IN-PROCESSING
+## IN-PROCESSING ALWAYS
 
  - HTML base tag to BASE UI Component (ex: [Button](./src/view/src/ui/Button.tsx), [Icon](./src/view/src/ui/Icon.tsx), [Text](./src/view/src/ui/Text.tsx)...)
  - Custom Theme (Hooks + Context vs ~~Dynamic Callback~~)
 
 ## TODO
+> check is in-processing
 
  - [x] Better Workspace Manager
    - [ ] ~~Folder Structure~~ -> Category-Specific Structure
@@ -15,10 +16,10 @@
      - [ ] Timeline Hierarchy
      - [ ] Script Hierarchy
        - [ ] (Alternative) Algorithm Hierarchy
-   - [ ] Explicit Workspace Manager Flow (Including IPC and Renderer Flow)
+   - [x] Explicit Workspace Manager Flow (Including IPC and Renderer Flow)
  - [ ] Hooks
-   - [ ] DRY Hooks
-   - [ ] Separate Target-Specific Hooks and General Hooks
+   - [x] DRY Hooks
+   - [x] Separate Target-Specific Hooks and General Hooks
  - [ ] Workspace
    - [ ] Create Workspace
    - [ ] Import Workspace

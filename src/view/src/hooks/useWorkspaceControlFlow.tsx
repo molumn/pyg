@@ -5,7 +5,7 @@ import { useAppDispatch } from '@view/hooks/index'
 import { updateRootNode } from '@view/store/ProjectFileNode'
 
 export const useWorkspaceControlFlow = () => {
-  const socket = IpcSocket.requester
+  const socket = IpcSocket.ipcRenderer
   const dispatcher = useAppDispatch()
 
   const createWorkspace = async (key: WorkspaceKey): Promise<boolean> => {

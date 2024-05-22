@@ -4,6 +4,7 @@ export type ChannelCategory =
   | 'workspace'
   | 'authentication'
   | 'nodeUtilities'
+  | 'event'
 
 export interface CategorizedChannels {
   windowControl: 'onMinimized' | 'onMaximized' | 'onRestore' | 'onClose'
@@ -20,6 +21,7 @@ export interface CategorizedChannels {
     | 'getRootNode'
   authentication: 'onAuth'
   nodeUtilities: 'null' | 'checkDirectoryIsFree'
+  event: 'onWindowContentLoaded' | 'onWindowClosing' | 'onWorkspaceOpen' | 'onWorkspaceClose'
 }
 
 export const getChannelString = <Category extends ChannelCategory>(

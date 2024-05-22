@@ -11,8 +11,8 @@ import {
 } from '@app/listener'
 
 export const handleSockets = (): void => {
-  IpcSocket.createListener(ipcMain)
-  const socket = IpcSocket.listener
+  IpcSocket.createIpcMainUnit(ipcMain)
+  const socket = IpcSocket.ipcMain
 
   registerWindowControlListener(socket)
   registerWindowStatusListener(socket)

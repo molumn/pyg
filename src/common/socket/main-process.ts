@@ -1,7 +1,7 @@
 import { IpcMainCopy, IpcMainEventCopy, IpcMainInvokeEventCopy } from './impl'
 import { CategorizedChannels, ChannelCategory, getChannelString } from './type'
 
-export class ListenerSocket {
+export class MainProcessSocket {
   private ipcMain: IpcMainCopy
   constructor(ipcMain: IpcMainCopy) {
     this.ipcMain = ipcMain

@@ -17,7 +17,7 @@ export const WindowControlButtons = (): JSX.Element => {
 
   useEffect(() => {
     async function fetchIsMaximized(): Promise<void> {
-      const response: boolean = await IpcSocket.requester.request(
+      const response: boolean = await IpcSocket.ipcRenderer.request(
         'windowStatus',
         'getWindowIsMaximized'
       )
@@ -32,14 +32,14 @@ export const WindowControlButtons = (): JSX.Element => {
   }, [])
 
   const onMinimize = (): void => {
-    IpcSocket.requester.command('windowControl', 'onMinimized')
+    IpcSocket.ipcRenderer.command('windowControl', 'onMinimized')
   }
   const onMaximizeOrRestore = (): void => {
-    if (isMaximized) IpcSocket.requester.command('windowControl', 'onRestore')
-    else IpcSocket.requester.command('windowControl', 'onMaximized')
+    if (isMaximized) IpcSocket.ipcRenderer.command('windowControl', 'onRestore')
+    else IpcSocket.ipcRenderer.command('windowControl', 'onMaximized')
   }
   const onClose = (): void => {
-    IpcSocket.requester.command('windowControl', 'onClose')
+    IpcSocket.ipcRenderer.command('windowControl', 'onClose')
   }
 
   return window.electron.process.platform !== 'darwin' ? (

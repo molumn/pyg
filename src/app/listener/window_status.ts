@@ -1,8 +1,8 @@
 import { BrowserWindow } from 'electron'
 
-import { ListenerSocket } from '@common/socket/listen'
+import { MainProcessSocket } from '@common/socket/main-process'
 
-export function registerWindowStatusListener(socket: ListenerSocket): void {
+export function registerWindowStatusListener(socket: MainProcessSocket): void {
   socket.handle('windowStatus', 'getWindowIsMaximized', (event) => {
     const win = BrowserWindow.fromId(event.sender.id)
     return win?.isMaximized() === true

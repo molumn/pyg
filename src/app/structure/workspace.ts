@@ -4,7 +4,7 @@ import path from 'path'
 import store from '../../lib/store'
 
 import { WorkspaceKey, WorkspaceType } from '@common/type'
-import { FileNode, FileType, getFileType } from '@common/workspace/files'
+import { FileNode, getFileType } from '@common/workspace/files'
 
 export class Workspace {
   private static _instance: Workspace | undefined

@@ -1,38 +1,45 @@
-import { IpcMainCopy } from './impl'
-import { ListenerSocket } from './listen'
-import { IpcRequester, RequesterSocket } from './request'
+import { IpcMainCopy, IpcWebContentCopy } from '@common/socket/impl'
+import { MainProcessSocket } from '@common/socket/main-process'
+import { IpcRendererUnit, RendererSocket } from '@common/socket/renderer-process'
+import { IpcWebContentSocket } from '@common/socket/webcontent-process'
 
 export class IpcSocket {
-  private static _listener: ListenerSocket | undefined = undefined
-  private static _requester: RequesterSocket | undefined = undefined
+  private static _ipcMain: MainProcessSocket | undefined = undefined
+  private static _ipcRenderer: RendererSocket | undefined = undefined
 
-  static get listener(): ListenerSocket {
-    if (this._listener) return this._listener
+  static createIpcWebContentRequester(webContents: IpcWebContentCopy): IpcWebContentSocket {
+    return new IpcWebContentSocket(webContents)
+  }
+
+  static get ipcMain(): MainProcessSocket {
+    if (this._ipcMain) return this._ipcMain
     else {
       console.error(
         'Listener Socket is not initialized! please call IpcSocket.createListener(ipcMain: IpcMain) before calling it'
       )
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       return
     }
   }
-  static get requester(): RequesterSocket {
-    if (this._requester) return this._requester
+  static get ipcRenderer(): RendererSocket {
+    if (this._ipcRenderer) return this._ipcRenderer
     else {
       console.error(
         'Requester Socket is not initialized! please call IpcSocket.createRequester(ipcRequester: IpcRequester) before calling it'
       )
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       return
     }
   }
 
-  static createListener(ipcMain: IpcMainCopy): ListenerSocket {
-    this._listener = new ListenerSocket(ipcMain)
-    return this.listener
+  static createIpcMainUnit(ipcMain: IpcMainCopy): MainProcessSocket {
+    this._ipcMain = new MainProcessSocket(ipcMain)
+    return this.ipcMain
   }
-  static createRequester(ipcRequester: IpcRequester): RequesterSocket {
-    this._requester = new RequesterSocket(ipcRequester)
-    return this.requester
+  static createIpcRendererUnit(ipcRequester: IpcRendererUnit): RendererSocket {
+    this._ipcRenderer = new RendererSocket(ipcRequester)
+    return this.ipcRenderer
   }
 }

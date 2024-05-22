@@ -58,3 +58,7 @@ export interface IpcMainCopy {
   // removeHandler(channel: string): void
   // removeListener(channel: string, listener: (...args: any[]) => void): this
 }
+
+export interface IpcWebContentCopy {
+  send(channel: string, ...args: any[]): void
+}

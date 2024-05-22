@@ -1,8 +1,8 @@
 import { BrowserWindow } from 'electron'
 
-import { ListenerSocket } from '@common/socket/listen'
+import { MainProcessSocket } from '@common/socket/main-process'
 
-export function registerWindowControlListener(socket: ListenerSocket): void {
+export function registerWindowControlListener(socket: MainProcessSocket): void {
   socket.on('windowControl', 'onMinimized', (event) => {
     const win = BrowserWindow.fromId(event.sender.id)
     if (!win) return

@@ -1,6 +1,6 @@
-import { ListenerSocket } from '@common/socket/listen'
+import { MainProcessSocket } from '@common/socket/main-process'
 
-export function registerAuthenticationListener(socket: ListenerSocket): void {
+export function registerAuthenticationListener(socket: MainProcessSocket): void {
   // listener.handle(
   //   'authentication',
   //   'onAuth',

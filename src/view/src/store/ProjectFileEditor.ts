@@ -17,7 +17,7 @@ const initialState: {
 export const registerFileContentByFileNode = createAsyncThunk(
   'ProjectFileEditorState/requestContent',
   async (fileNode: FileNode): Promise<FileContent> => {
-    const socket = IpcSocket.requester
+    const socket = IpcSocket.ipcRenderer
     const response: FileContent = await socket.request('workspace', 'readFile', fileNode)
     return response
   }
@@ -43,7 +43,7 @@ export const ProjectFileEditorStateSlice = createSlice({
       }
     },
     saveFileContentByPath: (state, action): void => {
-      const socket = IpcSocket.requester
+      const socket = IpcSocket.ipcRenderer
       const path = action.payload.path
       const fileContentOrNull = state.registeredFileContents[path]
       if (fileContentOrNull) {

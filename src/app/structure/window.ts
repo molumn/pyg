@@ -2,6 +2,8 @@ import { join } from 'path'
 
 import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
 import { is } from '@electron-toolkit/utils'
+import { IpcWebContentSocket } from '@common/socket/webcontent-process'
+import { IpcSocket } from '@common/socket'
 
 const browserWindowOptions: BrowserWindowConstructorOptions = {
   show: false,
@@ -29,13 +31,21 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
 
 class WindowHandler {
   private instance: BrowserWindow
+  private commander: IpcWebContentSocket
   constructor() {
     this.instance = new BrowserWindow(browserWindowOptions)
+    this.commander = IpcSocket.createIpcWebContentRequester(this.instance.webContents)
   }
 
   preload(): void {
     this.instance.on('ready-to-show', () => {
       this.instance.show()
+      this.commander.command('onWindowContentLoaded')
+    })
+
+    this.instance.on('close', (): void => {
+      this.commander.command('onWorkspaceClose')
+      this.commander.command('onWindowClosing')
     })
 
     this.instance.webContents.setWindowOpenHandler((details) => {
