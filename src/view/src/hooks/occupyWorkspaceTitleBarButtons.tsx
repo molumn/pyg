@@ -5,7 +5,7 @@ import { FocusableButton } from '@view/ui'
 
 export type WorkspaceTitleBarButtonType = 'project' | 'flag'
 
-export const useWorkspaceTitleBarButtons = (
+export const occupyWorkspaceTitleBarButtons = (
   buttons: [WorkspaceTitleBarButtonType, JSX.Element][] = []
 ): {
   buttonList: [WorkspaceTitleBarButtonType, JSX.Element][]

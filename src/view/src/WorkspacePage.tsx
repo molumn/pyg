@@ -7,7 +7,7 @@ import {
   VscLayoutSidebarLeftOff
 } from 'react-icons/vsc'
 
-import { useThemeContext, useWorkspaceTitleBarButtons } from '@view/hooks'
+import { useThemeContext, occupyWorkspaceTitleBarButtons } from '@view/hooks'
 
 import { Button } from '@view/ui'
 import { ReactIcon } from '@view/ui'
@@ -27,7 +27,7 @@ export const WorkspacePage = (): JSX.Element => {
   const [sidebarOnOff, setSidebarOnOff] = useState(true)
 
   const { buttonList, selectedWorkspaceSidebarTypeButton, onButtonFocus, WorkspaceTitleBarButton } =
-    useWorkspaceTitleBarButtons([
+    occupyWorkspaceTitleBarButtons([
       [
         'project',
         <ReactIcon

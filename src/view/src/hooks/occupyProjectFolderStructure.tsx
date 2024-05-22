@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@view/hooks/index'
 import { selectRootNode, updateRootNode } from '@view/store/ProjectFileNode'
 
-export const useProjectFolderStructure = () => {
+export const occupyProjectFolderStructure = () => {
   const rootNode = useAppSelector(selectRootNode)
   const dispatcher = useAppDispatch()
 

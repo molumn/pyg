@@ -2,14 +2,12 @@ import { useEffect } from 'react'
 
 import { FileNode } from '@common/workspace/files'
 
-import { useFileContentsHandler, useProjectFolderStructure, useThemeContext } from '@view/hooks'
+import { useFileContentsHandler, occupyProjectFolderStructure, useThemeContext } from '@view/hooks'
 
-import { CentralizedDiv, Column, Row } from '@view/components/layout/utils/Layout'
-import { TextButton } from '@view/ui'
+import { Column, Row } from '@view/components/layout/utils/Layout'
 
 export const WorkspaceFolderStructureSidebarView = (): JSX.Element => {
-  // todo : globalize workspace information
-  const { rootNode, fetchRootNode } = useProjectFolderStructure()
+  const { rootNode, fetchRootNode } = occupyProjectFolderStructure()
 
   useEffect(() => {
     fetchRootNode()

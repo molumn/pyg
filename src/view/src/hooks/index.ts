@@ -7,5 +7,5 @@ export const useAppSelector = useSelector.withTypes<RootState>()
 export * from './useTabs'
 export * from './useThemeContext'
 export * from './useSelectedFileContent'
-export * from './useProjectFolderStructure'
-export * from './useWorkspaceTitleBarButtons'
+export * from './occupyProjectFolderStructure'
+export * from './occupyWorkspaceTitleBarButtons'

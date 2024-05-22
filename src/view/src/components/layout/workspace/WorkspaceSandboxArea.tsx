@@ -6,7 +6,7 @@ import { DisplayOptional } from '@view/components/layout/utils/DisplayOptional'
 import { ProjectSandboxArea } from './ProjectSandboxArea'
 import { TextButton } from '@view/ui'
 import { CentralizedDiv } from '@view/components/layout/utils/Layout'
-import { useWorkspaceControlFlow } from '@view/hooks/useWorkspaceControlFlow'
+import { useWorkspaceOpenFlow } from '@view/hooks/useWorkspaceControlFlow'
 
 type WorkspaceSectionProps = {
   selectedWorkspaceSidebarTypeButton: WorkspaceTitleBarButtonType
@@ -18,7 +18,7 @@ export const WorkspaceSandboxArea = ({
 
   const projectFileNode = useAppSelector(selectRootNode)
 
-  const { openWorkspace } = useWorkspaceControlFlow()
+  const { openWorkspace } = useWorkspaceOpenFlow()
 
   if (!projectFileNode) {
     return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import {
   VscChromeClose,
@@ -7,21 +7,23 @@ import {
   VscChromeRestore
 } from 'react-icons/vsc'
 
-import { IpcSocket } from '@common/socket'
-
 import { Button, FatalButton } from '@view/ui'
+import { occupyWindowControlFlow } from '@view/hooks/occupyWindowControlFlow'
 
 export const WindowControlButtons = (): JSX.Element => {
   // todo : safe close
-  const [isMaximized, setIsMaximized] = useState(false)
+  const {
+    onClose,
+    onMinimize,
+    onMaximizeOrRestore,
+    isWindowMaximized,
+    fetchWindowMaximized,
+    setWindowIsMaximized
+  } = occupyWindowControlFlow()
 
   useEffect(() => {
     async function fetchIsMaximized(): Promise<void> {
-      const response: boolean = await IpcSocket.ipcRenderer.request(
-        'windowStatus',
-        'getWindowIsMaximized'
-      )
-      setIsMaximized(response)
+      setWindowIsMaximized(await fetchWindowMaximized())
     }
     fetchIsMaximized()
 
@@ -30,17 +32,6 @@ export const WindowControlButtons = (): JSX.Element => {
       window.removeEventListener('resize', fetchIsMaximized)
     }
   }, [])
-
-  const onMinimize = (): void => {
-    IpcSocket.ipcRenderer.command('windowControl', 'onMinimized')
-  }
-  const onMaximizeOrRestore = (): void => {
-    if (isMaximized) IpcSocket.ipcRenderer.command('windowControl', 'onRestore')
-    else IpcSocket.ipcRenderer.command('windowControl', 'onMaximized')
-  }
-  const onClose = (): void => {
-    IpcSocket.ipcRenderer.command('windowControl', 'onClose')
-  }
 
   return window.electron.process.platform !== 'darwin' ? (
     <>
@@ -51,7 +42,7 @@ export const WindowControlButtons = (): JSX.Element => {
         className={'w-[40px] h-[32px] flex items-center justify-center'}
         onClick={onMaximizeOrRestore}
       >
-        {isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+        {isWindowMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
       </Button>
       <FatalButton
         className={'w-[40px] h-[32px] flex items-center justify-center'}

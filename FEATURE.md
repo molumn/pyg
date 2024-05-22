@@ -17,9 +17,12 @@
      - [ ] Script Hierarchy
        - [ ] (Alternative) Algorithm Hierarchy
    - [x] Explicit Workspace Manager Flow (Including IPC and Renderer Flow)
+   - [ ] Re-design [Workspace](./src/app/structure/workspace.ts)
  - [ ] Hooks
    - [x] DRY Hooks
    - [x] Separate Target-Specific Hooks and General Hooks
+     - general hooks  : useXXX
+     - specific hooks : occupyXXX
  - [ ] Workspace
    - [ ] Create Workspace
    - [ ] Import Workspace
