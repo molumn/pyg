@@ -1,5 +1,5 @@
 import { IpcRendererCopy } from './impl'
-import { CategorizedChannels, ChannelCategory, getChannelString } from './type'
+import { getChannelString, IpcChannelURI, MainToWindowEvent } from './type'
 
 export interface IpcRendererUnit {
   borrowRequester: (editor: (ipcRenderer: IpcRendererCopy) => any) => any
@@ -11,47 +11,44 @@ export class RendererSocket {
     this.ipcUnit = ipcUnit
   }
 
-  get<ReturnType, Category extends ChannelCategory, Parameters extends any[] = any[]>(
-    category: Category,
-    channel: CategorizedChannels[Category],
+  get<ReturnType, Parameters extends any[] = any[]>(
+    channel: IpcChannelURI,
     ...args: Parameters
   ): ReturnType {
     return this.ipcUnit.borrowRequester((ipcUnit) => {
-      return ipcUnit.sendSync(getChannelString(category, channel), ...args)
+      return ipcUnit.sendSync(channel, ...args)
     })
   }
 
-  request<ReturnType, Category extends ChannelCategory, Parameters extends any[] = any[]>(
-    category: Category,
-    channel: CategorizedChannels[Category],
+  request<ReturnType, Parameters extends any[] = any[]>(
+    channel: IpcChannelURI,
     ...args: Parameters
-  ): Promise<ReturnType> {
+  ): ReturnType {
     return this.ipcUnit.borrowRequester((ipcUnit) => {
-      return ipcUnit.invoke(getChannelString(category, channel), ...args)
+      return ipcUnit.invoke(channel, ...args)
     })
   }
 
-  command<Category extends ChannelCategory, Parameters extends any[] = any[]>(
-    category: Category,
-    channel: CategorizedChannels[Category],
+  command<ReturnType, Parameters extends any[] = any[]>(
+    channel: IpcChannelURI,
     ...args: Parameters
-  ): void {
-    this.ipcUnit.borrowRequester((ipcUnit) => {
-      return ipcUnit.send(getChannelString(category, channel), ...args)
+  ): ReturnType {
+    return this.ipcUnit.borrowRequester((ipcUnit) => {
+      return ipcUnit.send(channel, ...args)
     })
   }
 
-  on(channel: CategorizedChannels['event'], callback: (...args: any[]) => unknown): this {
+  on(channel: MainToWindowEvent, callback: (...args: any[]) => unknown): this {
     this.ipcUnit.borrowRequester((ipcUnit) => {
-      ipcUnit.on(getChannelString('event', channel), callback)
+      ipcUnit.on(getChannelString(channel), callback)
       return
     })
     return this
   }
 
-  once(channel: CategorizedChannels['event'], callback: (...args: any[]) => unknown): this {
+  once(channel: MainToWindowEvent, callback: (...args: any[]) => unknown): this {
     this.ipcUnit.borrowRequester((ipcUnit) => {
-      ipcUnit.once(getChannelString('event', channel), callback)
+      ipcUnit.once(getChannelString(channel), callback)
       return
     })
     return this

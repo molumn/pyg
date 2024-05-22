@@ -1,5 +1,5 @@
-import { IpcMainCopy, IpcMainEventCopy, IpcMainInvokeEventCopy } from './impl'
-import { CategorizedChannels, ChannelCategory, getChannelString } from './type'
+import { IpcMainCopy, IpcMainInvokeEventCopy } from './impl'
+import { IpcChannelURI } from './type'
 
 export class MainProcessSocket {
   private ipcMain: IpcMainCopy
@@ -7,39 +7,35 @@ export class MainProcessSocket {
     this.ipcMain = ipcMain
   }
 
-  handle<Category extends ChannelCategory>(
-    category: Category,
-    channel: CategorizedChannels[Category],
+  handle(
+    channel: IpcChannelURI,
     callback: (event: IpcMainInvokeEventCopy, ...args: any[]) => unknown
   ): this {
-    this.ipcMain.handle(getChannelString(category, channel), callback)
+    this.ipcMain.handle(channel, callback)
     return this
   }
 
-  handleOnce<Category extends ChannelCategory>(
-    category: Category,
-    channel: CategorizedChannels[Category],
+  handleOnce(
+    channel: IpcChannelURI,
     callback: (event: IpcMainInvokeEventCopy, ...args: any[]) => unknown
   ): this {
-    this.ipcMain.handleOnce(getChannelString(category, channel), callback)
+    this.ipcMain.handleOnce(channel, callback)
     return this
   }
 
-  once<Category extends ChannelCategory>(
-    category: Category,
-    channel: CategorizedChannels[Category],
-    callback: (event: IpcMainEventCopy, ...args: any[]) => unknown
+  once(
+    channel: IpcChannelURI,
+    callback: (event: IpcMainInvokeEventCopy, ...args: any[]) => unknown
   ): this {
-    this.ipcMain.once(getChannelString(category, channel), callback)
+    this.ipcMain.once(channel, callback)
     return this
   }
 
-  on<Category extends ChannelCategory>(
-    category: Category,
-    channel: CategorizedChannels[Category],
-    callback: (event: IpcMainEventCopy, ...args: any[]) => unknown
+  on(
+    channel: IpcChannelURI,
+    callback: (event: IpcMainInvokeEventCopy, ...args: any[]) => unknown
   ): this {
-    this.ipcMain.on(getChannelString(category, channel), callback)
+    this.ipcMain.on(channel, callback)
     return this
   }
 }

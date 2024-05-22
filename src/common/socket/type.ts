@@ -1,32 +1,28 @@
-export type ChannelCategory =
-  | 'windowControl'
-  | 'windowStatus'
-  | 'workspace'
-  | 'authentication'
-  | 'nodeUtilities'
-  | 'event'
+export type MainToWindowEvent =
+  | 'onWindowContentLoaded'
+  | 'onWindowClosing'
+  | 'onWorkspaceOpen'
+  | 'onWorkspaceClose'
 
-export interface CategorizedChannels {
-  windowControl: 'onMinimized' | 'onMaximized' | 'onRestore' | 'onClose'
-  windowStatus: 'getWindowIsMaximized'
-  workspace:
-    | 'readFile'
-    | 'saveFile'
-    | 'createFile'
-    | 'createDirectory'
-    | 'getCreatedWorkspaces'
-    | 'createWorkspace'
-    | 'registerWorkspace'
-    | 'unregisterWorkspace'
-    | 'getRootNode'
-  authentication: 'onAuth'
-  nodeUtilities: 'null' | 'checkDirectoryIsFree'
-  event: 'onWindowContentLoaded' | 'onWindowClosing' | 'onWorkspaceOpen' | 'onWorkspaceClose'
-}
+export type IpcChannelURI =
+  | 'authentication/login'
+  | 'window/control/close'
+  | 'window/control/minimize'
+  | 'window/control/restore'
+  | 'window/control/maximize'
+  | 'window/status/maximized'
+  | 'workspace/create'
+  | 'workspace/open'
+  | 'workspace/close'
+  | 'workspace/file/read'
+  | 'workspace/file/save'
+  | 'workspace/file/create'
+  | 'workspace/directory/create'
+  | 'workspace/list/created'
+  | 'workspace/root'
+  | 'workspace/'
+  | ''
 
-export const getChannelString = <Category extends ChannelCategory>(
-  category: Category,
-  channel: CategorizedChannels[Category]
-): string => {
-  return `${category}:${channel}`
+export const getChannelString = (event: MainToWindowEvent): string => {
+  return `main-to-window-event:${event}`
 }

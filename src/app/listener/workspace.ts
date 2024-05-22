@@ -50,15 +50,14 @@ const saveFile = async (_: IpcMainInvokeEventCopy, fileContent: FileContent): Pr
 }
 
 export function registerWorkspaceListener(socket: MainProcessSocket): void {
-  socket.handle('workspace', 'getCreatedWorkspaces', getCreatedWorkspace)
-  socket.on('workspace', 'createWorkspace', createWorkspace)
-  socket.handle('workspace', 'registerWorkspace', registerWorkspace)
-  socket.handle('workspace', 'unregisterWorkspace', (): void => Workspace.unregisterWorkspace())
-  socket.handle('workspace', 'readFile', readFile)
-  socket.handle('workspace', 'saveFile', saveFile)
+  socket.handle('workspace/list/created', getCreatedWorkspace)
+  socket.on('workspace/create', createWorkspace)
+  socket.handle('workspace/open', registerWorkspace)
+  socket.handle('workspace/close', (): void => Workspace.unregisterWorkspace())
+  socket.handle('workspace/file/read', readFile)
+  socket.handle('workspace/file/save', saveFile)
   socket.handle(
-    'workspace',
-    'getRootNode',
+    'workspace/root',
     async (): Promise<FileNode | undefined> => Workspace.instance?.rootNode
   )
 }

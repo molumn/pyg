@@ -12,7 +12,7 @@ export const useWorkspaceOpenFlow = (): {
 
   return {
     openWorkspace: async (key: WorkspaceKey): Promise<boolean> => {
-      const result: boolean = await socket.request('workspace', 'registerWorkspace', key)
+      const result: boolean = await socket.request('workspace/open', key)
       dispatcher(updateRootNode())
 
       return result
@@ -27,7 +27,7 @@ export const useWorkspaceCreateFlow = (): {
 
   return {
     createWorkspace: async (key: WorkspaceKey): Promise<boolean> => {
-      return await socket.request('workspace', 'createWorkspace', key)
+      return await socket.request('workspace/create', key)
     }
   }
 }
@@ -39,7 +39,7 @@ export const useWorkspaceCloseFlow = (): {
 
   return {
     closeWorkspace: (): void => {
-      socket.command('workspace', 'unregisterWorkspace')
+      socket.command('workspace/close')
     }
   }
 }

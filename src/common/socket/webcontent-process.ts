@@ -1,5 +1,5 @@
 import { IpcWebContentCopy } from '@common/socket/impl'
-import { CategorizedChannels, getChannelString } from '@common/socket/type'
+import { getChannelString, MainToWindowEvent } from '@common/socket/type'
 
 export class IpcWebContentSocket {
   private webContents: IpcWebContentCopy
@@ -7,8 +7,8 @@ export class IpcWebContentSocket {
     this.webContents = webContent
   }
 
-  command(event: CategorizedChannels['event'], ...args: any[]): this {
-    this.webContents.send(getChannelString('event', event), ...args)
+  command(event: MainToWindowEvent, ...args: any[]): this {
+    this.webContents.send(getChannelString(event), ...args)
     return this
   }
 }

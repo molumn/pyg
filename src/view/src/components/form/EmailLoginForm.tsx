@@ -9,7 +9,7 @@ import { IpcSocket } from '@common/socket'
 import { CentralizedDiv, Column, Row } from '@view/components/layout/utils/Layout'
 
 const login = async (authInfo: AuthenticationRequest): Promise<AuthenticationResponse> => {
-  return await IpcSocket.ipcRenderer.request('authentication', 'onAuth', authInfo)
+  return await IpcSocket.ipcRenderer.request('authentication/login', authInfo)
 }
 
 const emailLogin = async (

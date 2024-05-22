@@ -12,18 +12,18 @@ export const occupyWindowControlFlow = (): {
   const [isMaximized, setIsMaximized] = useState(false)
 
   const onMinimize = (): void => {
-    IpcSocket.ipcRenderer.command('windowControl', 'onMinimized')
+    IpcSocket.ipcRenderer.command('window/control/minimize')
   }
   const onMaximizeOrRestore = (): void => {
-    if (isMaximized) IpcSocket.ipcRenderer.command('windowControl', 'onRestore')
-    else IpcSocket.ipcRenderer.command('windowControl', 'onMaximized')
+    if (isMaximized) IpcSocket.ipcRenderer.command('window/control/restore')
+    else IpcSocket.ipcRenderer.command('window/control/maximize')
   }
   const onClose = (): void => {
-    IpcSocket.ipcRenderer.command('windowControl', 'onClose')
+    IpcSocket.ipcRenderer.command('window/control/close')
   }
 
   const fetchWindowMaximized = async (): Promise<boolean> => {
-    return await IpcSocket.ipcRenderer.request('windowStatus', 'getWindowIsMaximized')
+    return await IpcSocket.ipcRenderer.request('window/status/maximized')
   }
 
   return {

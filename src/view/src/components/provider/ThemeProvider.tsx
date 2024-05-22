@@ -21,7 +21,7 @@ export const ThemeProvider = ({ children }: { children: JSX.Element }): JSX.Elem
   useEffect(() => {
     const refreshTheme = async (): Promise<void> => {
       // todo : request theme
-      const response: ThemeSchema = await IpcSocket.ipcRenderer.request('nodeUtilities', 'null')
+      const response: ThemeSchema = await IpcSocket.ipcRenderer.request('')
       if (!response) return
       setThemeSchema(response)
     }

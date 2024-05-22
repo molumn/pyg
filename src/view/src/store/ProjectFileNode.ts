@@ -15,7 +15,7 @@ export const updateRootNode = createAsyncThunk(
   'ProjectFileNode/updateRootNode',
   async (): Promise<FileNode | undefined> => {
     const socket = IpcSocket.ipcRenderer
-    return await socket.request('workspace', 'getRootNode')
+    return await socket.request('workspace/root')
   }
 )
 
