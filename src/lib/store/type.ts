@@ -38,7 +38,7 @@ export class LocalStore<Schema extends object> {
   }
 
   initialize(): void {
-    if (fs.existsSync(this.filepath) === false) {
+    if (!fs.existsSync(this.filepath)) {
       fs.mkdirSync(this.parentDir)
       fs.writeFileSync(this.filepath, JSON.stringify(this.store), { encoding: 'utf-8', flag: 'w' })
     }

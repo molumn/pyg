@@ -4,6 +4,7 @@ export type CharacterKey = {
   path: string
   name: string
   type: CharacterKeyType
+  realFilepath: string
   children: {
     [nextNode: string]: CharacterKey | undefined
   }

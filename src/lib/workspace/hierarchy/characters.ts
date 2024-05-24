@@ -1,8 +1,10 @@
 import fs from 'fs'
+import path from 'path'
 
 import { CharacterContent, CharacterKey, CharacterKeyType, ProfileContent } from '@common/workspace/types'
 
-import { createWorkspaceDirectory, readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace'
+import { readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace'
+import { splitPathToNodes } from '@lib/extension/fs'
 
 /**
  * file hierarchy plan:
@@ -21,16 +23,16 @@ const checkCharacterFileExtension = (filename: string, extension: CharacterFileE
   return filename.endsWith(extension)
 }
 
-const combinePath = (parent: string, child: string): string => {
-  if (parent.length === 0 || parent === '.') return child
-  return `${parent}/${child}`
-}
-
 const combineExtension = (name: string, type: CharacterKeyType, isDirectory = false): string => {
   if (type === 'profile') return `${name}.profile.pyg`
   else if (type === 'character' && isDirectory) return `${name}.character.pyg.dir`
   else if (type === 'character' && !isDirectory) return `${name}.character.pyg`
   else return name
+}
+
+const combinePath = (parentPath: string, childName: string, type: CharacterKeyType): string => {
+  if (parentPath.length === 0 || parentPath === '.') return childName
+  return `${parentPath}/${combineExtension(childName, type)}`
 }
 
 export class CharactersWorkspaceSegment {
@@ -48,90 +50,100 @@ export class CharactersWorkspaceSegment {
     return parent?.type === type ? parent : undefined
   }
 
-  private getOrCreateChild(parent: CharacterKey, nextNode: string): CharacterKey {
-    const childOrUndefined = parent.children[nextNode]
-    let type: CharacterKeyType = 'category'
+  private getOrCreateChild(parentKey: CharacterKey, nextNode: string, type: CharacterKeyType = 'category'): CharacterKey {
+    let name: string = nextNode
+    if (type === 'character') name = nextNode.replace('.character.pyg.dir', '')
+    else if (type === 'profile') name = nextNode.replace('.profile.pyg', '')
 
-    if (checkCharacterFileExtension(nextNode, '.character.pyg')) type = 'character'
-    else if (checkCharacterFileExtension(nextNode, '.character.pyg.dir')) type = 'character'
-    else if (checkCharacterFileExtension(nextNode, '.profile.pyg')) type = 'profile'
-
-    if (!childOrUndefined) {
-      parent.children[nextNode] = {
-        path: combinePath(parent.path, nextNode),
-        name: nextNode,
-        type,
-        children: {}
+    const child = parentKey.children[name]
+    if (!child) {
+      parentKey.children[name] = {
+        path: combinePath(parentKey.path, nextNode, type),
+        realFilepath: combinePath(parentKey.path, nextNode, type),
+        name,
+        children: {},
+        type: type
       }
-      return parent.children[nextNode]!
     }
-    return childOrUndefined
+    return parentKey.children[name]!
   }
 
   private insertCategory(nodes: string[]): void {
     let parent = this._rootKey
     for (const node of nodes) {
-      const current = this.getOrCreateChild(parent, node)
-      if (current.type !== 'category') break
-      parent = current
+      parent = this.getOrCreateChild(parent, node)
     }
   }
 
-  private insertCharacterDirectory(nodes: string[]): void {
+  private insertCharacter(nodes: string[]): void {
     let parent = this._rootKey
     for (const node of nodes) {
-      const current = this.getOrCreateChild(parent, node)
-      if (current.type !== 'category') break
-      parent = current
+      if (node === nodes[nodes.length - 1]) parent = this.getOrCreateChild(parent, node, 'character')
+      else parent = this.getOrCreateChild(parent, node)
     }
   }
 
-  private checkCombinedCharacter(nodes: string[]): void {
+  private insertProfile(nodes: string[]): void {
+    if (nodes.length < 2) return
+
+    const profileNode = nodes[nodes.length - 1]
+    const characterDirNode = nodes[nodes.length - 2]
+
     let parent = this._rootKey
     for (const node of nodes) {
-      if (parent.type === 'character') break
-      const current = this.getOrCreateChild(parent, node)
-      if (current.type === 'profile') break
-      parent = current
-    }
-    if (parent.type !== 'character') {
-      console.error('character file must be existed inside of character folder!')
+      if (node === characterDirNode) parent = this.getOrCreateChild(parent, node, 'character')
+      else if (node === profileNode) parent = this.getOrCreateChild(parent, node, 'profile')
+      else parent = this.getOrCreateChild(parent, node)
     }
   }
 
-  private insertProfileFile(nodes: string[]): void {
-    let parent = this._rootKey
+  private matchCharacterRealFilepath(nodes: string[]): void {
+    if (nodes.length < 2) return
+
+    const realFileNode = nodes[nodes.length - 1]
+    const characterDirNode = nodes[nodes.length - 2]
+
+    let parent = this.rootKey
     for (const node of nodes) {
-      const current = this.getOrCreateChild(parent, node)
-      if (current.type === 'profile') break
-      parent = current
+      if (node === characterDirNode) {
+        parent = this.getOrCreateChild(parent, node, 'character')
+        break
+      }
+      parent = this.getOrCreateChild(parent, node)
     }
+
+    parent.realFilepath += '/'
+    parent.realFilepath += realFileNode
   }
 
-  private fetchCharacterHierarchyFromPath(path: string): boolean {
+  private fetchCharacterHierarchyFromPath(hierarchyRootPath: string): boolean {
     if (this._rootKey.type !== 'category') return false
 
-    const files = fs.readdirSync(path, { recursive: true, encoding: 'utf-8' })
+    const files = fs.readdirSync(hierarchyRootPath, { recursive: true, encoding: 'utf-8' })
 
     for (const file of files) {
-      const isDirectory = fs.lstatSync(file).isDirectory()
+      const isDirectory = fs.lstatSync(path.join(hierarchyRootPath, file)).isDirectory()
       const isCharacterFile = checkCharacterFileExtension(file, '.character.pyg')
       const isCharacterDir = checkCharacterFileExtension(file, '.character.pyg.dir')
       const isProfile = checkCharacterFileExtension(file, '.profile.pyg')
 
-      const nodes = file.split('/')
+      const nodes = splitPathToNodes(file)
 
-      if (isCharacterDir) {
-        if (isDirectory) this.insertCharacterDirectory(nodes)
-        else {
-          console.error(`File named .character.pyg.dir is ignored : [${file}]`)
-        }
-      } else if (isCharacterFile) {
-        this.checkCombinedCharacter(nodes)
+      if (isDirectory && isCharacterDir) {
+        console.log('add character dir')
+        this.insertCharacter(nodes)
+      } else if (isCharacterFile && !isDirectory) {
+        console.log('match character file')
+        console.log(nodes)
+        this.matchCharacterRealFilepath(nodes)
       } else if (isProfile) {
-        this.insertProfileFile(nodes)
-      } else {
+        console.log('add profile file')
+        this.insertProfile(nodes)
+      } else if (isDirectory) {
+        console.log('add category')
         this.insertCategory(nodes)
+      } else {
+        console.log('unknown file name format')
       }
     }
 
@@ -142,91 +154,57 @@ export class CharactersWorkspaceSegment {
     this.path = `${workspacePath}/Characters`
     this._rootKey = {
       path: '',
+      realFilepath: '',
       name: `Character [${name}]`,
       type: 'category',
       children: {}
     }
+  }
 
+  fetchFromDisk(): void {
     if (!this.fetchCharacterHierarchyFromPath(this.path)) {
       console.error(`Character Hierarchy Fetching Error : path - [${this.path}]`)
     } else {
       console.log('Character Hierarchy : ')
       console.group()
-      console.log(this._rootKey)
+      console.log(JSON.stringify(this._rootKey, null, 2))
       console.groupEnd()
     }
   }
 
-  createCategory(categoryPath: string, nextNode: string): CharacterKey | undefined {
-    const nodes = categoryPath.split('/')
-    const category = this.getKeyOrUndefined(nodes, 'category')
-    if (!category) return undefined
+  createCategory(categoryPath: string, childCategory: string): CharacterKey | undefined {
+    const nodes = splitPathToNodes(categoryPath)
+    const parentCategoryKey = this.getKeyOrUndefined(nodes, 'category')
 
-    let newCategory = category.children[nextNode]
-    if (!newCategory) {
-      category.children[nextNode] = {
-        path: combinePath(category.path, nextNode),
-        name: nextNode,
-        type: 'category',
-        children: {}
-      }
-      newCategory = category.children[nextNode]
-    }
+    // this function only work for create single category
+    if (!parentCategoryKey) return undefined
 
-    createWorkspaceDirectory('Characters', newCategory?.path ?? '')
+    return this.getOrCreateChild(parentCategoryKey, combineExtension(childCategory, 'category'))
   }
 
-  createCharacter(categoryPath: string, nextNode: string): CharacterKey | undefined {
-    const nodes = categoryPath.split('/')
-    const category = this.getKeyOrUndefined(nodes, 'category')
-    if (!category) return undefined
+  createCharacter(categoryPath: string, characterName: string): CharacterKey | undefined {
+    const nodes = splitPathToNodes(categoryPath)
+    const parentCategoryKey = this.getKeyOrUndefined(nodes, 'category')
 
-    let newCharacter = category.children[nextNode]
-    if (!newCharacter) {
-      category.children[nextNode] = {
-        path: combinePath(category.path, combineExtension(nextNode, 'character', false)),
-        name: nextNode,
-        type: 'character',
-        children: {}
-      }
-      newCharacter = category.children[nextNode]
-    }
+    // this function only work for create single category
+    if (!parentCategoryKey) return undefined
 
-    if (!newCharacter) return undefined
-    createWorkspaceDirectory('Characters', newCharacter.path + '.dir')
-    saveWorkspaceFile({
-      name: newCharacter.name,
-      path: `./Characters/${newCharacter.path}`,
-      content: ''
-    })
+    const character = this.getOrCreateChild(parentCategoryKey, combineExtension(characterName, 'character', true))
+    character.realFilepath += '/'
+    character.realFilepath += combineExtension(characterName, 'character')
 
-    return newCharacter
+    return character
   }
 
-  createProfile(characterPath: string, nextNode: string): CharacterKey | undefined {
-    const nodes = characterPath.split('/')
-    const character = this.getKeyOrUndefined(nodes, 'character')
-    if (!character) return undefined
+  createProfile(characterPath: string, profileName: string): CharacterKey | undefined {
+    const nodes = splitPathToNodes(characterPath)
+    const parentCategoryKey = this.getKeyOrUndefined(nodes, 'category')
 
-    let newProfile = character.children[nextNode]
-    if (!newProfile) {
-      character.children[nextNode] = {
-        path: combinePath(character.path, combineExtension(nextNode, 'profile', false)),
-        name: nextNode,
-        type: 'profile',
-        children: {}
-      }
-      newProfile = character.children[nextNode]
-    }
+    // this function only work for create single category
+    if (!parentCategoryKey) return undefined
+    else if (parentCategoryKey.type !== 'character') return undefined
 
-    if (!newProfile) return undefined
-    saveWorkspaceFile({
-      name: newProfile.name,
-      path: `./Characters/${newProfile.path}`,
-      content: ''
-    })
-
-    return newProfile
+    return this.getOrCreateChild(parentCategoryKey, combineExtension(profileName, 'category'))
   }
 
   readCharacter(key: CharacterKey): CharacterContent {

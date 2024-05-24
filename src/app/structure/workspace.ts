@@ -53,6 +53,7 @@ export class Workspace {
     this.type = type
 
     this.hierarchy = new WorkspaceFolderHierarchy(this.rootPath, this.name)
+    WorkspaceFolderHierarchy.create(this.hierarchy)
   }
 
   get key(): WorkspaceKey {
