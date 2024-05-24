@@ -22,8 +22,8 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
     contextIsolation: true
   },
 
-  minWidth: 1960,
-  minHeight: 1200,
+  // minWidth: 1960,
+  // minHeight: 1200,
   width: 1960,
   height: 1200,
   modal: true

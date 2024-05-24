@@ -13,7 +13,6 @@ export type FileNode = {
 export type FileContent = {
   name: string
   path: string
-  encoding: FileEncodingType
   content: string
 }
 

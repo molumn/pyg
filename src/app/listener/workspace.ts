@@ -20,7 +20,7 @@ const getCreatedWorkspace = (): WorkspaceKey[] => {
   return createdWorkspace
 }
 
-const createWorkspace = (_: IpcMainEventCopy, _key: WorkspaceKey): boolean => {
+const createWorkspace = (_key: WorkspaceKey): boolean => {
   // todo : create workspace
   const key = _key
 
@@ -29,35 +29,39 @@ const createWorkspace = (_: IpcMainEventCopy, _key: WorkspaceKey): boolean => {
   return Workspace.createWorkspace(key)
 }
 
-const registerWorkspace = (_: IpcMainInvokeEventCopy, _key: WorkspaceKey): boolean => {
+const registerWorkspace = (_key: WorkspaceKey): boolean => {
   const key = store.localStores.workspaceStore.get((store) => {
     return store.createdWorkspaces[_key.name]
   })
 
-  if (!key) {
-    Workspace.createWorkspace(_key)
-  }
+  if (!key) return false
 
   return Workspace.registerWorkspace(_key.name)
 }
 
-const readFile = async (_: IpcMainInvokeEventCopy, fileNode: FileNode): Promise<FileContent> => {
-  return readWorkspaceFile(fileNode)
+const readFile = async (fileNode: FileNode): Promise<FileContent> => {
+  return readWorkspaceFile(fileNode.path, fileNode.name)
 }
 
-const saveFile = async (_: IpcMainInvokeEventCopy, fileContent: FileContent): Promise<boolean> => {
+const saveFile = async (fileContent: FileContent): Promise<boolean> => {
   return saveWorkspaceFile(fileContent)
 }
 
 export function registerWorkspaceListener(socket: MainProcessSocket): void {
-  socket.handle('workspace/list/created', getCreatedWorkspace)
   socket.on('workspace/create', createWorkspace)
+
   socket.handle('workspace/open', registerWorkspace)
-  socket.handle('workspace/close', (): void => Workspace.unregisterWorkspace())
+  socket.handle('workspace/close', Workspace.unregisterWorkspace)
   socket.handle('workspace/file/read', readFile)
   socket.handle('workspace/file/save', saveFile)
-  socket.handle(
-    'workspace/root',
-    async (): Promise<FileNode | undefined> => Workspace.instance?.rootNode
-  )
+  socket.handle('workspace/list/created', getCreatedWorkspace)
+
+  socket.handle('workspace/hierarchy/characters/list', () => Workspace.instance?.hierarchy.characters.rootKey)
+  socket.handle('workspace/hierarchy/characters/read/character', Workspace.instance?.hierarchy.characters.readCharacter)
+  socket.handle('workspace/hierarchy/characters/read/profile', Workspace.instance?.hierarchy.characters.readProfile)
+  socket.handle('workspace/hierarchy/characters/save/character', Workspace.instance?.hierarchy.characters.saveCharacter)
+  socket.handle('workspace/hierarchy/characters/save/profile', Workspace.instance?.hierarchy.characters.saveProfile)
+  socket.handle('workspace/hierarchy/characters/create/category', Workspace.instance?.hierarchy.characters.createCategory)
+  socket.handle('workspace/hierarchy/characters/create/character', Workspace.instance?.hierarchy.characters.createCharacter)
+  socket.handle('workspace/hierarchy/characters/create/profile', Workspace.instance?.hierarchy.characters.createProfile)
 }

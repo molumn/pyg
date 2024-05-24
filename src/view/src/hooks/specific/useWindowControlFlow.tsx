@@ -1,7 +1,7 @@
 import { IpcSocket } from '@common/socket'
 import { useState } from 'react'
 
-export const occupyWindowControlFlow = (): {
+export const useWindowControlFlow = (): {
   onClose: () => void
   onMinimize: () => void
   onMaximizeOrRestore: () => void

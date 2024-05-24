@@ -21,8 +21,9 @@
  - [ ] Hooks
    - [x] DRY Hooks
    - [x] Separate Target-Specific Hooks and General Hooks
-     - general hooks  : useXXX
-     - specific hooks : occupyXXX
+     - ~~general hooks  : useXXX~~
+     - ~~specific hooks : occupyXXX~~
+     - DELETED
  - [ ] Workspace
    - [ ] Create Workspace
    - [ ] Import Workspace

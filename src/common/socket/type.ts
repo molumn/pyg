@@ -1,8 +1,4 @@
-export type MainToWindowEvent =
-  | 'onWindowContentLoaded'
-  | 'onWindowClosing'
-  | 'onWorkspaceOpen'
-  | 'onWorkspaceClose'
+export type MainToWindowEvent = 'onWindowContentLoaded' | 'onWindowClosing' | 'onWorkspaceOpen' | 'onWorkspaceClose'
 
 export type IpcChannelURI =
   | 'authentication/login'
@@ -19,7 +15,14 @@ export type IpcChannelURI =
   | 'workspace/file/create'
   | 'workspace/directory/create'
   | 'workspace/list/created'
-  | 'workspace/root'
+  | 'workspace/hierarchy/characters/list'
+  | 'workspace/hierarchy/characters/read/character'
+  | 'workspace/hierarchy/characters/read/profile'
+  | 'workspace/hierarchy/characters/save/character'
+  | 'workspace/hierarchy/characters/save/profile'
+  | 'workspace/hierarchy/characters/create/category'
+  | 'workspace/hierarchy/characters/create/character'
+  | 'workspace/hierarchy/characters/create/profile'
   | 'workspace/'
   | ''
 

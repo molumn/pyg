@@ -1,24 +1,22 @@
 import fs from 'fs'
 import path from 'path'
 
-import { FileContent, FileEncodingType, FileNode } from '@common/workspace/files'
+import { FileContent } from '@common/workspace/files'
 
 import { Workspace } from '@app/structure/workspace'
 
-export const readWorkspaceFile = (fileNode: FileNode): FileContent => {
+export const readWorkspaceFile = (relpath: string, filename: string): FileContent => {
   const fileContent: FileContent = {
-    name: fileNode.name,
-    path: fileNode.path,
-    content: '',
-    encoding: 'raw'
+    name: filename,
+    path: relpath,
+    content: ''
   }
 
   const workspace = Workspace.instance
   if (!workspace) return fileContent
 
   const rootPath = workspace.rootPath
-  const childPath = fileNode.path
-  const absPath = path.join(rootPath, childPath)
+  const absPath = path.join(rootPath, relpath)
 
   if (!fs.existsSync(absPath)) {
     fileContent.name += ' -- No Such File'
@@ -27,11 +25,8 @@ export const readWorkspaceFile = (fileNode: FileNode): FileContent => {
 
   try {
     fileContent.content = fs.readFileSync(absPath, { encoding: 'utf-8' })
-    fileContent.encoding = fileNode.name.substring(
-      fileNode.name.lastIndexOf('.') + 1
-    ) as FileEncodingType
   } catch (err) {
-    console.log('FS readFileSync Error')
+    console.log('FS readFileSync Error - readWorkspaceFile')
   }
 
   return fileContent
@@ -49,7 +44,23 @@ export const saveWorkspaceFile = (fileContent: FileContent): boolean => {
     fs.writeFileSync(absPath, fileContent.content, { encoding: 'utf-8', flag: 'w' })
     return true
   } catch (err) {
-    console.log('fs saveFileSync Error')
+    console.log('fs saveFileSync Error - saveWorkspaceFile')
+    return false
+  }
+}
+
+export const createWorkspaceDirectory = (...relpath: string[]): boolean => {
+  const workspace = Workspace.instance
+  if (!workspace) return false
+
+  const rootPath = workspace.rootPath
+  const absPath = path.join(rootPath, relpath.join('/'))
+
+  try {
+    fs.mkdirSync(absPath)
+    return true
+  } catch (err) {
+    console.log('fs mkdirSync Error - createWorkspaceDirectory')
     return false
   }
 }

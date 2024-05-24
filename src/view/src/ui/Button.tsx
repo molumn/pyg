@@ -10,11 +10,7 @@ const StyledTextButton = styled.button`
   }
 `
 
-export const TextButton = ({
-  size,
-  children,
-  ...props
-}: TextProps & ComponentProps<'button'>): JSX.Element => {
+export const TextButton = ({ size, children, ...props }: TextProps & ComponentProps<'button'>): JSX.Element => {
   return (
     <StyledTextButton {...props}>
       <Text size={size}>{children}</Text>
@@ -63,10 +59,7 @@ export const FatalButton = (props: ComponentProps<'button'>): JSX.Element => {
   )
 }
 
-export const FocusableButton = ({
-  focused,
-  ...props
-}: { focused: boolean } & ComponentProps<'button'>): JSX.Element => {
+export const FocusableButton = ({ focused, ...props }: { focused: boolean } & ComponentProps<'button'>): JSX.Element => {
   const theme = useThemeContext()
   const hovered = theme.color.hover.button
 
