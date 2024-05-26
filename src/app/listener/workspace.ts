@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { WorkspaceKey } from '@common/type'
 import { MainProcessSocket } from '@common/socket/main-process'
-import { IpcMainEventCopy, IpcMainInvokeEventCopy } from '@common/socket/impl'
+import { CharacterContent, CharacterKey, CharacterProfileContent } from '@common/workspace/types'
 import { FileContent, FileNode } from '@common/workspace/files'
 
 import store from '@lib/store'
@@ -57,39 +57,12 @@ export function registerWorkspaceListener(socket: MainProcessSocket): void {
   socket.handle('workspace/list/created', getCreatedWorkspace)
 
   socket.handle('workspace/hierarchy/characters/list', () => Workspace.instance?.hierarchy.characters.rootKey)
-  socket.handleLazy(
-    'workspace/hierarchy/characters/read/character',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.readCharacter
-  )
-  socket.handleLazy(
-    'workspace/hierarchy/characters/read/profile',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.readProfile
-  )
-  socket.handleLazy(
-    'workspace/hierarchy/characters/save/character',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.saveCharacter
-  )
-  socket.handleLazy(
-    'workspace/hierarchy/characters/save/profile',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.saveProfile
-  )
-  socket.handleLazy(
-    'workspace/hierarchy/characters/create/category',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.createCategory
-  )
-  socket.handleLazy(
-    'workspace/hierarchy/characters/create/character',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.createCharacter
-  )
-  socket.handleLazy(
-    'workspace/hierarchy/characters/create/profile',
-    () => Workspace.instance,
-    (instance) => instance?.hierarchy.characters.createProfile
-  )
+
+  socket.handle('workspace/hierarchy/characters/read/character', (key: CharacterKey) => Workspace.instance?.hierarchy.characters.readCharacter(key))
+  socket.handle('workspace/hierarchy/characters/read/profile', (key: CharacterKey) => Workspace.instance?.hierarchy.characters.readProfile(key))
+  socket.handle('workspace/hierarchy/characters/save/character', (content: CharacterContent) => Workspace.instance?.hierarchy.characters.saveCharacter(content))
+  socket.handle('workspace/hierarchy/characters/save/profile', (content: CharacterProfileContent) => Workspace.instance?.hierarchy.characters.saveProfile(content))
+  socket.handle('workspace/hierarchy/characters/create/category', (parent: string, child: string) => Workspace.instance?.hierarchy.characters.createCategory(parent, child))
+  socket.handle('workspace/hierarchy/characters/create/character', (parent: string, child: string) => Workspace.instance?.hierarchy.characters.createCharacter(parent, child))
+  socket.handle('workspace/hierarchy/characters/create/profile', (parent: string, child: string) => Workspace.instance?.hierarchy.characters.createProfile(parent, child))
 }

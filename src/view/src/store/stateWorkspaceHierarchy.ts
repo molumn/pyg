@@ -14,6 +14,28 @@ export const updateCharacterHierarchyFromMain = createAsyncThunk('WorkspaceHiera
   return await socket.request('workspace/hierarchy/characters/list')
 })
 
+export const requestCreateWorkspaceCharacterCategoryDir = createAsyncThunk(
+  'WorkspaceHierarchy/requestCreateWorkspaceCharacterCategoryDir',
+  async (args: { parentPath: string; categoryName: string }): Promise<boolean> => {
+    const socket = IpcSocket.ipcRenderer
+    return await socket.request('workspace/hierarchy/characters/create/category', args.parentPath, args.categoryName)
+  }
+)
+export const requestCreateWorkspaceCharacterFile = createAsyncThunk(
+  'WorkspaceHierarchy/requestCreateWorkspaceCharacterCategoryDir',
+  async (args: { parentPath: string; characterName: string }): Promise<boolean> => {
+    const socket = IpcSocket.ipcRenderer
+    return await socket.request('workspace/hierarchy/characters/create/character', args.parentPath, args.characterName)
+  }
+)
+export const requestCreateWorkspaceCharacterProfileFile = createAsyncThunk(
+  'WorkspaceHierarchy/requestCreateWorkspaceCharacterCategoryDir',
+  async (args: { parentPath: string; profileName: string }): Promise<boolean> => {
+    const socket = IpcSocket.ipcRenderer
+    return await socket.request('workspace/hierarchy/characters/create/profile', args.parentPath, args.profileName)
+  }
+)
+
 export const stateWorkspaceHierarchySlice = createSlice({
   name: 'WorkspaceHierarchy',
   initialState,

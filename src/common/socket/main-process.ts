@@ -17,7 +17,10 @@ export class MainProcessSocket {
     return this
   }
   handleLazy<E>(channel: IpcChannelURI, lazyElement: () => E, callbackWrapper: (lazyElement: E | undefined) => ((...args: any[]) => unknown) | undefined): this {
-    this.handle(channel, callbackWrapper(lazyElement()))
+    this.handle(channel, (...args: any[]): unknown => {
+      const callback = callbackWrapper(lazyElement())
+      if (callback) callback(...args)
+    })
     return this
   }
 

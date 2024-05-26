@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { CharacterContent, CharacterKey, CharacterKeyType, ProfileContent } from '@common/workspace/types'
+import { CharacterContent, CharacterKey, CharacterKeyType, CharacterProfileContent } from '@common/workspace/types'
 
 import { readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace'
 import { splitPathToNodes } from '@lib/extension/fs'
@@ -44,8 +44,15 @@ export class CharactersWorkspaceSegment {
 
   private getKeyOrUndefined(nodes: string[], type: CharacterKeyType): CharacterKey | undefined {
     let parent: CharacterKey | undefined = this._rootKey
+
+    if (nodes.length <= 1 && nodes[0] === '') return parent
+
     for (const node of nodes) {
-      parent = parent?.children[node]
+      if (!parent) return undefined
+      let name: string = node
+      if (type === 'character') name = node.replace('.character.pyg.dir', '')
+      else if (type === 'profile') name = node.replace('.profile.pyg', '')
+      parent = parent.children[name]
     }
     return parent?.type === type ? parent : undefined
   }
@@ -169,7 +176,7 @@ export class CharactersWorkspaceSegment {
     // this function only work for create single category
     if (!parentCategoryKey) return undefined
 
-    return this.getOrCreateChild(parentCategoryKey, combineExtension(childCategory, 'category'))
+    return this.getOrCreateChild(parentCategoryKey, combineExtension(childCategory, 'category'), 'category')
   }
 
   createCharacter(categoryPath: string, characterName: string): CharacterKey | undefined {
@@ -179,7 +186,7 @@ export class CharactersWorkspaceSegment {
     // this function only work for create single category
     if (!parentCategoryKey) return undefined
 
-    const character = this.getOrCreateChild(parentCategoryKey, combineExtension(characterName, 'character', true))
+    const character = this.getOrCreateChild(parentCategoryKey, combineExtension(characterName, 'character', true), 'character')
     character.realFilepath += '/'
     character.realFilepath += combineExtension(characterName, 'character')
 
@@ -188,13 +195,15 @@ export class CharactersWorkspaceSegment {
 
   createProfile(characterPath: string, profileName: string): CharacterKey | undefined {
     const nodes = splitPathToNodes(characterPath)
-    const parentCategoryKey = this.getKeyOrUndefined(nodes, 'category')
+    const parentCategoryKey = this.getKeyOrUndefined(nodes, 'character')
+
+    console.log(nodes)
 
     // this function only work for create single category
     if (!parentCategoryKey) return undefined
     else if (parentCategoryKey.type !== 'character') return undefined
 
-    return this.getOrCreateChild(parentCategoryKey, combineExtension(profileName, 'category'))
+    return this.getOrCreateChild(parentCategoryKey, combineExtension(profileName, 'profile'), 'profile')
   }
 
   readCharacter(key: CharacterKey): CharacterContent {
@@ -207,7 +216,7 @@ export class CharactersWorkspaceSegment {
     // todo : parse character file
   }
 
-  readProfile(key: CharacterKey): ProfileContent {
+  readProfile(key: CharacterKey): CharacterProfileContent {
     const content = readWorkspaceFile(key.path, key.name)
     return {
       path: `./Characters/${content.path}`,
@@ -225,7 +234,7 @@ export class CharactersWorkspaceSegment {
     })
   }
 
-  saveProfile(content: ProfileContent): boolean {
+  saveProfile(content: CharacterProfileContent): boolean {
     return saveWorkspaceFile({
       name: content.filename,
       path: `./Characters/${content.path}`,

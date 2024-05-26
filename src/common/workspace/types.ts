@@ -16,7 +16,7 @@ export type CharacterContent = {
   content: string
 }
 
-export type ProfileContent = {
+export type CharacterProfileContent = {
   path: string
   filename: string
   content: string

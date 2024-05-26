@@ -37,13 +37,7 @@ export const WorkspaceSidebarHierarchyViewTemplate = ({ className, children, ...
         }
       }}
     >
-      <Column
-        style={{
-          borderColor: theme.color.separator
-        }}
-        className={twMerge(className, 'border-l-[1px] cursor-auto overflow-y-scroll overflow-x-hidden')}
-        {...props}
-      >
+      <Column className={twMerge(className, 'cursor-auto overflow-y-scroll overflow-x-hidden')} {...props}>
         {children}
       </Column>
     </Resizable>
