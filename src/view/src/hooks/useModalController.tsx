@@ -3,7 +3,7 @@ import { useThemeContext } from '@view/hooks/useThemeContext'
 
 export const useModalController = (
   position: 'mouseRelative' | 'center',
-  modalId: string | undefined = undefined
+  modalId: string
 ): {
   Modal: (props: ComponentProps<'div'>) => JSX.Element
   openModal: (event: MouseEvent) => void
@@ -16,8 +16,7 @@ export const useModalController = (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     function releaseOrNot(event): void {
-      if (!modalId) setModalOpened(false)
-      else if (document.getElementById(`modal-hook-element-[${modalId}]`)?.contains(event.target as Element) === false) {
+      if (document.getElementById(`modal-hook-element-[${modalId}]`)?.contains(event.target) !== true) {
         setModalOpened(false)
       }
     }
@@ -31,29 +30,41 @@ export const useModalController = (
   const Modal = ({ children, ...props }: ComponentProps<'div'>): JSX.Element => {
     return (
       <div
-        {...props}
-        id={`modal-hook-element-[${modalId}]`}
         style={{
+          zIndex: '900',
           display: modalOpened ? '' : 'none',
+          backgroundColor: '#FFFFFF22',
           position: 'fixed',
-          backgroundColor: theme.color.base,
-          border: '1px solid',
-          borderColor: theme.color.separator,
-          ...(position === 'center'
-            ? {
-                margin: 'auto',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-              }
-            : {
-                left: modalPosition.x,
-                top: modalPosition.y
-              })
+          width: '100%',
+          height: '100%'
         }}
       >
-        {children}
+        <div
+          {...props}
+          id={`modal-hook-element-[${modalId}]`}
+          style={{
+            zIndex: '999',
+            display: modalOpened ? '' : 'none',
+            position: 'fixed',
+            backgroundColor: theme.color.base,
+            border: '1px solid',
+            borderColor: theme.color.separator,
+            ...(position === 'center'
+              ? {
+                  margin: 'auto',
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0
+                }
+              : {
+                  left: modalPosition.x,
+                  top: modalPosition.y
+                })
+          }}
+        >
+          {children}
+        </div>
       </div>
     )
   }

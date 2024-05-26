@@ -11,6 +11,7 @@ import { Button, ReactIcon, Text } from '@view/ui'
 
 import { Column, Row } from '@view/components/layout/utils'
 import { WorkspaceSidebarHierarchyViewTemplate } from '@view/components/layout/sidebar'
+import { useContextMenuController } from '@view/hooks/useContextMenuController'
 
 export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
   const { characterHierarchyKey, fetchCharacterHierarchy } = useHookWorkspaceCharacterHierarchy()
@@ -29,19 +30,19 @@ export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
 
   const DisplayCategory = ({ characterKey }: { characterKey: CharacterKey }): JSX.Element => {
     const [collapse, setCollapse] = useState(false)
-    const { Modal, openModal } = useModalController('mouseRelative')
+    const { ContextMenu, openContextMenu } = useContextMenuController()
 
     return (
       <>
-        <Modal className={'w-auto flex flex-col gap-1 px-2 py-2 rounded-[8px]'}>
+        <ContextMenu className={'w-auto flex flex-col gap-1 px-2 py-2 rounded-[8px]'}>
           <Button className={'rounded text-start px-1'} onClick={(): void => console.log('add category')}>
             <Text size={'sm'}>Add Category</Text>
           </Button>
           <Button className={'rounded text-start px-1'} onClick={(): void => console.log('add character')}>
             <Text size={'sm'}>Add Character</Text>
           </Button>
-        </Modal>
-        <Row onContextMenu={openModal}>
+        </ContextMenu>
+        <Row onContextMenu={openContextMenu}>
           <ReactIcon reactIconType={BiCategory} onClick={(): void => setCollapse(!collapse)} />
           <Text size={'xs'}>{characterKey.name}</Text>
         </Row>
@@ -56,16 +57,16 @@ export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
 
   const DisplayCharacter = ({ characterKey }: { characterKey: CharacterKey }): JSX.Element => {
     const [collapse, setCollapse] = useState(false)
-    const { Modal, openModal } = useModalController('mouseRelative')
+    const { ContextMenu, openContextMenu } = useContextMenuController()
 
     return (
       <>
-        <Modal className={'w-auto flex flex-col gap-1 px-2 py-2 rounded-[8px]'}>
+        <ContextMenu className={'w-auto flex flex-col gap-1 px-2 py-2 rounded-[8px]'}>
           <Button className={'rounded text-start px-1'} onClick={(): void => console.log('add profile')}>
             <Text size={'sm'}>Add Profile</Text>
           </Button>
-        </Modal>
-        <Row onDoubleClick={(): void => console.log('open')} onContextMenu={openModal}>
+        </ContextMenu>
+        <Row onDoubleClick={(): void => console.log('open')} onContextMenu={openContextMenu}>
           <ReactIcon reactIconType={GiCharacter} onClick={(): void => setCollapse(!collapse)} />
           <Text size={'xs'}>{characterKey.name}</Text>
         </Row>
