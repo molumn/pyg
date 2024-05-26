@@ -14,6 +14,7 @@ const FontSizeDict: {
 }
 export type TextProps = {
   size: '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
+  className?: string
   children: string
 }
 export const Text = ({ size, ...props }: TextProps): JSX.Element => {

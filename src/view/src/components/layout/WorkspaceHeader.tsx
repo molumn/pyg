@@ -12,6 +12,7 @@ export const WorkspaceHeader = (): JSX.Element => {
 
   const { sidebarViewOpened, reverseSidebarView } = useHookWorkspaceSidebarGateKeeper()
   // todo : header util buttons
+  // todo : header blur background color
 
   return (
     <header

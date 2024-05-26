@@ -8,3 +8,4 @@ export * from './useHookWorkspaceCharacterHierarchy'
 
 export * from './useThemeContext'
 export * from './useTabController'
+export * from './useModalController'

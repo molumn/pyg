@@ -5,7 +5,7 @@ import { GiCharacter } from 'react-icons/gi'
 
 import { CharacterKey } from '@common/workspace/types'
 
-import { useHookWorkspaceCharacterHierarchy } from '@view/hooks'
+import { useHookWorkspaceCharacterHierarchy, useModalController, useThemeContext } from '@view/hooks'
 
 import { Button, ReactIcon, Text } from '@view/ui'
 
@@ -13,7 +13,7 @@ import { Column, Row } from '@view/components/layout/utils'
 import { WorkspaceSidebarHierarchyViewTemplate } from '@view/components/layout/sidebar'
 
 export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
-  const { characterHierarchyKey, fetchCharacterHierarchy, createCharacter, createProfile } = useHookWorkspaceCharacterHierarchy()
+  const { characterHierarchyKey, fetchCharacterHierarchy } = useHookWorkspaceCharacterHierarchy()
 
   useEffect(() => {
     fetchCharacterHierarchy()
@@ -29,10 +29,19 @@ export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
 
   const DisplayCategory = ({ characterKey }: { characterKey: CharacterKey }): JSX.Element => {
     const [collapse, setCollapse] = useState(false)
+    const { Modal, openModal } = useModalController('mouseRelative')
 
     return (
       <>
-        <Row>
+        <Modal className={'w-auto flex flex-col gap-1 px-2 py-2 rounded-[8px]'}>
+          <Button className={'rounded text-start px-1'} onClick={(): void => console.log('add category')}>
+            <Text size={'sm'}>Add Category</Text>
+          </Button>
+          <Button className={'rounded text-start px-1'} onClick={(): void => console.log('add character')}>
+            <Text size={'sm'}>Add Character</Text>
+          </Button>
+        </Modal>
+        <Row onContextMenu={openModal}>
           <ReactIcon reactIconType={BiCategory} onClick={(): void => setCollapse(!collapse)} />
           <Text size={'xs'}>{characterKey.name}</Text>
         </Row>
@@ -47,10 +56,16 @@ export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
 
   const DisplayCharacter = ({ characterKey }: { characterKey: CharacterKey }): JSX.Element => {
     const [collapse, setCollapse] = useState(false)
+    const { Modal, openModal } = useModalController('mouseRelative')
 
     return (
       <>
-        <Row onDoubleClick={() => console.log('open')}>
+        <Modal className={'w-auto flex flex-col gap-1 px-2 py-2 rounded-[8px]'}>
+          <Button className={'rounded text-start px-1'} onClick={(): void => console.log('add profile')}>
+            <Text size={'sm'}>Add Profile</Text>
+          </Button>
+        </Modal>
+        <Row onDoubleClick={(): void => console.log('open')} onContextMenu={openModal}>
           <ReactIcon reactIconType={GiCharacter} onClick={(): void => setCollapse(!collapse)} />
           <Text size={'xs'}>{characterKey.name}</Text>
         </Row>
@@ -65,7 +80,7 @@ export const WorkspaceSidebarCharacterHierarchyView = (): JSX.Element => {
 
   const DisplayProfile = ({ characterKey }: { characterKey: CharacterKey }): JSX.Element => {
     return (
-      <Row onDoubleClick={() => console.log('open')}>
+      <Row onDoubleClick={(): void => console.log('open')}>
         <ReactIcon reactIconType={GiCharacter} />
         <Text size={'xs'}>{characterKey.name}</Text>
       </Row>
