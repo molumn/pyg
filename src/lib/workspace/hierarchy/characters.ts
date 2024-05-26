@@ -130,17 +130,12 @@ export class CharactersWorkspaceSegment {
       const nodes = splitPathToNodes(file)
 
       if (isDirectory && isCharacterDir) {
-        console.log('add character dir')
         this.insertCharacter(nodes)
       } else if (isCharacterFile && !isDirectory) {
-        console.log('match character file')
-        console.log(nodes)
         this.matchCharacterRealFilepath(nodes)
       } else if (isProfile) {
-        console.log('add profile file')
         this.insertProfile(nodes)
       } else if (isDirectory) {
-        console.log('add category')
         this.insertCategory(nodes)
       } else {
         console.log('unknown file name format')
@@ -164,11 +159,6 @@ export class CharactersWorkspaceSegment {
   fetchFromDisk(): void {
     if (!this.fetchCharacterHierarchyFromPath(this.path)) {
       console.error(`Character Hierarchy Fetching Error : path - [${this.path}]`)
-    } else {
-      console.log('Character Hierarchy : ')
-      console.group()
-      console.log(JSON.stringify(this._rootKey, null, 2))
-      console.groupEnd()
     }
   }
 

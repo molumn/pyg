@@ -16,6 +16,10 @@ export class MainProcessSocket {
     this.ipcMain.handle(channel, (_: IpcMainInvokeEventCopy, ...args) => callback(...args))
     return this
   }
+  handleLazy<E>(channel: IpcChannelURI, lazyElement: () => E, callbackWrapper: (lazyElement: E | undefined) => ((...args: any[]) => unknown) | undefined): this {
+    this.handle(channel, callbackWrapper(lazyElement()))
+    return this
+  }
 
   onWithEvent(channel: IpcChannelURI, callback: (event: IpcMainEventCopy, ...args: any[]) => unknown): this {
     this.ipcMain.on(channel, callback)

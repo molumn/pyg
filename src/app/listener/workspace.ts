@@ -57,11 +57,39 @@ export function registerWorkspaceListener(socket: MainProcessSocket): void {
   socket.handle('workspace/list/created', getCreatedWorkspace)
 
   socket.handle('workspace/hierarchy/characters/list', () => Workspace.instance?.hierarchy.characters.rootKey)
-  socket.handle('workspace/hierarchy/characters/read/character', Workspace.instance?.hierarchy.characters.readCharacter)
-  socket.handle('workspace/hierarchy/characters/read/profile', Workspace.instance?.hierarchy.characters.readProfile)
-  socket.handle('workspace/hierarchy/characters/save/character', Workspace.instance?.hierarchy.characters.saveCharacter)
-  socket.handle('workspace/hierarchy/characters/save/profile', Workspace.instance?.hierarchy.characters.saveProfile)
-  socket.handle('workspace/hierarchy/characters/create/category', Workspace.instance?.hierarchy.characters.createCategory)
-  socket.handle('workspace/hierarchy/characters/create/character', Workspace.instance?.hierarchy.characters.createCharacter)
-  socket.handle('workspace/hierarchy/characters/create/profile', Workspace.instance?.hierarchy.characters.createProfile)
+  socket.handleLazy(
+    'workspace/hierarchy/characters/read/character',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.readCharacter
+  )
+  socket.handleLazy(
+    'workspace/hierarchy/characters/read/profile',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.readProfile
+  )
+  socket.handleLazy(
+    'workspace/hierarchy/characters/save/character',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.saveCharacter
+  )
+  socket.handleLazy(
+    'workspace/hierarchy/characters/save/profile',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.saveProfile
+  )
+  socket.handleLazy(
+    'workspace/hierarchy/characters/create/category',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.createCategory
+  )
+  socket.handleLazy(
+    'workspace/hierarchy/characters/create/character',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.createCharacter
+  )
+  socket.handleLazy(
+    'workspace/hierarchy/characters/create/profile',
+    () => Workspace.instance,
+    (instance) => instance?.hierarchy.characters.createProfile
+  )
 }

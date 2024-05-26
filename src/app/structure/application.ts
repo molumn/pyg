@@ -10,6 +10,7 @@ export class ApplicationHandler {
       rootPath: 'C:\\Users\\stude\\AppData\\Roaming\\pyg\\defaults\\demo-workspaces\\demo',
       isExisted: true
     })
+    Workspace.registerWorkspace('demo')
 
     // todo : search for loaded workspace and send to renderer
     WindowManager.registerMainInstance()

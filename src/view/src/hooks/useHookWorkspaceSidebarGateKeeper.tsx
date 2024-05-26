@@ -3,23 +3,23 @@ import { selectWorkspaceViewSidebarOpened, stateWorkspaceViewSlice } from '@view
 
 export const useHookWorkspaceSidebarGateKeeper = (): {
   sidebarViewOpened: boolean
-  openSidebarView: () => void
-  closeSidebarView: () => void
-  reverseSidebarView: () => void
+  openSidebarView: () => Promise<void>
+  closeSidebarView: () => Promise<void>
+  reverseSidebarView: () => Promise<void>
 } => {
   const sidebarViewOpened = useAppSelector(selectWorkspaceViewSidebarOpened)
   const dispatcher = useAppDispatch()
 
-  const openSidebarView = (): void => {
+  const openSidebarView = async (): Promise<void> => {
     dispatcher(stateWorkspaceViewSlice.actions.openSidebar())
   }
-  const closeSidebarView = (): void => {
+  const closeSidebarView = async (): Promise<void> => {
     dispatcher(stateWorkspaceViewSlice.actions.closeSidebar())
   }
 
-  const reverseSidebarView = (): void => {
-    if (sidebarViewOpened) closeSidebarView()
-    else openSidebarView()
+  const reverseSidebarView = async (): Promise<void> => {
+    if (sidebarViewOpened) await closeSidebarView()
+    else await openSidebarView()
   }
 
   return {
