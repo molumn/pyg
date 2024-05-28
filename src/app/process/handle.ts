@@ -2,13 +2,7 @@ import { ipcMain } from 'electron'
 
 import { IpcSocket } from '@common/socket'
 
-import {
-  registerAuthenticationListener,
-  registerNodeUtilitiesListener,
-  registerWindowControlListener,
-  registerWindowStatusListener,
-  registerWorkspaceListener
-} from '@app/listener'
+import { registerAuthenticationListener, registerNodeUtilitiesListener, registerWindowControlListener, registerWindowStatusListener, registerWorkspaceListener } from '@app/listener'
 
 export const handleSockets = (): void => {
   IpcSocket.createIpcMainUnit(ipcMain)

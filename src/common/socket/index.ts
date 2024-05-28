@@ -14,9 +14,7 @@ export class IpcSocket {
   static get ipcMain(): MainProcessSocket {
     if (this._ipcMain) return this._ipcMain
     else {
-      console.error(
-        'Listener Socket is not initialized! please call IpcSocket.createListener(ipcMain: IpcMain) before calling it'
-      )
+      console.error('Listener Socket is not initialized! please call IpcSocket.createListener(ipcMain: IpcMain) before calling it')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       return
@@ -25,9 +23,7 @@ export class IpcSocket {
   static get ipcRenderer(): RendererSocket {
     if (this._ipcRenderer) return this._ipcRenderer
     else {
-      console.error(
-        'Requester Socket is not initialized! please call IpcSocket.createRequester(ipcRequester: IpcRequester) before calling it'
-      )
+      console.error('Requester Socket is not initialized! please call IpcSocket.createRequester(ipcRequester: IpcRequester) before calling it')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       return

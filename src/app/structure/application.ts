@@ -1,3 +1,6 @@
+import path from 'path'
+import { app } from 'electron'
+
 import { WindowManager } from './window'
 import { Workspace } from '@app/structure/workspace'
 
@@ -7,7 +10,7 @@ export class ApplicationHandler {
     Workspace.createWorkspace({
       name: 'demo',
       type: 'demo',
-      rootPath: 'C:\\Users\\stude\\AppData\\Roaming\\pyg\\defaults\\demo-workspaces\\demo',
+      rootPath: path.join(app.getPath('userData'), 'defaults/demo-workspaces/demo'),
       isExisted: true
     })
     Workspace.registerWorkspace('demo')
