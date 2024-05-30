@@ -7,7 +7,8 @@ import {
   WorkspaceSidebarPlotHierarchyView,
   WorkspaceSidebarSceneHierarchyView,
   WorkspaceSidebarScriptHierarchyView,
-  WorkspaceSidebarTimelineHierarchyView
+  WorkspaceSidebarTimelineHierarchyView,
+  WorkspaceSidebarHierarchyViewTemplate
 } from '@view/components/layout/sidebar'
 
 export const WorkspaceSidebar = (): JSX.Element => {
@@ -26,21 +27,23 @@ export const WorkspaceSidebar = (): JSX.Element => {
         className={'w-auto'}
         animate={sidebarViewOpened}
       >
-        <OptionalDisplay display={checkFocused('Character Hierarchy')}>
-          <WorkspaceSidebarCharacterHierarchyView />
-        </OptionalDisplay>
-        <OptionalDisplay display={checkFocused('Plot Hierarchy')}>
-          <WorkspaceSidebarPlotHierarchyView />
-        </OptionalDisplay>
-        <OptionalDisplay display={checkFocused('Scene Hierarchy')}>
-          <WorkspaceSidebarSceneHierarchyView />
-        </OptionalDisplay>
-        <OptionalDisplay display={checkFocused('Timeline Hierarchy')}>
-          <WorkspaceSidebarTimelineHierarchyView />
-        </OptionalDisplay>
-        <OptionalDisplay display={checkFocused('Scripts Hierarchy')}>
-          <WorkspaceSidebarScriptHierarchyView />
-        </OptionalDisplay>
+        <WorkspaceSidebarHierarchyViewTemplate>
+          <OptionalDisplay display={checkFocused('Character Hierarchy')}>
+            <WorkspaceSidebarCharacterHierarchyView />
+          </OptionalDisplay>
+          <OptionalDisplay display={checkFocused('Plot Hierarchy')}>
+            <WorkspaceSidebarPlotHierarchyView />
+          </OptionalDisplay>
+          <OptionalDisplay display={checkFocused('Scene Hierarchy')}>
+            <WorkspaceSidebarSceneHierarchyView />
+          </OptionalDisplay>
+          <OptionalDisplay display={checkFocused('Timeline Hierarchy')}>
+            <WorkspaceSidebarTimelineHierarchyView />
+          </OptionalDisplay>
+          <OptionalDisplay display={checkFocused('Scripts Hierarchy')}>
+            <WorkspaceSidebarScriptHierarchyView />
+          </OptionalDisplay>
+        </WorkspaceSidebarHierarchyViewTemplate>
       </AccordVertical>
     </>
   )

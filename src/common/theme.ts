@@ -6,6 +6,7 @@ type ThemeColorSchema = {
     fatal: string
   }
   separator: string
+  text: string
 }
 
 type ThemeFontSchema = {

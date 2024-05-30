@@ -1,11 +1,11 @@
-import { useHookWorkspaceSidebarFocusedType, useThemeContext } from '@view/hooks'
+import { useThemeContext } from '@view/hooks'
 
 import { Row } from '@view/components/layout/utils'
 import { WorkspaceSidebar } from '@view/components/layout/sidebar'
+import { WorkspaceSandbox } from '@view/components/layout/sandbox'
 
 export const WorkspaceBody = (): JSX.Element => {
   const theme = useThemeContext()
-  const { focusedSidebarType } = useHookWorkspaceSidebarFocusedType()
 
   return (
     <Row
@@ -15,7 +15,7 @@ export const WorkspaceBody = (): JSX.Element => {
       className={'mt-[32px]'}
     >
       <WorkspaceSidebar />
-      <div>{focusedSidebarType}</div>
+      <WorkspaceSandbox />
     </Row>
   )
 }

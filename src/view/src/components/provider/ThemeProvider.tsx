@@ -10,7 +10,8 @@ const defaultValue: ThemeSchema = {
       button: '#43454A',
       fatal: '#EA0000CD'
     },
-    separator: '#1E1F22'
+    separator: '#1E1F22',
+    text: '#EEEEEE'
   }
 }
 export const ThemeContext = createContext<ThemeSchema>(defaultValue)

@@ -1,3 +1,5 @@
+import { useThemeContext } from '@view/hooks'
+
 const FontSizeDict: {
   [size in TextProps['size']]: string
 } = {
@@ -18,10 +20,13 @@ export type TextProps = {
   children: string
 }
 export const Text = ({ size, ...props }: TextProps): JSX.Element => {
+  const theme = useThemeContext()
+
   return (
     <p
       style={{
-        fontSize: FontSizeDict[size]
+        fontSize: FontSizeDict[size],
+        color: theme.color.text
       }}
       {...props}
     />
