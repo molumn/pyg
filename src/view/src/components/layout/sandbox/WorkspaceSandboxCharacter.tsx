@@ -1,6 +1,7 @@
 import { useThemeContext } from '@view/hooks'
 
 import { Column, Row } from '@view/components/layout/utils'
+import { WorkspaceCharacterEditor } from '@view/components/editor'
 
 export const WorkspaceSandboxCharacter = (): JSX.Element => {
   const theme = useThemeContext()
@@ -19,7 +20,9 @@ export const WorkspaceSandboxCharacter = (): JSX.Element => {
         style={{
           backgroundColor: 'gray'
         }}
-      ></Column>
+      >
+        <WorkspaceCharacterEditor />
+      </Column>
     </Column>
   )
 }
