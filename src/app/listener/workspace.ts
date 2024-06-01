@@ -29,16 +29,6 @@ const createWorkspace = (_key: WorkspaceKey): boolean => {
   return Workspace.createWorkspace(key)
 }
 
-const registerWorkspace = (_key: WorkspaceKey): boolean => {
-  const key = store.localStores.workspaceStore.get((store) => {
-    return store.createdWorkspaces[_key.name]
-  })
-
-  if (!key) return false
-
-  return Workspace.registerWorkspace(_key.name)
-}
-
 const readFile = async (fileNode: FileNode): Promise<FileContent> => {
   return readWorkspaceFile(fileNode.path, fileNode.name)
 }
@@ -50,7 +40,7 @@ const saveFile = async (fileContent: FileContent): Promise<boolean> => {
 export function registerWorkspaceListener(socket: MainProcessSocket): void {
   socket.on('workspace/create', createWorkspace)
 
-  socket.handle('workspace/open', registerWorkspace)
+  socket.handle('workspace/open', (key: WorkspaceKey) => Workspace.registerWorkspace(key.name))
   socket.handle('workspace/close', Workspace.unregisterWorkspace)
   socket.handle('workspace/file/read', readFile)
   socket.handle('workspace/file/save', saveFile)

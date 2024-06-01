@@ -11,28 +11,19 @@ export class RendererSocket {
     this.ipcUnit = ipcUnit
   }
 
-  get<ReturnType, Parameters extends any[] = any[]>(
-    channel: IpcChannelURI,
-    ...args: Parameters
-  ): ReturnType {
+  get<ReturnType, Parameters extends any[] = any[]>(channel: IpcChannelURI, ...args: Parameters): ReturnType {
     return this.ipcUnit.borrowRequester((ipcUnit) => {
       return ipcUnit.sendSync(channel, ...args)
     })
   }
 
-  request<ReturnType, Parameters extends any[] = any[]>(
-    channel: IpcChannelURI,
-    ...args: Parameters
-  ): ReturnType {
+  request<ReturnType, Parameters extends any[] = any[]>(channel: IpcChannelURI, ...args: Parameters): ReturnType {
     return this.ipcUnit.borrowRequester((ipcUnit) => {
       return ipcUnit.invoke(channel, ...args)
     })
   }
 
-  command<ReturnType, Parameters extends any[] = any[]>(
-    channel: IpcChannelURI,
-    ...args: Parameters
-  ): ReturnType {
+  command<ReturnType, Parameters extends any[] = any[]>(channel: IpcChannelURI, ...args: Parameters): ReturnType {
     return this.ipcUnit.borrowRequester((ipcUnit) => {
       return ipcUnit.send(channel, ...args)
     })

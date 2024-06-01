@@ -6,6 +6,8 @@ export * from './useHookWorkspaceSidebarFocusedType'
 
 export * from './useHookWorkspaceCharacterHierarchy'
 
+export * from './useWorkspaceRegister'
+
 export * from './useThemeContext'
 export * from './useTabController'
 export * from './useModalGateKeeper'
