@@ -19,7 +19,7 @@ export const TextButton = ({ size, children, ...props }: TextProps & ComponentPr
 }
 
 const StyledButton = styled.button`
-  background: transparent;
+  background-color: ${(props): string => props.theme.color};
   &:hover {
     background-color: ${(props): string => props.theme.hovered};
   }
@@ -27,7 +27,8 @@ const StyledButton = styled.button`
 
 StyledButton.defaultProps = {
   theme: {
-    hovered: '#FFFFFF'
+    color: 'transparent',
+    hovered: '#FFF'
   }
 }
 
@@ -38,6 +39,24 @@ export const Button = (props: ComponentProps<'button'>): JSX.Element => {
   return (
     <StyledButton
       theme={{
+        hovered
+      }}
+      {...props}
+    />
+  )
+}
+
+export const ColoredButton = ({ hover, ...props }: { hover?: string } & ComponentProps<'button'>): JSX.Element => {
+  const theme = useThemeContext()
+  const hovered = hover ?? theme.color.hover.button
+
+  return (
+    <StyledButton
+      style={{
+        borderColor: theme.color.separator
+      }}
+      theme={{
+        color: theme.color.button,
         hovered
       }}
       {...props}

@@ -13,7 +13,7 @@ export const WorkspaceSidebarHierarchyViewTemplate = ({ className, children, ...
   return (
     <Resizable
       defaultSize={{
-        width: 250,
+        width: 300,
         height: '100%'
       }}
       minWidth={50}
@@ -22,7 +22,7 @@ export const WorkspaceSidebarHierarchyViewTemplate = ({ className, children, ...
         top: false,
         right: true,
         bottom: false,
-        left: true,
+        left: false,
         topRight: false,
         bottomRight: false,
         bottomLeft: false,

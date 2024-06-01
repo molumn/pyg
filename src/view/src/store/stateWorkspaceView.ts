@@ -22,7 +22,7 @@ export const stateWorkspaceViewSlice = createSlice({
       state.sidebarOpened = false
     },
     focusSidebar: (state, action): void => {
-      state.focusedSidebarType = action.payload.focused
+      state.focusedSidebarType = action.payload
     }
   }
 })

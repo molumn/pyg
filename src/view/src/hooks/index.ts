@@ -8,5 +8,6 @@ export * from './useHookWorkspaceCharacterHierarchy'
 
 export * from './useThemeContext'
 export * from './useTabController'
-export * from './useModalController'
+export * from './useModalGateKeeper'
+export * from './useModalRegister'
 export * from './useContextMenuController'

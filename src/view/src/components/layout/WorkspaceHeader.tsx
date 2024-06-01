@@ -1,6 +1,6 @@
 import { VscLayoutSidebarLeft, VscLayoutSidebarLeftOff, VscRootFolderOpened } from 'react-icons/vsc'
 
-import { useHookWorkspaceSidebarGateKeeper, useModalController, useThemeContext } from '@view/hooks'
+import { useHookWorkspaceSidebarGateKeeper, useModalRegister, useThemeContext } from '@view/hooks'
 
 import { Button, ReactIcon } from '@view/ui'
 
@@ -11,10 +11,9 @@ export const WorkspaceHeader = (): JSX.Element => {
   const theme = useThemeContext()
 
   const { sidebarViewOpened, reverseSidebarView } = useHookWorkspaceSidebarGateKeeper()
+  const { registerModal } = useModalRegister()
   // todo : header util buttons
   // todo : header blur background color
-
-  const { Modal, openModal } = useModalController('center', 'start-workspace')
 
   return (
     <>
@@ -33,7 +32,7 @@ export const WorkspaceHeader = (): JSX.Element => {
           </div>
           <div className={'w-[20px]'} />
           <div className={'w-[40px] h-[32px] flex items-center justify-center'}>
-            <Button className={'w-[25px] h-[24px] rounded centralize'} onClick={openModal}>
+            <Button className={'w-[25px] h-[24px] rounded centralize'} onClick={registerModal('CreateOrOpenWorkspace')}>
               <ReactIcon reactIconType={VscRootFolderOpened} size={16} />
             </Button>
           </div>
@@ -41,7 +40,6 @@ export const WorkspaceHeader = (): JSX.Element => {
         </Row>
         <WindowControlButtons />
       </header>
-      <Modal className={'w-[80vw] h-[80vh]'}>hello</Modal>
     </>
   )
 }

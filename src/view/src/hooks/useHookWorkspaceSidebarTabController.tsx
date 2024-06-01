@@ -45,7 +45,7 @@ export const useHookWorkspaceSidebarTabController = (): {
   const dispatcher = useAppDispatch()
 
   const focusSidebar = (type: WorkspaceSidebarTabType): void => {
-    dispatcher(stateWorkspaceViewSlice.actions.focusSidebar({ focused: type }))
+    dispatcher(stateWorkspaceViewSlice.actions.focusSidebar(type))
   }
 
   const TabButton = ({ button, className, ...buttonProps }: { button: TabButtonType } & ComponentProps<'button'>): JSX.Element => {

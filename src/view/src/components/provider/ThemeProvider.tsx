@@ -1,23 +1,12 @@
 import { createContext, useEffect, useState } from 'react'
 
 import { IpcSocket } from '@common/socket'
+import { defaultThemeSchema, ThemeSchema } from '@common/theme'
 
-const defaultValue: ThemeSchema = {
-  color: {
-    base: '#2B2D30',
-    icon: '#DEE0E4',
-    hover: {
-      button: '#43454A',
-      fatal: '#EA0000CD'
-    },
-    separator: '#1E1F22',
-    text: '#EEEEEE'
-  }
-}
-export const ThemeContext = createContext<ThemeSchema>(defaultValue)
+export const ThemeContext = createContext<ThemeSchema>(defaultThemeSchema)
 
 export const ThemeProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
-  const [themeSchema, setThemeSchema] = useState<ThemeSchema>(defaultValue)
+  const [themeSchema, setThemeSchema] = useState<ThemeSchema>(defaultThemeSchema)
 
   useEffect(() => {
     const refreshTheme = async (): Promise<void> => {
