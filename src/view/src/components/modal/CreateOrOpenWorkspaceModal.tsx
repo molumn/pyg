@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 import { VscAdd, VscClose, VscEdit, VscFolderOpened } from 'react-icons/vsc'
 
 import { WorkspaceKey } from '@common/type'
@@ -6,8 +6,34 @@ import { IpcSocket } from '@common/socket'
 
 import { useModalRegister, useWorkspaceRegister } from '@view/hooks'
 
-import { Button, ColoredButton, ReactIcon, Text } from '@view/ui'
-import { Column, GrowingDiv, Hover, Modal, Row } from '@view/components/layout/utils'
+import { Button, ColoredButton, Form, Input, ReactIcon, Text } from '@view/ui'
+import { Column, Gap, GrowingDiv, Hover, Modal, Row } from '@view/components/layout/utils'
+
+const WorkspaceCreateForm = (props: ComponentProps<typeof Form>) => {
+  return (
+    <Form
+      style={{
+        backgroundColor: '#1E1F22'
+      }}
+      {...props}
+    >
+      <Column className={'w-full justify-center flex-1'}>
+        <Input label={'Workspace Name'} />
+        <Gap gap={10} />
+        <Input label={'Workspace Path'} />
+      </Column>
+      <Gap gap={'20%'} />
+      <Column className={'w-[10%] centralize'}>
+        <GrowingDiv />
+        <Row className={'h-auto'}>
+          <ColoredButton className={'w-[25px] h-[25px] centralize rounded'} type={'submit'}>
+            <ReactIcon reactIconType={VscAdd} />
+          </ColoredButton>
+        </Row>
+      </Column>
+    </Form>
+  )
+}
 
 const WorkspaceKeyNode = ({ workspace }: { workspace: WorkspaceKey }): JSX.Element => {
   const { unregisterModal } = useModalRegister()
@@ -56,22 +82,29 @@ export const CreateOrOpenWorkspaceModal = (): JSX.Element => {
 
   // todo : coloring
   return (
-    <Modal modalId={'CreateOrOpenWorkspace'} className={'w-[80vw] h-[80vh] px-3 py-2 rounded'}>
+    <Modal modalId={'CreateOrOpenWorkspace'} className={'w-[70vw] h-[70vh] px-3 py-2 rounded'}>
       <Column className={'items-center'}>
-        <Row className={'h-auto items-center'}>
-          <Column>
-            {/* Text Input : Name */}
-            {/* Text Input : Path */}
-          </Column>
-          <ColoredButton className={'w-[25px] h-[25px] centralize rounded'}>
-            <ReactIcon reactIconType={VscAdd} />
-          </ColoredButton>
-        </Row>
-        <Hover className={'w-[200px] h-[30px] centralize rounded-t'}>
+        <div
+          style={{
+            backgroundColor: '#1E1F22'
+          }}
+          className={'w-[200px] h-[40px] self-start centralize rounded-t'}
+        >
+          <Text size={'md'}>Create Workspace</Text>
+        </div>
+        <WorkspaceCreateForm className={'h-auto w-full flex flex-row items-center px-3 py-2 rounded rounded-tl-[0px]'} />
+        <Gap gap={30} />
+        <div
+          style={{
+            backgroundColor: '#1E1F22'
+          }}
+          className={'w-[200px] h-[40px] self-start centralize rounded-t'}
+        >
           <Text size={'md'}>Workspace Lists</Text>
-        </Hover>
-        <div className={'h-3'} />
-        <Column className={'bg-[#1E1F22] rounded px-3 py-2'}>{...workspaces.map((workspace) => <WorkspaceKeyNode key={`workspaces-element-${workspace.rootPath}`} workspace={workspace} />)}</Column>
+        </div>
+        <Column className={'bg-[#1E1F22] px-3 py-2 rounded rounded-tl-[0px] overflow-y-scroll'}>
+          {...workspaces.map((workspace) => <WorkspaceKeyNode key={`workspaces-element-${workspace.rootPath}`} workspace={workspace} />)}
+        </Column>
       </Column>
     </Modal>
   )
