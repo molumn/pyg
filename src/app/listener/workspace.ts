@@ -69,7 +69,7 @@ export function registerWorkspaceListener(socket: MainProcessSocket): void {
   socket.handle('workspace/hierarchy/characters/read/profile', (key: CharacterKey) => Workspace.instance?.hierarchy.characters.readProfile(key))
   socket.handle('workspace/hierarchy/characters/save/character', (content: CharacterContent) => Workspace.instance?.hierarchy.characters.saveCharacter(content))
   socket.handle('workspace/hierarchy/characters/save/profile', (content: CharacterProfileContent) => Workspace.instance?.hierarchy.characters.saveProfile(content))
-  socket.handle('workspace/hierarchy/characters/create/category', (parent: string, child: string) => Workspace.instance?.hierarchy.characters.createCategory(parent, child))
-  socket.handle('workspace/hierarchy/characters/create/character', (parent: string, child: string) => Workspace.instance?.hierarchy.characters.createCharacter(parent, child))
-  socket.handle('workspace/hierarchy/characters/create/profile', (parent: string, child: string) => Workspace.instance?.hierarchy.characters.createProfile(parent, child))
+  socket.handle('workspace/hierarchy/characters/create/category', (parent: string) => Workspace.instance?.hierarchy.characters.createCategory(parent))
+  socket.handle('workspace/hierarchy/characters/create/character', (parent: string) => Workspace.instance?.hierarchy.characters.createCharacter(parent))
+  socket.handle('workspace/hierarchy/characters/create/profile', (parent: string) => Workspace.instance?.hierarchy.characters.createProfile(parent))
 }

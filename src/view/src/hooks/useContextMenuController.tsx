@@ -18,7 +18,7 @@ export const useContextMenuController = (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     function releaseOrNot(event): void {
-      setModalOpened(false)
+      if (document.getElementById(`contextMenu-[${menuId}]`)?.contains(event.target)) setModalOpened(false)
     }
 
     window.addEventListener('mousedown', releaseOrNot)
@@ -27,9 +27,16 @@ export const useContextMenuController = (
     }
   }, [])
 
-  const ContextItem = ({ className, children, ...props }: ComponentProps<'button'>): JSX.Element => {
+  const ContextItem = ({ className, children, onClick, ...props }: ComponentProps<'button'>): JSX.Element => {
     return (
-      <Button className={twMerge(className, 'w-full text-start px-1')} {...props}>
+      <Button
+        className={twMerge(className, 'w-full text-start px-1')}
+        onClick={(e): void => {
+          if (onClick) onClick(e)
+          setModalOpened(false)
+        }}
+        {...props}
+      >
         {children}
       </Button>
     )
@@ -38,6 +45,7 @@ export const useContextMenuController = (
   const ContextMenu = ({ children, ...props }: ComponentProps<'div'>): JSX.Element => {
     return (
       <div
+        id={`contextMenu-[${menuId}]`}
         {...props}
         style={{
           zIndex: '999',

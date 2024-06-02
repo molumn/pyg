@@ -16,6 +16,7 @@ export const useHookWorkspaceCharacterHierarchy = () => {
 
   const fetchCharacterHierarchy = (): void => {
     dispatcher(updateCharacterHierarchyFromMain())
+    console.log(characterHierarchyKey)
   }
 
   const createCategory = async (parent: CharacterKey, categoryName: string): Promise<void> => {

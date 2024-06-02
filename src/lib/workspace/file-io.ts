@@ -5,6 +5,13 @@ import { FileContent } from '@common/workspace/files'
 
 import { Workspace } from '@app/structure/workspace'
 
+export const existWorkspaceFile = (...relpath: string[]): boolean => {
+  const workspace = Workspace.instance
+  if (!workspace) return false
+
+  return fs.existsSync(path.join(workspace.rootPath, relpath.join('/')))
+}
+
 export const readWorkspaceFile = (relpath: string, filename: string): FileContent => {
   const fileContent: FileContent = {
     name: filename,
@@ -61,6 +68,23 @@ export const createWorkspaceDirectory = (...relpath: string[]): boolean => {
     return true
   } catch (err) {
     console.log('fs mkdirSync Error - createWorkspaceDirectory')
+    return false
+  }
+}
+
+export const createWorkspaceFile = (...relpath: string[]): boolean => {
+  const workspace = Workspace.instance
+  if (!workspace) return false
+
+  const rootPath = workspace.rootPath
+  const absPath = path.join(rootPath, relpath.join('/'))
+  console.log(absPath)
+
+  try {
+    fs.writeFileSync(absPath, '', { encoding: 'utf-8', flag: 'w' })
+    return true
+  } catch (err) {
+    console.log('fs writeFile Error - createWorkspaceFile')
     return false
   }
 }

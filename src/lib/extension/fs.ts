@@ -9,4 +9,4 @@ export const ensureDir = (
   if (!fs.existsSync(path)) fs.mkdirSync(path, options)
 }
 
-export const splitPathToNodes = (path: string): string[] => path.replace('\\', '/').split('/')
+export const splitPathToNodes = (path: string): string[] => path.replaceAll('\\', '/').split('/')

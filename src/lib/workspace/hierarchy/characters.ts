@@ -3,7 +3,7 @@ import path from 'path'
 
 import { CharacterContent, CharacterKey, CharacterKeyType, CharacterProfileContent } from '@common/workspace/types'
 
-import { readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace'
+import { createWorkspaceDirectory, createWorkspaceFile, existWorkspaceFile, readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace'
 import { splitPathToNodes } from '@lib/extension/fs'
 
 /**
@@ -23,16 +23,24 @@ const checkCharacterFileExtension = (filename: string, extension: CharacterFileE
   return filename.endsWith(extension)
 }
 
-const combineExtension = (name: string, type: CharacterKeyType, isDirectory = false): string => {
+const combineExtension = (name: string, type: CharacterKeyType, isCharacterDirectory = false): string => {
   if (type === 'profile') return `${name}.profile.pyg`
-  else if (type === 'character' && isDirectory) return `${name}.character.pyg.dir`
-  else if (type === 'character' && !isDirectory) return `${name}.character.pyg`
+  else if (type === 'character' && isCharacterDirectory) return `${name}.character.pyg.dir`
+  else if (type === 'character' && !isCharacterDirectory) return `${name}.character.pyg`
   else return name
 }
 
-const combinePath = (parentPath: string, childName: string, type: CharacterKeyType): string => {
-  if (parentPath.length === 0 || parentPath === '.') return childName
-  return `${parentPath}/${combineExtension(childName, type)}`
+const combinePath = (parentPath: string, childName: string, type: CharacterKeyType, isCharacterDirectory = false): string => {
+  if (parentPath.length === 0 || parentPath === '.') return combineExtension(childName, type, isCharacterDirectory)
+  return `${parentPath}/${combineExtension(childName, type, isCharacterDirectory)}`
+}
+
+const removeExtension = (node: string): string => {
+  const extensions: CharacterFileExtension[] = ['.character.pyg.dir', '.character.pyg', '.profile.pyg']
+  for (const ext of extensions) {
+    if (node.endsWith(ext)) return node.replace(ext, '')
+  }
+  return node
 }
 
 export class CharactersWorkspaceSegment {
@@ -49,30 +57,25 @@ export class CharactersWorkspaceSegment {
 
     for (const node of nodes) {
       if (!parent) return undefined
-      let name: string = node
-      if (type === 'character') name = node.replace('.character.pyg.dir', '')
-      else if (type === 'profile') name = node.replace('.profile.pyg', '')
-      parent = parent.children[name]
+      parent = parent.children[node]
     }
     return parent?.type === type ? parent : undefined
   }
 
-  private getOrCreateChild(parentKey: CharacterKey, nextNode: string, type: CharacterKeyType = 'category'): CharacterKey {
-    let name: string = nextNode
-    if (type === 'character') name = nextNode.replace('.character.pyg.dir', '')
-    else if (type === 'profile') name = nextNode.replace('.profile.pyg', '')
-
-    const child = parentKey.children[name]
+  private getOrCreateChild(parentKey: CharacterKey, name: string, type: CharacterKeyType = 'category'): CharacterKey {
+    const key = combineExtension(name, type, true)
+    const child = parentKey.children[key]
     if (!child) {
-      parentKey.children[name] = {
-        path: combinePath(parentKey.path, nextNode, type),
-        realFilepath: combinePath(parentKey.path, nextNode, type),
+      const path = combinePath(parentKey.path, name, type, true)
+      parentKey.children[key] = {
+        path,
+        realFilepath: path,
         name,
         children: {},
         type: type
       }
     }
-    return parentKey.children[name]!
+    return parentKey.children[key]!
   }
 
   private insertCategory(nodes: string[]): void {
@@ -85,38 +88,41 @@ export class CharactersWorkspaceSegment {
   private insertCharacter(nodes: string[]): void {
     let parent = this._rootKey
     for (const node of nodes) {
-      if (node === nodes[nodes.length - 1]) parent = this.getOrCreateChild(parent, node, 'character')
-      else parent = this.getOrCreateChild(parent, node)
+      const keyName = removeExtension(node)
+      if (node === nodes.at(-1)) parent = this.getOrCreateChild(parent, keyName, 'character')
+      else parent = this.getOrCreateChild(parent, keyName)
     }
   }
 
   private insertProfile(nodes: string[]): void {
     if (nodes.length < 2) return
 
-    const profileNode = nodes[nodes.length - 1]
-    const characterDirNode = nodes[nodes.length - 2]
+    const profileNode = nodes.at(-1)
+    const characterDirNode = nodes.at(-2)
 
     let parent = this._rootKey
     for (const node of nodes) {
-      if (node === characterDirNode) parent = this.getOrCreateChild(parent, node, 'character')
-      else if (node === profileNode) parent = this.getOrCreateChild(parent, node, 'profile')
-      else parent = this.getOrCreateChild(parent, node)
+      const keyName = removeExtension(node)
+      if (node === characterDirNode) parent = this.getOrCreateChild(parent, keyName, 'character')
+      else if (node === profileNode) parent = this.getOrCreateChild(parent, keyName, 'profile')
+      else parent = this.getOrCreateChild(parent, keyName)
     }
   }
 
   private matchCharacterRealFilepath(nodes: string[]): void {
     if (nodes.length < 2) return
 
-    const realFileNode = nodes[nodes.length - 1]
-    const characterDirNode = nodes[nodes.length - 2]
+    const realFileNode = nodes.at(-1)!
+    const characterDirNode = nodes.at(-2)!
 
     let parent = this.rootKey
     for (const node of nodes) {
+      const keyName = removeExtension(node)
       if (node === characterDirNode) {
-        parent = this.getOrCreateChild(parent, node, 'character')
+        parent = this.getOrCreateChild(parent, keyName, 'character')
         break
       }
-      parent = this.getOrCreateChild(parent, node)
+      parent = this.getOrCreateChild(parent, keyName)
     }
 
     parent.realFilepath += '/'
@@ -136,7 +142,7 @@ export class CharactersWorkspaceSegment {
 
       const nodes = splitPathToNodes(file)
 
-      if (isDirectory && isCharacterDir) {
+      if (isCharacterDir && isDirectory) {
         this.insertCharacter(nodes)
       } else if (isCharacterFile && !isDirectory) {
         this.matchCharacterRealFilepath(nodes)
@@ -148,6 +154,8 @@ export class CharactersWorkspaceSegment {
         console.log('unknown file name format')
       }
     }
+
+    console.log(JSON.stringify(this.rootKey, null, 2))
 
     return true
   }
@@ -163,47 +171,74 @@ export class CharactersWorkspaceSegment {
     }
   }
 
+  fileIsExisted(path: string): boolean {
+    return existWorkspaceFile('Characters', path)
+  }
+
+  refreshNewName(parentKey: CharacterKey, type: CharacterKeyType): string {
+    let newName = 'New'
+    let index = 0
+    while (this.fileIsExisted(combinePath(parentKey.path, newName, type, true))) {
+      newName = `New (${index})`
+      index++
+    }
+    console.log(newName)
+    return newName
+  }
+
   fetchFromDisk(): void {
     if (!this.fetchCharacterHierarchyFromPath(this.path)) {
       console.error(`Character Hierarchy Fetching Error : path - [${this.path}]`)
     }
   }
 
-  createCategory(categoryPath: string, childCategory: string): CharacterKey | undefined {
+  createCategory(categoryPath: string): CharacterKey | undefined {
     const nodes = splitPathToNodes(categoryPath)
     const parentCategoryKey = this.getKeyOrUndefined(nodes, 'category')
 
     // this function only work for create single category
     if (!parentCategoryKey) return undefined
 
-    return this.getOrCreateChild(parentCategoryKey, combineExtension(childCategory, 'category'), 'category')
+    const newName = this.refreshNewName(parentCategoryKey, 'category')
+
+    createWorkspaceDirectory('Characters', categoryPath, newName)
+
+    return this.getOrCreateChild(parentCategoryKey, newName, 'category')
   }
 
-  createCharacter(categoryPath: string, characterName: string): CharacterKey | undefined {
+  createCharacter(categoryPath: string): CharacterKey | undefined {
     const nodes = splitPathToNodes(categoryPath)
     const parentCategoryKey = this.getKeyOrUndefined(nodes, 'category')
 
     // this function only work for create single category
     if (!parentCategoryKey) return undefined
 
-    const character = this.getOrCreateChild(parentCategoryKey, combineExtension(characterName, 'character', true), 'character')
+    const newName = this.refreshNewName(parentCategoryKey, 'character')
+
+    const character = this.getOrCreateChild(parentCategoryKey, newName, 'character')
     character.realFilepath += '/'
-    character.realFilepath += combineExtension(characterName, 'character')
+    character.realFilepath += combineExtension(newName, 'character')
+
+    createWorkspaceDirectory('Characters', character.path)
+    createWorkspaceFile('Characters', character.realFilepath)
 
     return character
   }
 
-  createProfile(characterPath: string, profileName: string): CharacterKey | undefined {
+  createProfile(characterPath: string): CharacterKey | undefined {
     const nodes = splitPathToNodes(characterPath)
-    const parentCategoryKey = this.getKeyOrUndefined(nodes, 'character')
+    const parentCharacterKey = this.getKeyOrUndefined(nodes, 'character')
 
-    console.log(nodes)
-
+    console.log(nodes, parentCharacterKey)
     // this function only work for create single category
-    if (!parentCategoryKey) return undefined
-    else if (parentCategoryKey.type !== 'character') return undefined
+    if (!parentCharacterKey) return undefined
+    else if (parentCharacterKey.type !== 'character') return undefined
 
-    return this.getOrCreateChild(parentCategoryKey, combineExtension(profileName, 'profile'), 'profile')
+    const newName = this.refreshNewName(parentCharacterKey, 'profile')
+
+    createWorkspaceFile('Characters', characterPath, combineExtension(newName, 'profile'))
+
+    return this.getOrCreateChild(parentCharacterKey, newName, 'profile')
   }
 
   readCharacter(key: CharacterKey): CharacterContent {
@@ -242,3 +277,5 @@ export class CharactersWorkspaceSegment {
     })
   }
 }
+
+// todo : character remove

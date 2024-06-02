@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '@view/store/root'
 
-export type ModalType = 'CreateOrOpenWorkspace'
+export type DialogType = 'dialogNewCharacterNode'
+
+export type ModalType = 'CreateOrOpenWorkspace' | DialogType
 
 const initialState: {
   opened: boolean

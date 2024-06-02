@@ -1,8 +1,9 @@
 import { MouseEvent } from 'react'
 
 import { CharacterKey } from '@common/workspace/types'
-import { useContextMenuController } from '@view/hooks'
+import { useContextMenuController, useHookWorkspaceCharacterHierarchy } from '@view/hooks'
 import { Text } from '@view/ui'
+import { IpcSocket } from '@common/socket'
 
 export const useCharacterFileContextMenu = (
   characterKey: CharacterKey,
@@ -11,25 +12,53 @@ export const useCharacterFileContextMenu = (
   openContextMenu: (event: MouseEvent) => void
   CharacterContextMenu: () => JSX.Element
 } => {
+  const socket = IpcSocket.ipcRenderer
   const { openContextMenu, ContextMenu, ContextItem } = useContextMenuController(menuId ?? '')
+  const { fetchCharacterHierarchy } = useHookWorkspaceCharacterHierarchy()
 
   // todo : create method
   // todo : open method
 
-  const creatable: string[] = []
-  if (characterKey.type === 'character') creatable.push('Profile')
-  if (characterKey.type === 'category') creatable.push('Category', 'Character')
+  const createNodeButtons: JSX.Element[] = []
+
+  if (characterKey.type === 'character') {
+    createNodeButtons.push(
+      <ContextItem
+        onClick={(): void => {
+          socket.request('workspace/hierarchy/characters/create/profile', characterKey.path)
+          fetchCharacterHierarchy()
+        }}
+      >
+        <Text size={'xs'}>New Profile</Text>
+      </ContextItem>
+    )
+  } else if (characterKey.type === 'category') {
+    createNodeButtons.push(
+      <ContextItem
+        onClick={(): void => {
+          socket.request('workspace/hierarchy/characters/create/category', characterKey.path)
+          fetchCharacterHierarchy()
+        }}
+      >
+        <Text size={'xs'}>New Category</Text>
+      </ContextItem>
+    )
+    createNodeButtons.push(
+      <ContextItem
+        onClick={(): void => {
+          socket.request('workspace/hierarchy/characters/create/character', characterKey.path)
+          fetchCharacterHierarchy()
+        }}
+      >
+        <Text size={'xs'}>New Character</Text>
+      </ContextItem>
+    )
+  }
 
   const CharacterContextMenu = (): JSX.Element => {
     return (
       <ContextMenu className={'w-[140px] flex flex-col p-1 rounded'}>
-        {...creatable.map(
-          (type): JSX.Element => (
-            <ContextItem key={`context-item-${type}`}>
-              <Text size={'xs'}>{`New ${type}`}</Text>
-            </ContextItem>
-          )
-        )}
+        {...createNodeButtons}
         {characterKey.type === 'category' ? (
           <></>
         ) : (

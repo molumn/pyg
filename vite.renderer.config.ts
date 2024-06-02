@@ -22,7 +22,7 @@ export default defineConfig((env) => {
             if (id.includes('node_modules')) {
               return id
                 .toString()
-                .replace(/^\/?[^/]+\//, '/')
+                .replaceAll(/^\/?[^/]+\//, '/')
                 .split('node_modules/')[1]
                 .split('/')[0]
                 .toString()
