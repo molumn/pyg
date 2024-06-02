@@ -15,6 +15,7 @@ export type IpcChannelURI =
   | 'workspace/file/create'
   | 'workspace/directory/create'
   | 'workspace/list/created'
+  | 'workspace/list/remove'
   | 'workspace/hierarchy/characters/list'
   | 'workspace/hierarchy/characters/read/character'
   | 'workspace/hierarchy/characters/read/profile'

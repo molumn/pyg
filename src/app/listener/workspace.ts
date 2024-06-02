@@ -24,6 +24,15 @@ const getCreatedWorkspace = (): WorkspaceKey[] => {
   return createdWorkspace
 }
 
+const removeCreatedWorkspace = (key: WorkspaceKey): void => {
+  store.localStores.workspaceStore.edit((store) => {
+    const find = store.createdWorkspaces[key.name]
+    if (!find) return
+
+    delete store.createdWorkspaces[key.name]
+  })
+}
+
 const createWorkspace = (_key: WorkspaceKey): boolean => {
   // todo : create workspace
   const key = _key
@@ -52,6 +61,7 @@ export function registerWorkspaceListener(socket: MainProcessSocket): void {
   socket.handle('workspace/file/read', readFile)
   socket.handle('workspace/file/save', saveFile)
   socket.handle('workspace/list/created', getCreatedWorkspace)
+  socket.on('workspace/list/remove', removeCreatedWorkspace)
 
   socket.handle('workspace/hierarchy/characters/list', () => Workspace.instance?.hierarchy.characters.rootKey)
 

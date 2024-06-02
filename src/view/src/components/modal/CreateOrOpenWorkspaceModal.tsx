@@ -49,7 +49,7 @@ const WorkspaceCreateForm = (props: ComponentProps<typeof Form>): JSX.Element =>
   )
 }
 
-const WorkspaceKeyNode = ({ workspace, onOpenWorkspace }: { workspace: WorkspaceKey; onOpenWorkspace: () => void }): JSX.Element => {
+const WorkspaceKeyNode = ({ workspace, onOpenWorkspace, onRemoveWorkspace }: { workspace: WorkspaceKey; onOpenWorkspace: () => void; onRemoveWorkspace: () => void }): JSX.Element => {
   const { unregisterModal } = useModalRegister()
 
   // todo : coloring
@@ -78,13 +78,13 @@ const WorkspaceKeyNode = ({ workspace, onOpenWorkspace }: { workspace: Workspace
         </Button>
         <div className={'w-[10px]'} />
         {workspace.isExisted ? (
-          <Button className={'w-[30px] h-[30px] centralize rounded-xl'}>
-            <ReactIcon size={15} reactIconType={VscClose} />
-          </Button>
-        ) : (
           <FatalButton className={'w-[30px] h-[30px] centralize rounded-xl'}>
             <ReactIcon size={15} reactIconType={VscClose} />
           </FatalButton>
+        ) : (
+          <Button className={'w-[30px] h-[30px] centralize rounded-xl'} onClick={onRemoveWorkspace}>
+            <ReactIcon size={15} reactIconType={VscClose} />
+          </Button>
         )}
       </Row>
     </Hover>
@@ -103,7 +103,7 @@ export const CreateOrOpenWorkspaceModal = (): JSX.Element => {
     reloadCreatedWorkspace()
   }, [setWorkspaces])
 
-  const { onOpenWorkspace, onCreateWorkspace } = useWorkspaceRegister()
+  const { onOpenWorkspace, onCreateWorkspace, onRemoveWorkspace } = useWorkspaceRegister()
 
   // todo : coloring
   return (
@@ -134,7 +134,9 @@ export const CreateOrOpenWorkspaceModal = (): JSX.Element => {
           <Text size={'md'}>Workspace Lists</Text>
         </div>
         <Column className={'bg-[#1E1F22] px-3 py-2 rounded rounded-tl-[0px] overflow-y-scroll'}>
-          {...workspaces.map((workspace) => <WorkspaceKeyNode key={`workspaces-element-${workspace.rootPath}`} workspace={workspace} onOpenWorkspace={onOpenWorkspace(workspace)} />)}
+          {...workspaces.map((workspace) => (
+            <WorkspaceKeyNode key={`workspaces-element-${workspace.rootPath}`} workspace={workspace} onOpenWorkspace={onOpenWorkspace(workspace)} onRemoveWorkspace={onRemoveWorkspace(workspace)} />
+          ))}
         </Column>
       </Column>
     </Modal>

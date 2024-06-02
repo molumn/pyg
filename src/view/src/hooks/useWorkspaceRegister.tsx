@@ -6,18 +6,19 @@ import { useHookWorkspaceCharacterHierarchy } from '@view/hooks/useHookWorkspace
 export const useWorkspaceRegister = (): {
   onOpenWorkspace: (key: WorkspaceKey) => () => Promise<void>
   onCreateWorkspace: (workspaceName: string, workspacePath: string) => () => Promise<void>
+  onRemoveWorkspace: (key: WorkspaceKey) => () => Promise<void>
 } => {
   const socket = IpcSocket.ipcRenderer
   const { fetchCharacterHierarchy } = useHookWorkspaceCharacterHierarchy()
 
-  const onRegistered = (): void => {
+  const onSocketCalled = (): void => {
     fetchCharacterHierarchy()
   }
 
   const onOpenWorkspace = (key: WorkspaceKey): (() => Promise<void>) => {
     return async (): Promise<void> => {
       await socket.request('workspace/open', key)
-      onRegistered()
+      onSocketCalled()
     }
   }
 
@@ -32,12 +33,20 @@ export const useWorkspaceRegister = (): {
       // todo : debug this
       await socket.command('workspace/create', key)
       await socket.request('workspace/open', key)
-      onRegistered()
+      onSocketCalled()
+    }
+  }
+
+  const onRemoveWorkspace = (key: WorkspaceKey): (() => Promise<void>) => {
+    return async (): Promise<void> => {
+      await socket.command('workspace/list/remove', key)
+      onSocketCalled()
     }
   }
 
   return {
     onOpenWorkspace,
-    onCreateWorkspace
+    onCreateWorkspace,
+    onRemoveWorkspace
   }
 }
