@@ -10,7 +10,7 @@
 
  - [x] Better Workspace Manager
    - [ ] ~~Folder Structure~~ -> Category-Specific Structure
-     - [ ] Characters Hierarchy
+     - [x] Characters Hierarchy
      - [ ] Plot Hierarchy
      - [ ] Scene Hierarchy
      - [ ] Timeline Hierarchy
@@ -18,15 +18,18 @@
        - [ ] (Alternative) Algorithm Hierarchy
    - [x] Explicit Workspace Manager Flow (Including IPC and Renderer Flow)
    - [ ] Re-design [Workspace](./src/app/structure/workspace.ts)
- - [ ] Hooks
+ - [x] Hooks
    - [x] DRY Hooks
    - [x] Separate Target-Specific Hooks and General Hooks
      - ~~general hooks  : useXXX~~
      - ~~specific hooks : occupyXXX~~
      - DELETED
  - [ ] Workspace
-   - [ ] Create Workspace
-   - [ ] Import Workspace
+   - [ ] File Selection
+   - [ ] File Editing
+   - [ ] File Saving
+   - [x] Create Workspace
+   - [x] Import Workspace
    - [ ] Plot System
      - [ ] Plot Editor
 
@@ -34,8 +37,4 @@
 
  - [x] webkit title bar
  - [x] ipc abstraction : socket
- - [ ] Workspace
-   - [x] File Selection
-   - [x] File Editing
-   - [x] File Saving
  - [x] Better Markdown Editor
