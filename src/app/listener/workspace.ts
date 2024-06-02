@@ -1,4 +1,7 @@
 import fs from 'fs'
+import path from 'path'
+
+import { app } from 'electron'
 
 import { WorkspaceKey } from '@common/type'
 import { MainProcessSocket } from '@common/socket/main-process'
@@ -6,13 +9,14 @@ import { CharacterContent, CharacterKey, CharacterProfileContent } from '@common
 import { FileContent, FileNode } from '@common/workspace/files'
 
 import store from '@lib/store'
+import { readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace/file-io'
 
 import { Workspace } from '@app/structure/workspace'
-import { readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace/file-io'
 
 const getCreatedWorkspace = (): WorkspaceKey[] => {
   const createdWorkspace: WorkspaceKey[] = []
-  store.localStores.workspaceStore.get((store) => {
+  store.localStores.workspaceStore.refreshStatus()
+  store.localStores.workspaceStore.edit((store) => {
     for (const key in store.createdWorkspaces) {
       createdWorkspace.push(store.createdWorkspaces[key])
     }
@@ -25,6 +29,9 @@ const createWorkspace = (_key: WorkspaceKey): boolean => {
   const key = _key
 
   key.isExisted = fs.existsSync(key.rootPath)
+
+  if (key.rootPath[0] === '~' || key.rootPath[0] === '.') key.rootPath = path.join(app.getPath('home'), key.rootPath.slice(1))
+  key.rootPath = path.resolve('/', key.rootPath)
 
   return Workspace.createWorkspace(key)
 }

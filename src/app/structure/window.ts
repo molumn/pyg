@@ -30,11 +30,14 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
 }
 
 class WindowHandler {
-  private instance: BrowserWindow
+  private _instance: BrowserWindow
   private commander: IpcWebContentSocket
   constructor() {
-    this.instance = new BrowserWindow(browserWindowOptions)
+    this._instance = new BrowserWindow(browserWindowOptions)
     this.commander = IpcSocket.createIpcWebContentRequester(this.instance.webContents)
+  }
+  get instance(): BrowserWindow {
+    return this._instance
   }
 
   preload(): void {
@@ -73,6 +76,9 @@ class WindowHandler {
 
 export class WindowManager {
   private static main: WindowHandler | null = null
+  static get current(): WindowHandler | null {
+    return this.main
+  }
 
   static display(): void {
     if (this.main) this.main.render()

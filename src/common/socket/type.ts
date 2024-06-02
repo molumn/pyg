@@ -24,6 +24,7 @@ export type IpcChannelURI =
   | 'workspace/hierarchy/characters/create/character'
   | 'workspace/hierarchy/characters/create/profile'
   | 'workspace/'
+  | 'util/get/directory'
   | ''
 
 export const getChannelString = (event: MainToWindowEvent): string => {

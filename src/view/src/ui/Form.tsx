@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 type FormProps = {
   onSubmitCaptured?: (...inputs: string[]) => void
 } & ComponentProps<'form'>
-export const Form = ({ id, key, style, className, children, onSubmitCaptured = (...inputs) => console.log(inputs) }: FormProps): JSX.Element => {
+export const Form = ({ id, key, style, className, children, onSubmitCaptured = (...inputs): void => console.log(inputs) }: FormProps): JSX.Element => {
   const theme = useThemeContext()
 
   return (
@@ -22,8 +22,10 @@ export const Form = ({ id, key, style, className, children, onSubmitCaptured = (
 
         const inputs: string[] = []
         let marker = 0
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         while (event.target[marker]) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           inputs.push(event.target[marker].value)
           marker++

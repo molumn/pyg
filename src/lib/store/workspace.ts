@@ -16,12 +16,16 @@ export class WorkspaceStore extends LocalStore<WorkspaceStoreSchema> {
       createdWorkspaces: {}
     })
   }
-  initialize(): void {
-    super.initialize()
+  refreshStatus(): void {
     for (const workspaceNickname in this.store.createdWorkspaces) {
       const workspaceKey = this.store.createdWorkspaces[workspaceNickname]
       workspaceKey.isExisted = existsSync(workspaceKey.rootPath)
     }
+  }
+
+  initialize(): void {
+    super.initialize()
+    this.refreshStatus()
   }
 
   save(): void {

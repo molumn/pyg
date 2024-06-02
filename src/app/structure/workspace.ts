@@ -17,7 +17,7 @@ export class Workspace {
     const workspaceStore = store.localStores.workspaceStore
     workspaceStore.edit((store) => {
       const workspaces = store.createdWorkspaces
-      if (workspaces[workspace.key.name]) {
+      if (!workspaces[workspace.key.name]) {
         workspaces[workspace.key.name] = workspace.key
       }
     })
@@ -31,6 +31,7 @@ export class Workspace {
     })
 
     if (!key) return false
+    else if (!key.isExisted) return false
 
     this._instance = new Workspace(key.name, key.rootPath, key.type)
 

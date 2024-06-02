@@ -1,15 +1,15 @@
 import { ComponentProps, useEffect, useState } from 'react'
-import { VscAdd, VscClose, VscEdit, VscFolderOpened } from 'react-icons/vsc'
+import { VscAdd, VscClose, VscEdit, VscFolder, VscFolderOpened } from 'react-icons/vsc'
 
 import { WorkspaceKey } from '@common/type'
 import { IpcSocket } from '@common/socket'
 
 import { useModalRegister, useWorkspaceRegister } from '@view/hooks'
 
-import { Button, ColoredButton, Form, Input, ReactIcon, Text } from '@view/ui'
+import { Button, ColoredButton, FatalButton, FilePathInput, Form, Input, ReactIcon, Text } from '@view/ui'
 import { Column, Gap, GrowingDiv, Hover, Modal, Row } from '@view/components/layout/utils'
 
-const WorkspaceCreateForm = (props: ComponentProps<typeof Form>) => {
+const WorkspaceCreateForm = (props: ComponentProps<typeof Form>): JSX.Element => {
   return (
     <Form
       style={{
@@ -18,9 +18,23 @@ const WorkspaceCreateForm = (props: ComponentProps<typeof Form>) => {
       {...props}
     >
       <Column className={'w-full justify-center flex-1'}>
-        <Input label={'Workspace Name'} />
+        <Input label={'Workspace Name'} className={'h-[30px]'} defaultValue={'new'} />
         <Gap gap={10} />
-        <Input label={'Workspace Path'} />
+        <Input label={'Workspace Path'} className={'h-[30px]'} defaultValue={'~/'}>
+          <FilePathInput
+            dialogProperties={['openDirectory']}
+            onResult={async (filepath): Promise<void> => {
+              const input = document.getElementById('Workspace Path')
+              if (!input) return
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              input.value = filepath
+            }}
+            className={'w-[26px] h-[26px] rounded'}
+          >
+            <ReactIcon reactIconType={VscFolder} />
+          </FilePathInput>
+        </Input>
       </Column>
       <Gap gap={'20%'} />
       <Column className={'w-[10%] centralize'}>
@@ -35,22 +49,24 @@ const WorkspaceCreateForm = (props: ComponentProps<typeof Form>) => {
   )
 }
 
-const WorkspaceKeyNode = ({ workspace }: { workspace: WorkspaceKey }): JSX.Element => {
+const WorkspaceKeyNode = ({ workspace, onOpenWorkspace }: { workspace: WorkspaceKey; onOpenWorkspace: () => void }): JSX.Element => {
   const { unregisterModal } = useModalRegister()
-  const { onOpenWorkspace } = useWorkspaceRegister()
 
   // todo : coloring
   return (
     <Hover className={'h-[40px] rounded px-3 centralize overflow-x-hidden'}>
       <Row className={'items-center'}>
-        <Text size={'md'}>{workspace.name}</Text>
-        <div className={'w-[150px]'} />
-        <Text size={'2xs'}>{`path: ${workspace.rootPath}`}</Text>
+        <div className={'w-1/4'}>
+          <Text size={'md'}>{workspace.isExisted ? workspace.name : `${workspace.name} - [deleted]`}</Text>
+        </div>
+        <div className={'w-1/2'}>
+          <Text size={'2xs'}>{`path: ${workspace.rootPath}`}</Text>
+        </div>
         <GrowingDiv />
         <Button
           className={'w-[30px] h-[30px] centralize rounded-xl'}
           onClick={(): void => {
-            onOpenWorkspace(workspace)()
+            onOpenWorkspace()
             unregisterModal()()
           }}
         >
@@ -61,9 +77,15 @@ const WorkspaceKeyNode = ({ workspace }: { workspace: WorkspaceKey }): JSX.Eleme
           <ReactIcon size={15} reactIconType={VscEdit} />
         </Button>
         <div className={'w-[10px]'} />
-        <Button className={'w-[30px] h-[30px] centralize rounded-xl'}>
-          <ReactIcon size={15} reactIconType={VscClose} />
-        </Button>
+        {workspace.isExisted ? (
+          <Button className={'w-[30px] h-[30px] centralize rounded-xl'}>
+            <ReactIcon size={15} reactIconType={VscClose} />
+          </Button>
+        ) : (
+          <FatalButton className={'w-[30px] h-[30px] centralize rounded-xl'}>
+            <ReactIcon size={15} reactIconType={VscClose} />
+          </FatalButton>
+        )}
       </Row>
     </Hover>
   )
@@ -71,14 +93,17 @@ const WorkspaceKeyNode = ({ workspace }: { workspace: WorkspaceKey }): JSX.Eleme
 
 export const CreateOrOpenWorkspaceModal = (): JSX.Element => {
   const [workspaces, setWorkspaces] = useState<WorkspaceKey[]>([])
+  async function reloadCreatedWorkspace(): Promise<void> {
+    const workspaces: WorkspaceKey[] = await IpcSocket.ipcRenderer.request('workspace/list/created')
+    setWorkspaces(workspaces)
+  }
 
+  reloadCreatedWorkspace()
   useEffect(() => {
-    async function reloadCreatedWorkspace(): Promise<void> {
-      const workspaces: WorkspaceKey[] = await IpcSocket.ipcRenderer.request('workspace/list/created')
-      setWorkspaces(workspaces)
-    }
     reloadCreatedWorkspace()
   }, [setWorkspaces])
+
+  const { onOpenWorkspace, onCreateWorkspace } = useWorkspaceRegister()
 
   // todo : coloring
   return (
@@ -92,7 +117,13 @@ export const CreateOrOpenWorkspaceModal = (): JSX.Element => {
         >
           <Text size={'md'}>Create Workspace</Text>
         </div>
-        <WorkspaceCreateForm className={'h-auto w-full flex flex-row items-center px-3 py-2 rounded rounded-tl-[0px]'} />
+        <WorkspaceCreateForm
+          className={'h-auto w-full flex flex-row items-center px-3 py-2 rounded rounded-tl-[0px]'}
+          onSubmitCaptured={async (workspaceName, workspacePath): Promise<void> => {
+            await onCreateWorkspace(workspaceName, workspacePath)()
+            await reloadCreatedWorkspace()
+          }}
+        />
         <Gap gap={30} />
         <div
           style={{
@@ -103,7 +134,7 @@ export const CreateOrOpenWorkspaceModal = (): JSX.Element => {
           <Text size={'md'}>Workspace Lists</Text>
         </div>
         <Column className={'bg-[#1E1F22] px-3 py-2 rounded rounded-tl-[0px] overflow-y-scroll'}>
-          {...workspaces.map((workspace) => <WorkspaceKeyNode key={`workspaces-element-${workspace.rootPath}`} workspace={workspace} />)}
+          {...workspaces.map((workspace) => <WorkspaceKeyNode key={`workspaces-element-${workspace.rootPath}`} workspace={workspace} onOpenWorkspace={onOpenWorkspace(workspace)} />)}
         </Column>
       </Column>
     </Modal>

@@ -5,7 +5,7 @@ import { useHookWorkspaceCharacterHierarchy } from '@view/hooks/useHookWorkspace
 
 export const useWorkspaceRegister = (): {
   onOpenWorkspace: (key: WorkspaceKey) => () => Promise<void>
-  onCreateWorkspace: (key: WorkspaceKey) => () => Promise<void>
+  onCreateWorkspace: (workspaceName: string, workspacePath: string) => () => Promise<void>
 } => {
   const socket = IpcSocket.ipcRenderer
   const { fetchCharacterHierarchy } = useHookWorkspaceCharacterHierarchy()
@@ -21,9 +21,16 @@ export const useWorkspaceRegister = (): {
     }
   }
 
-  const onCreateWorkspace = (key: WorkspaceKey): (() => Promise<void>) => {
+  const onCreateWorkspace = (workspaceName: string, workspacePath: string): (() => Promise<void>) => {
     return async (): Promise<void> => {
-      await socket.request('workspace/create', key)
+      const key: WorkspaceKey = {
+        name: workspaceName,
+        rootPath: `${workspacePath}/${workspaceName}`,
+        type: 'planning-game',
+        isExisted: false
+      }
+      // todo : debug this
+      await socket.command('workspace/create', key)
       await socket.request('workspace/open', key)
       onRegistered()
     }
