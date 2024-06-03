@@ -3,7 +3,7 @@ import path from 'path'
 
 import { CharacterContent, CharacterKey, CharacterKeyType, CharacterProfileContent } from '@common/workspace/types'
 
-import { createWorkspaceDirectory, createWorkspaceFile, existWorkspaceFile, readWorkspaceFile, saveWorkspaceFile } from '@lib/workspace'
+import { createWorkspaceDirectory, createWorkspaceFile, existWorkspaceFile, readWorkspaceFile, renameWorkspaceFil, saveWorkspaceFile } from '@lib/workspace'
 import { splitPathToNodes } from '@lib/extension/fs'
 
 /**
@@ -45,7 +45,8 @@ const removeExtension = (node: string): string => {
 
 export class CharactersWorkspaceSegment {
   readonly path: string
-  private readonly _rootKey: CharacterKey
+  readonly workspaceName: string
+  private _rootKey: CharacterKey
   get rootKey(): CharacterKey {
     return this._rootKey
   }
@@ -131,6 +132,7 @@ export class CharactersWorkspaceSegment {
 
   private fetchCharacterHierarchyFromPath(hierarchyRootPath: string): boolean {
     if (this._rootKey.type !== 'category') return false
+    this.resetRootKey()
 
     const files = fs.readdirSync(hierarchyRootPath, { recursive: true, encoding: 'utf-8' })
 
@@ -155,13 +157,22 @@ export class CharactersWorkspaceSegment {
       }
     }
 
-    console.log(JSON.stringify(this.rootKey, null, 2))
-
     return true
+  }
+
+  private resetRootKey(): void {
+    this._rootKey = {
+      path: '',
+      realFilepath: '',
+      name: `Character [${this.workspaceName}]`,
+      type: 'category',
+      children: {}
+    }
   }
 
   constructor(workspacePath: string, name: string) {
     this.path = `${workspacePath}/Characters`
+    this.workspaceName = name
     this._rootKey = {
       path: '',
       realFilepath: '',
@@ -182,7 +193,6 @@ export class CharactersWorkspaceSegment {
       newName = `New (${index})`
       index++
     }
-    console.log(newName)
     return newName
   }
 
@@ -229,7 +239,6 @@ export class CharactersWorkspaceSegment {
     const nodes = splitPathToNodes(characterPath)
     const parentCharacterKey = this.getKeyOrUndefined(nodes, 'character')
 
-    console.log(nodes, parentCharacterKey)
     // this function only work for create single category
     if (!parentCharacterKey) return undefined
     else if (parentCharacterKey.type !== 'character') return undefined
@@ -275,6 +284,31 @@ export class CharactersWorkspaceSegment {
       path: `./Characters/${content.path}`,
       content: content.content
     })
+  }
+
+  renameCategory(key: CharacterKey, newName: string): boolean {
+    let newHRelPath = key.path.substring(0, key.path.lastIndexOf('/') + 1)
+    newHRelPath += newName
+
+    return renameWorkspaceFil(`Characters/${key.path}`, `Characters/${newHRelPath}`)
+  }
+
+  renameCharacter(key: CharacterKey, newName: string): boolean {
+    let newHRelPath = key.path.substring(0, key.path.lastIndexOf('/') + 1)
+    newHRelPath += combineExtension(newName, 'character', true)
+    const newHRelFilePath = newHRelPath + `/${newName}.character.pyg`
+
+    const left = renameWorkspaceFil(`Characters/${key.path}`, `Characters/${newHRelPath}`)
+    const right = renameWorkspaceFil(`Characters/${newHRelPath}/${combineExtension(key.name, 'character')}`, `Characters/${newHRelFilePath}`)
+    return left && right
+  }
+
+  renameProfile(key: CharacterKey, newName: string): boolean {
+    let newHRelPath = key.path.substring(0, key.path.lastIndexOf('/') + 1)
+    newHRelPath += combineExtension(newName, 'profile')
+    console.log('hello?', combineExtension(newName, 'profile'))
+
+    return renameWorkspaceFil(`Characters/${key.path}`, `Characters/${newHRelPath}`)
   }
 }
 

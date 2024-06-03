@@ -13,3 +13,5 @@ export * from './useTabController'
 export * from './useModalGateKeeper'
 export * from './useModalRegister'
 export * from './useContextMenuController'
+
+export * from './useMutableText'

@@ -78,13 +78,29 @@ export const createWorkspaceFile = (...relpath: string[]): boolean => {
 
   const rootPath = workspace.rootPath
   const absPath = path.join(rootPath, relpath.join('/'))
-  console.log(absPath)
 
   try {
     fs.writeFileSync(absPath, '', { encoding: 'utf-8', flag: 'w' })
     return true
   } catch (err) {
     console.log('fs writeFile Error - createWorkspaceFile')
+    return false
+  }
+}
+
+export const renameWorkspaceFil = (oldpath: string, newpath: string): boolean => {
+  const workspace = Workspace.instance
+  if (!workspace) return false
+
+  const rootPath = workspace.rootPath
+  const absOldPath = path.join(rootPath, oldpath)
+  const absNewPath = path.join(rootPath, newpath)
+
+  try {
+    fs.renameSync(absOldPath, absNewPath)
+    return true
+  } catch (err) {
+    console.log('fs rename Error - renameWorkspaceDirectory')
     return false
   }
 }

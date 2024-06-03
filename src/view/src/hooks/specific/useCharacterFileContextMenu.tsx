@@ -7,6 +7,7 @@ import { IpcSocket } from '@common/socket'
 
 export const useCharacterFileContextMenu = (
   characterKey: CharacterKey,
+  setMutable: (state: boolean) => void,
   menuId?: string
 ): {
   openContextMenu: (event: MouseEvent) => void
@@ -66,6 +67,13 @@ export const useCharacterFileContextMenu = (
             <Text size={'xs'}>Open</Text>
           </ContextItem>
         )}
+        <ContextItem
+          onClick={(): void => {
+            setMutable(true)
+          }}
+        >
+          <Text size={'xs'}>Rename</Text>
+        </ContextItem>
       </ContextMenu>
     )
   }
