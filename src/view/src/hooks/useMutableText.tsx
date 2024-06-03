@@ -20,6 +20,7 @@ export const useMutableText = (
         if (onChange) onChange(newText)
         setMutableState(false)
       }}
+      onBlur={(): void => setMutableState(false)}
       size={size}
       className={className}
     />

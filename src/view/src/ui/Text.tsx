@@ -25,10 +25,11 @@ export type MutableTextProps = {
   text?: string
   mutableStatus: boolean
   onEnter: (text: string) => void
+  onBlur: () => void
   size: keyof ThemeSchema['font']['size']
   className?: string
 }
-export const MutableText = ({ text = '', mutableStatus, onEnter, ...props }: MutableTextProps): JSX.Element => {
+export const MutableText = ({ text = '', mutableStatus, onEnter, onBlur, ...props }: MutableTextProps): JSX.Element => {
   const theme = useThemeContext()
 
   if (mutableStatus) {
@@ -36,16 +37,23 @@ export const MutableText = ({ text = '', mutableStatus, onEnter, ...props }: Mut
       <textarea
         style={{
           borderColor: theme.color.separator,
-          fontSize: theme.font.size['xs']
+          fontSize: theme.font.size['xs'],
+          color: theme.color.text
         }}
         rows={1}
         className={'h-auto w-auto centralize bg-transparent border-[1px] rounded resize-none'}
         onKeyDown={(event): void => {
           if (event.key === 'Enter') {
-            console.log(event.target.value)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             onEnter(event.target.value)
+          } else if (event.key === 'Escape') {
+            onBlur()
           }
         }}
+        onBlur={onBlur}
+        autoFocus={true}
+        onFocus={(event) => event.target.select()}
       >
         {text}
       </textarea>
