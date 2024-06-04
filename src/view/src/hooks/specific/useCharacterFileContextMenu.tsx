@@ -84,6 +84,14 @@ export const useCharacterFileContextMenu = (
         >
           <Text size={'xs'}>Rename</Text>
         </ContextItem>
+        <ContextItem
+          onClick={(): void => {
+            socket.request(`workspace/hierarchy/characters/delete/${characterKey.type}`, characterKey)
+            fetchCharacterHierarchy()
+          }}
+        >
+          <Text size={'xs'}>Delete</Text>
+        </ContextItem>
       </ContextMenu>
     )
   }

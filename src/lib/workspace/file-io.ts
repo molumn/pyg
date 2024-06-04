@@ -4,6 +4,7 @@ import path from 'path'
 import { FileContent } from '@common/workspace/files'
 
 import { Workspace } from '@app/structure/workspace'
+import { deleteFolderRecursive } from '@lib/extension/fs'
 
 export const existWorkspaceFile = (...relpath: string[]): boolean => {
   const workspace = Workspace.instance
@@ -88,7 +89,7 @@ export const createWorkspaceFile = (...relpath: string[]): boolean => {
   }
 }
 
-export const renameWorkspaceFil = (oldpath: string, newpath: string): boolean => {
+export const renameWorkspaceFile = (oldpath: string, newpath: string): boolean => {
   const workspace = Workspace.instance
   if (!workspace) return false
 
@@ -100,7 +101,39 @@ export const renameWorkspaceFil = (oldpath: string, newpath: string): boolean =>
     fs.renameSync(absOldPath, absNewPath)
     return true
   } catch (err) {
-    console.log('fs rename Error - renameWorkspaceDirectory')
+    console.log('fs rename Error - renameWorkspaceFile')
+    return false
+  }
+}
+
+export const deleteWorkspaceDirectory = (subpath: string): boolean => {
+  const workspace = Workspace.instance
+  if (!workspace) return false
+
+  const rootPath = workspace.rootPath
+  const absPath = path.join(rootPath, subpath)
+
+  try {
+    deleteFolderRecursive(absPath)
+    return true
+  } catch (err) {
+    console.log('fs rmdirSync Error - deleteWorkspaceDirectory')
+    return false
+  }
+}
+
+export const deleteWorkspaceFile = (subpath: string): boolean => {
+  const workspace = Workspace.instance
+  if (!workspace) return false
+
+  const rootPath = workspace.rootPath
+  const absPath = path.join(rootPath, subpath)
+
+  try {
+    fs.rmSync(absPath, { maxRetries: 3 })
+    return true
+  } catch (err) {
+    console.log('fs rmSync Error - deleteWorkspaceFile')
     return false
   }
 }

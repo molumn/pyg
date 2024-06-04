@@ -77,4 +77,7 @@ export function registerWorkspaceListener(socket: MainProcessSocket): void {
   socket.handle('workspace/hierarchy/characters/rename/category', (characterKey: CharacterKey, newName: string) => Workspace.instance?.hierarchy.characters.renameCategory(characterKey, newName))
   socket.handle('workspace/hierarchy/characters/rename/character', (characterKey: CharacterKey, newName: string) => Workspace.instance?.hierarchy.characters.renameCharacter(characterKey, newName))
   socket.handle('workspace/hierarchy/characters/rename/profile', (characterKey: CharacterKey, newName: string) => Workspace.instance?.hierarchy.characters.renameProfile(characterKey, newName))
+  socket.handle('workspace/hierarchy/characters/delete/category', (characterKey: CharacterKey) => Workspace.instance?.hierarchy.characters.deleteCategory(characterKey))
+  socket.handle('workspace/hierarchy/characters/delete/character', (characterKey: CharacterKey) => Workspace.instance?.hierarchy.characters.deleteCharacter(characterKey))
+  socket.handle('workspace/hierarchy/characters/delete/profile', (characterKey: CharacterKey) => Workspace.instance?.hierarchy.characters.deleteProfile(characterKey))
 }

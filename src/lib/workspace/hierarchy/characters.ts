@@ -3,7 +3,16 @@ import path from 'path'
 
 import { CharacterContent, CharacterKey, CharacterKeyType, CharacterProfileContent } from '@common/workspace/types'
 
-import { createWorkspaceDirectory, createWorkspaceFile, existWorkspaceFile, readWorkspaceFile, renameWorkspaceFil, saveWorkspaceFile } from '@lib/workspace'
+import {
+  createWorkspaceDirectory,
+  createWorkspaceFile,
+  deleteWorkspaceDirectory,
+  deleteWorkspaceFile,
+  existWorkspaceFile,
+  readWorkspaceFile,
+  renameWorkspaceFile,
+  saveWorkspaceFile
+} from '@lib/workspace'
 import { splitPathToNodes } from '@lib/extension/fs'
 
 /**
@@ -306,7 +315,7 @@ export class CharactersWorkspaceSegment {
     let newHRelPath = key.path.substring(0, key.path.lastIndexOf('/') + 1)
     newHRelPath += newName
 
-    return renameWorkspaceFil(`Characters/${key.path}`, `Characters/${newHRelPath}`)
+    return renameWorkspaceFile(`Characters/${key.path}`, `Characters/${newHRelPath}`)
   }
 
   renameCharacter(key: CharacterKey, newName: string): boolean {
@@ -314,8 +323,8 @@ export class CharactersWorkspaceSegment {
     newHRelPath += combineExtension(newName, 'character', true)
     const newHRelFilePath = newHRelPath + `/${newName}.character.pyg`
 
-    const left = renameWorkspaceFil(`Characters/${key.path}`, `Characters/${newHRelPath}`)
-    const right = renameWorkspaceFil(`Characters/${newHRelPath}/${combineExtension(key.name, 'character')}`, `Characters/${newHRelFilePath}`)
+    const left = renameWorkspaceFile(`Characters/${key.path}`, `Characters/${newHRelPath}`)
+    const right = renameWorkspaceFile(`Characters/${newHRelPath}/${combineExtension(key.name, 'character')}`, `Characters/${newHRelFilePath}`)
     return left && right
   }
 
@@ -324,8 +333,33 @@ export class CharactersWorkspaceSegment {
     newHRelPath += combineExtension(newName, 'profile')
     console.log('hello?', combineExtension(newName, 'profile'))
 
-    return renameWorkspaceFil(`Characters/${key.path}`, `Characters/${newHRelPath}`)
+    return renameWorkspaceFile(`Characters/${key.path}`, `Characters/${newHRelPath}`)
+  }
+
+  deleteCategory(key: CharacterKey): boolean {
+    const testKey = this.getKeyOrUndefined(key.path.split('/'), 'category')
+
+    if (!testKey) return false
+
+    deleteWorkspaceDirectory(`Characters/${key.path}`)
+    return true
+  }
+
+  deleteCharacter(key: CharacterKey): boolean {
+    const testKey = this.getKeyOrUndefined(key.path.split('/'), 'character')
+
+    if (!testKey) return false
+
+    deleteWorkspaceDirectory(`Characters/${key.path}`)
+    return true
+  }
+
+  deleteProfile(key: CharacterKey): boolean {
+    const testKey = this.getKeyOrUndefined(key.path.split('/'), 'profile')
+
+    if (!testKey) return false
+
+    deleteWorkspaceFile(`Characters/${key.path}`)
+    return true
   }
 }
-
-// todo : character remove
