@@ -19,7 +19,18 @@ export const WorkspaceSandboxCharacter = (): JSX.Element => {
         className={'min-h-[30px] max-h-[30px] items-end gap-2 border-b-[1px]'}
       >
         {...registeredCharacterTabs.map((tab) => (
-          <Button key={'aaa'} className={'h-full w-auto px-2 flex flex-row gap-2 centralize rounded-t'} onClick={(): void => focusCharacterTab(tab.character.path)}>
+          <Button
+            key={'aaa'}
+            style={
+              focusedCharacterTab?.character.path === tab.character.path
+                ? {
+                    backgroundColor: theme.color.hover.button
+                  }
+                : {}
+            }
+            className={'h-full w-auto px-2 flex flex-row gap-2 centralize rounded-t'}
+            onClick={(): void => focusCharacterTab(tab.character.path)}
+          >
             <Text size={'xs'}>{`${tab.character.filename} - ${tab.profile?.filename}`}</Text>
             <FatalButton className={'centralize rounded-full'} onClick={(): void => unregisterCharacterTab(tab.character.path)}>
               <ReactIcon reactIconType={VscClose} />

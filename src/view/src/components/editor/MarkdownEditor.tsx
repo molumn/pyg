@@ -14,7 +14,7 @@ export const MarkdownEditor = ({
   onSave
 }: {
   content: string // todo : Block[]
-  onSave: () => Promise<void>
+  onSave: (content: string) => void
 }): JSX.Element => {
   const theme = useThemeContext()
 
@@ -44,13 +44,16 @@ export const MarkdownEditor = ({
   //   editor.replaceBlocks(editor.document, blocks)
   // }, [editor])
 
-  useEffect(() => {
-    async function loadInitialHTML(): Promise<void> {
-      const blocks = await editor.tryParseMarkdownToBlocks(content)
-      editor.replaceBlocks(editor.document, blocks)
-    }
-    loadInitialHTML()
-  }, [editor])
+  async function loadInitialHTML(): Promise<void> {
+    const blocks = await editor.tryParseMarkdownToBlocks(content)
+    editor.replaceBlocks(editor.document, blocks)
+  }
+  loadInitialHTML()
+
+  const onChange = async (): Promise<void> => {
+    const newContent = await editor.blocksToMarkdownLossy(editor.document)
+    onSave(newContent)
+  }
 
   return (
     <BlockNoteView
@@ -59,6 +62,7 @@ export const MarkdownEditor = ({
       }}
       editor={editor}
       theme={editorTheme}
+      onChange={onChange}
     />
   )
 }

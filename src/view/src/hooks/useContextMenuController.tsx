@@ -14,19 +14,6 @@ export const useContextMenuController = (
   const [modalOpened, setModalOpened] = useState(false)
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    function releaseOrNot(event): void {
-      if (document.getElementById(`contextMenu-[${menuId}]`)?.contains(event.target)) setModalOpened(false)
-    }
-
-    window.addEventListener('mousedown', releaseOrNot)
-    return () => {
-      window.removeEventListener('mousedown', releaseOrNot)
-    }
-  }, [])
-
   const ContextItem = ({ className, children, onClick, ...props }: ComponentProps<'button'>): JSX.Element => {
     return (
       <Button
@@ -45,20 +32,33 @@ export const useContextMenuController = (
   const ContextMenu = ({ children, ...props }: ComponentProps<'div'>): JSX.Element => {
     return (
       <div
-        id={`contextMenu-[${menuId}]`}
-        {...props}
         style={{
-          zIndex: '999',
+          zIndex: '900',
           display: modalOpened ? '' : 'none',
+          backgroundColor: '#FFFFFF00',
           position: 'fixed',
-          backgroundColor: theme.color.base,
-          border: '1px solid',
-          borderColor: theme.color.separator,
-          left: modalPosition.x,
-          top: modalPosition.y
+          width: '100%',
+          height: '100%'
+        }}
+        onClick={(event): void => {
+          if (event.target === event.currentTarget) setModalOpened(false)
         }}
       >
-        {children}
+        <div
+          {...props}
+          style={{
+            zIndex: '999',
+            display: modalOpened ? '' : 'none',
+            position: 'fixed',
+            backgroundColor: theme.color.base,
+            border: '1px solid',
+            borderColor: theme.color.separator,
+            left: modalPosition.x,
+            top: modalPosition.y
+          }}
+        >
+          {children}
+        </div>
       </div>
     )
   }

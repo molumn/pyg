@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@view/hooks/hook'
-import { focusCharacterTabByPath, selectFocusedCharacterTab, selectRegisteredCharacterTabs, unregisterCharacterTabByCharacterPath } from '@view/store/stateWorkspaceFocusCharacters'
+import { focusCharacterTabByPath, selectFocusedCharacterTab, selectRegisteredCharacterTabs, unregisterCharacterTabByCharacterPath } from '@view/store'
 
 export const useRegisteredCharacterTabs = () => {
   const dispatcher = useAppDispatch()

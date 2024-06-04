@@ -251,7 +251,7 @@ export class CharactersWorkspaceSegment {
   }
 
   readCharacter(key: CharacterKey): CharacterContent {
-    const content = readWorkspaceFile(`Characters/${key.path}`, key.name)
+    const content = readWorkspaceFile(`Characters/${key.realFilepath}`, key.name)
     return {
       path: content.path,
       filename: content.name,
@@ -289,7 +289,7 @@ export class CharactersWorkspaceSegment {
   saveCharacter(content: CharacterContent): boolean {
     return saveWorkspaceFile({
       name: content.filename,
-      path: `./Characters/${content.path}`,
+      path: content.path,
       content: content.content
     })
   }
@@ -297,7 +297,7 @@ export class CharactersWorkspaceSegment {
   saveProfile(content: CharacterProfileContent): boolean {
     return saveWorkspaceFile({
       name: content.filename,
-      path: `./Characters/${content.path}`,
+      path: content.path,
       content: content.content
     })
   }

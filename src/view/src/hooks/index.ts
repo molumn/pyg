@@ -8,6 +8,8 @@ export * from './useHookWorkspaceCharacterHierarchy'
 
 export * from './useRegisteredCharacterTabs'
 
+export * from './useFocusedCharacterTab'
+
 export * from './useWorkspaceRegister'
 
 export * from './useThemeContext'
