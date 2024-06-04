@@ -34,7 +34,6 @@ const removeCreatedWorkspace = (key: WorkspaceKey): void => {
 }
 
 const createWorkspace = (_key: WorkspaceKey): boolean => {
-  // todo : create workspace
   const key = _key
 
   key.isExisted = fs.existsSync(key.rootPath)

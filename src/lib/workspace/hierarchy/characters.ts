@@ -251,9 +251,9 @@ export class CharactersWorkspaceSegment {
   }
 
   readCharacter(key: CharacterKey): CharacterContent {
-    const content = readWorkspaceFile(key.path, key.name)
+    const content = readWorkspaceFile(`Characters/${key.path}`, key.name)
     return {
-      path: `./Characters/${content.path}`,
+      path: content.path,
       filename: content.name,
       content: content.content
     }
@@ -261,9 +261,9 @@ export class CharactersWorkspaceSegment {
   }
 
   readProfile(key: CharacterKey): CharacterProfileContent {
-    const content = readWorkspaceFile(key.path, key.name)
+    const content = readWorkspaceFile(`Characters/${key.path}`, key.name)
     return {
-      path: `./Characters/${content.path}`,
+      path: content.path,
       filename: content.name,
       content: content.content
     }
