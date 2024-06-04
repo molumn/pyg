@@ -20,4 +20,5 @@ export type CharacterProfileContent = {
   path: string
   filename: string
   content: string
+  parentContent: CharacterContent
 }

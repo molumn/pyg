@@ -1,9 +1,10 @@
 import { MouseEvent } from 'react'
 
 import { CharacterKey } from '@common/workspace/types'
-import { useContextMenuController, useHookWorkspaceCharacterHierarchy } from '@view/hooks'
+import { useAppDispatch, useContextMenuController, useHookWorkspaceCharacterHierarchy } from '@view/hooks'
 import { Text } from '@view/ui'
 import { IpcSocket } from '@common/socket'
+import { registerCharacterToTabs, registerProfileToTabs } from '@view/store/stateWorkspaceFocusCharacters'
 
 export const useCharacterFileContextMenu = (
   characterKey: CharacterKey,
@@ -14,6 +15,7 @@ export const useCharacterFileContextMenu = (
   CharacterContextMenu: () => JSX.Element
 } => {
   const socket = IpcSocket.ipcRenderer
+  const dispatcher = useAppDispatch()
   const { openContextMenu, ContextMenu, ContextItem } = useContextMenuController(menuId ?? '')
   const { fetchCharacterHierarchy } = useHookWorkspaceCharacterHierarchy()
 
@@ -63,7 +65,15 @@ export const useCharacterFileContextMenu = (
         {characterKey.type === 'category' ? (
           <></>
         ) : (
-          <ContextItem>
+          <ContextItem
+            onClick={(): void => {
+              if (characterKey.type === 'character') {
+                dispatcher(registerCharacterToTabs(characterKey))
+              } else if (characterKey.type === 'profile') {
+                dispatcher(registerProfileToTabs(characterKey))
+              }
+            }}
+          >
             <Text size={'xs'}>Open</Text>
           </ContextItem>
         )}

@@ -262,10 +262,26 @@ export class CharactersWorkspaceSegment {
 
   readProfile(key: CharacterKey): CharacterProfileContent {
     const content = readWorkspaceFile(`Characters/${key.path}`, key.name)
+    const parentKey = this.getKeyOrUndefined(key.path.substring(0, key.path.lastIndexOf('/')).split('/'), 'character')
+
+    if (!parentKey) {
+      return {
+        path: '',
+        filename: '',
+        content: '',
+        parentContent: {
+          path: '',
+          filename: '',
+          content: ''
+        }
+      }
+    }
+
     return {
       path: content.path,
       filename: content.name,
-      content: content.content
+      content: content.content,
+      parentContent: this.readCharacter(parentKey)
     }
     // todo : parse profile file
   }
